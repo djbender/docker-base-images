@@ -25,9 +25,17 @@ RUN <<EOT
     apt-transport-https \
     curl \
     gnupg
+
+<% if node_major < 16 -%>
+  curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | apt-key add -
+  echo "deb https://deb.nodesource.com/node_<%= node_major %>.x <%= distribution_code_name %> main" \
+    > /etc/apt/sources.list.d/nodesource.list
+<% else -%>
   mkdir -p /usr/share/keyrings
   curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /usr/share/keyrings/nodesource.gpg
   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_<%= node_major %>.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+<% end -%>
+
   apt-get update
   apt-get install --yes --no-install-recommends \
     nodejs

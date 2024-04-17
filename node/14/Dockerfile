@@ -24,9 +24,11 @@ RUN <<EOT
     apt-transport-https \
     curl \
     gnupg
-  mkdir -p /usr/share/keyrings
-  curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /usr/share/keyrings/nodesource.gpg
-  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_14.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+
+  curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | apt-key add -
+  echo "deb https://deb.nodesource.com/node_14.x jammy main" \
+    > /etc/apt/sources.list.d/nodesource.list
+
   apt-get update
   apt-get install --yes --no-install-recommends \
     nodejs
