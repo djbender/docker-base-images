@@ -16,11 +16,9 @@ target "java" {
   context = "${PWD}/java/18"
   platforms = ["linux/amd64", "linux/arm64"]
   cache-from = [
-    "type=gha,scope=java/18",
-    "type=registry,ref=ghcr.io/get-bridge/java:18-cache"
+    "type=gha,scope=java/18"
   ]
   cache-to = [
-    # disabled while GitHub Actions cache is cranky
-    # "type=gha,scope=java/18,mode=max"
+    "type=gha,scope=java/18,mode=max"
   ]
 }
