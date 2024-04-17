@@ -6,9 +6,9 @@
 
 ########## tini ##########################
 # Grab tini binary (used as default entrypoint)
-FROM ubuntu:lunar as tini
-LABEL org.opencontainers.image.authors="get-bridge"
-LABEL org.opencontainers.image.source=https://github.com/get-bridge/docker-base-images
+FROM ubuntu:bionic as tini
+LABEL org.opencontainers.image.authors="djbender"
+LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
 ENV TINI_VERSION=v0.19.0
 # Options added via tini README.md suggestion
@@ -41,8 +41,8 @@ EOT
 
 
 ########## Core image ##########################
-FROM ubuntu:lunar
-LABEL com.get-bridge.image.authors="get-bridge"
+FROM ubuntu:bionic
+LABEL com.opencontainers.image.authors="djbender"
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Create a 'docker' user
@@ -51,7 +51,6 @@ RUN <<EOT
 set -exu
 apt-get update
 apt-get install --yes --no-install-recommends \
-  adduser \
   ca-certificates \
   curl \
   locales \

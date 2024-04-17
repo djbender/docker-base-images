@@ -21,7 +21,6 @@ globals:
     distribution: ubuntu
     distribution_code_name: jammy
     docker_syntax: docker/dockerfile:1.4  # https://hub.docker.com/r/docker/dockerfile
-    ecr_registry: 127178877223.dkr.ecr.us-east-2.amazonaws.com
     ghcr_registry: ghcr.io
     tini_version: v0.19.0
 
@@ -29,10 +28,10 @@ globals:
 
 clojure:
   defaults:
-    flavor: fat
+    flavor: dev
   versions:
     '11':
-      base_image: 127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/java
+      base_image: ghcr.io/djbender/java
       latest: true
       java_version: '11'
       lein_version: '2.9.1'
@@ -40,36 +39,23 @@ clojure:
       jar_sha: 'ea7c831a4f5c38b6fc3926c6ad32d1d4b9b91bf830a715ecff5a70a18bda55f8'
 
 core:
-  defaults:
-    flavor: slim
   versions:
-    lunar:
-      base_image: ubuntu:lunar
-      distribution_code_name: lunar
-      rolling: true # NOTE: rolling is always latest ubuntu release.
-    # NOTE: Fat image has things like build-essential, and other libraries needed for compilation
-    # This image should only be used via docker multi-stage build and not deployed
-    lunar-fat:
-      base_image: ubuntu:lunar
-      distribution_code_name: lunar
-      flavor: fat
-      rolling: true # NOTE: rolling is always the most recent ubuntu release.
     jammy:
       # NOTE: never tag non-LTS releases as latest, its better to tag the specific LTS release below as latest.
       latest: true
-    jammy-fat:
-      flavor: fat
+    jammy-dev:
+      flavor: dev
     bionic:
       base_image: ubuntu:bionic
       distribution_code_name: bionic
-    bionic-fat:
+    bionic-dev:
       base_image: ubuntu:bionic
       distribution_code_name: bionic
-      flavor: fat
+      flavor: dev
 
 java:
   defaults:
-    base_image: 127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/core
+    base_image: ghcr.io/djbender/core
   versions:
     '8':
       java_version: 8
@@ -111,80 +97,80 @@ java:
 node: &NODE
   defaults:
     flavor: slim
-    base_image: 127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/core
+    base_image: ghcr.io/djbender/core
     yarn_version: 1.22.19
   versions:
     '8': &NODE8
       # there is no deb for node v8 on anything later than bionic
-      base_image: 127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/core:bionic
+      base_image: ghcr.io/djbender/core:bionic
       distribution_code_name: bionic
       node_major: 8
       node_version: 8.17.0
       npm_version: 6.13.4
-    '8-fat':
+    '8-dev':
       <<: *NODE8
-      flavor: fat
+      flavor: dev
     '10': &NODE10
       # there is no deb for node v10 on anything later than bionic
-      base_image: 127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/core:bionic
+      base_image: ghcr.io/djbender/core:bionic
       distribution_code_name: bionic
       node_major: 10
       node_version: 10.24.1
       npm_version: 6.14.12
-    '10-fat':
+    '10-dev':
       <<: *NODE10
-      flavor: fat
+      flavor: dev
     '12': &NODE12
       # there is no deb for node v12 on anything later than bionic
-      base_image: 127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/core:bionic
+      base_image: ghcr.io/djbender/core:bionic
       distribution_code_name: bionic
       node_major: 12
       node_version: 12.22.12
       npm_version: 6.14.16
-    '12-fat':
+    '12-dev':
       <<: *NODE12
-      flavor: fat
+      flavor: dev
     '14': &NODE14
       node_major: 14
       node_version: 14.21.3
       npm_version: 6.14.18
-    '14-fat':
+    '14-dev':
       <<: *NODE14
-      flavor: fat
+      flavor: dev
     '16': &NODE16
       node_major: 16
       node_version: 16.20.0
       npm_version: 8.19.4
-    '16-fat':
+    '16-dev':
       <<: *NODE16
-      flavor: fat
+      flavor: dev
     '18': &NODE18
       node_major: 18
       node_version: 18.16.0
       npm_version: 9.5.1
-    '18-fat':
+    '18-dev':
       <<: *NODE18
-      flavor: fat
+      flavor: dev
     '19': &NODE19
       node_major: 19
       node_version: 19.9.0
       npm_version: 9.6.3
-    '19-fat':
+    '19-dev':
       <<: *NODE19
-      flavor: fat
+      flavor: dev
     '20': &NODE20
       node_major: 20
       node_version: 20.2.0
       npm_version: 9.6.6
       latest: true
-    '20-fat':
+    '20-dev':
       <<: *NODE20
-      flavor: fat
+      flavor: dev
       latest: false
 
 ruby: &RUBY
   defaults:
-    base_image: 127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/core
+    base_image: ghcr.io/djbender/core
     bundler_version: 2.4.5
     rubygems_version: 3.4.5
     flavor: slim
@@ -193,29 +179,29 @@ ruby: &RUBY
       ruby_major: 2.7
       ruby_version: 2.7.8
       ruby_download_sha256: f22f662da504d49ce2080e446e4bea7008cee11d5ec4858fc69000d0e5b1d7fb
-    '2.7-fat':
+    '2.7-dev':
       <<: *RUBY27
-      flavor: fat
+      flavor: dev
     '3.0': &RUBY30
       ruby_major: 3.0
       ruby_version: 3.0.6
       ruby_download_sha256: b5cbee93e62d85cfb2a408c49fa30a74231ae8409c2b3858e5f5ea254d7ddbd1
-    '3.0-fat':
+    '3.0-dev':
       <<: *RUBY30
-      flavor: fat
+      flavor: dev
     '3.1': &RUBY31
       ruby_major: 3.1
       ruby_version: 3.1.4
       ruby_download_sha256: 1b6d6010e76036c937b9671f4752f065aeca800a6c664f71f6c9a699453af94f
-    '3.1-fat':
+    '3.1-dev':
       <<: *RUBY31
-      flavor: fat
+      flavor: dev
     '3.2': &RUBY32
       ruby_major: 3.2
       ruby_version: 3.2.2
       ruby_download_sha256: 4b352d0f7ec384e332e3e44cdbfdcd5ff2d594af3c8296b5636c710975149e23
       latest: true # apply the latest tag
-    '3.2-fat':
+    '3.2-dev':
       <<: *RUBY32
-      flavor: fat
+      flavor: dev
       latest: false

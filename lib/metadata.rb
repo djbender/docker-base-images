@@ -14,14 +14,8 @@ class Metadata
     binding
   end
 
-  # Ends up looking something like 127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge
-  def ecr_namespace
-    "#{ENV.fetch('ECR_REGISTRY', ecr_registry)}/get-bridge"
-  end
-
-  # Ends up looking something like 127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/ruby
-  def full_ecr_path
-    "#{ecr_namespace}/#{image_name}"
+  def full_image_path
+    "ghcr.io/djbender/#{image_name}"
   end
 
   def docker_tags(custom_tags = [])
@@ -40,23 +34,23 @@ class Metadata
   end
 
   # Examples
-  # "#{full_ecr_path}:#{version}" == 127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/ruby:3.1
+  # "#{full_image_path}:#{version}" == ghcr.io/djbender/ruby:3.3
   def default_docker_tags
     [].tap do |tags_array|
       tags_array.push(default_flavor_tag, default_version_tag)
-      tags_array.push("#{full_ecr_path}:#{github_sha}") if github_sha
-      tags_array.push("#{full_ecr_path}:latest") if latest
-      tags_array.push("#{full_ecr_path}:rolling") if rolling
+      tags_array.push("#{full_image_path}:#{github_sha}") if github_sha
+      tags_array.push("#{full_image_path}:latest") if latest
+      tags_array.push("#{full_image_path}:rolling") if rolling
     end.flatten.compact.uniq
   end
 
   # Ensures flavor tags exist
   # Example:
-  #   ruby:3.1-slim ruby:3.1-fat
+  #   ruby:3.1-slim ruby:3.1-dev
   def default_flavor_tag
     if flavor && !flavor&.empty?
       local_flavor_tag = version.include?(flavor) ? version : "#{version}-#{flavor}"
-      default_flavor_tag = "#{full_ecr_path}:#{local_flavor_tag}"
+      default_flavor_tag = "#{full_image_path}:#{local_flavor_tag}"
       [default_flavor_tag]
     else
       []
@@ -64,15 +58,15 @@ class Metadata
   end
 
   # Ensures non flavor tags exist
-  # and if flavor exists, apply it != fat image
+  # and if flavor exists, apply it != dev image
   # Example:
   #   ruby:3.1 ruby:3.1-slim point at the same image
-  #   ruby:3.1-fat will not have the non flavor tag
+  #   ruby:3.1-dev will not have the non flavor tag
   def default_version_tag
-    if flavor&.casecmp('fat')&.zero?
+    if flavor&.casecmp('dev')&.zero?
       []
     else
-      ["#{full_ecr_path}:#{version}"]
+      ["#{full_image_path}:#{version}"]
     end
   end
 end

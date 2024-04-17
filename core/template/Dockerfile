@@ -5,8 +5,8 @@
 ########## tini ##########################
 # Grab tini binary (used as default entrypoint)
 FROM <%= base_image %> as tini
-LABEL org.opencontainers.image.authors="get-bridge"
-LABEL org.opencontainers.image.source=https://github.com/get-bridge/docker-base-images
+LABEL org.opencontainers.image.authors="djbender"
+LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
 ENV TINI_VERSION=<%= tini_version %>
 # Options added via tini README.md suggestion
@@ -40,7 +40,7 @@ EOT
 
 ########## Core image ##########################
 FROM <%= base_image %>
-LABEL com.get-bridge.image.authors="get-bridge"
+LABEL com.opencontainers.image.authors="djbender"
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Create a 'docker' user
@@ -49,7 +49,7 @@ RUN <<EOT
 set -exu
 apt-get update
 apt-get install --yes --no-install-recommends \
-<%- if distribution_code_name == 'lunar' -%>
+<%- if distribution_code_name == 'noble' -%>
   adduser \
 <%- end -%>
   ca-certificates \
@@ -75,7 +75,7 @@ EOT
 ENV LANG en_US.utf-8
 ENV LANGUAGE en_US:en
 
-<% if flavor == 'fat' -%>
+<% if flavor == 'dev' -%>
 RUN <<EOT
 #!/usr/bin/env bash
 set -exu

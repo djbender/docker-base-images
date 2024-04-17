@@ -1,11 +1,5 @@
 version: 2
 
-registries:
-  ecr:
-    type: docker-registry
-    url: https://127178877223.dkr.ecr.us-east-2.amazonaws.com
-    username: ${{ secrets.TRUSS_AWS_ACCESS_KEY_ID }}
-    password: ${{ secrets.TRUSS_AWS_SECRET_ACCESS_KEY }}
 updates:
   - package-ecosystem: github-actions
     directory: /
@@ -14,8 +8,6 @@ updates:
     labels:
       - dependencies
       - github_actions
-    reviewers:
-      - get-bridge/oberbaum
 
   - package-ecosystem: bundler
     directory: /
@@ -24,8 +16,6 @@ updates:
     labels:
       - dependencies
       - ruby
-    reviewers:
-      - get-bridge/oberbaum
 
   # These are not meant to be automatically accepted
   # because they're templated files, however this will
@@ -40,8 +30,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: core/jammy-fat
@@ -52,8 +40,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: core/bionic
@@ -64,8 +50,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: core/bionic-fat
@@ -76,8 +60,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: node/8
@@ -88,8 +70,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: node/8-fat
@@ -100,8 +80,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: node/10
@@ -112,8 +90,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: node/10-fat
@@ -124,8 +100,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: node/12
@@ -136,8 +110,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: node/12-fat
@@ -148,8 +120,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: node/14
@@ -160,8 +130,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: node/14-fat
@@ -172,8 +140,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: node/16
@@ -184,8 +150,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: node/16-fat
@@ -196,8 +160,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: node/18
@@ -208,8 +170,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: node/18-fat
@@ -220,8 +180,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: node/19
@@ -232,8 +190,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: node/19-fat
@@ -244,8 +200,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: node/20
@@ -256,8 +210,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: node/20-fat
@@ -268,8 +220,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: ruby/2.7
@@ -280,8 +230,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: ruby/2.7-fat
@@ -292,8 +240,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: ruby/3.0
@@ -304,8 +250,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: ruby/3.0-fat
@@ -316,8 +260,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: ruby/3.1
@@ -328,8 +270,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: ruby/3.1-fat
@@ -340,8 +280,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: ruby/3.2
@@ -352,8 +290,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: ruby/3.2-fat
@@ -364,8 +300,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: java/8
@@ -376,8 +310,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: java/8-jre
@@ -388,13 +320,9 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: clojure/11
-    registries:
-      - ecr
     schedule:
       interval: daily
     labels:
@@ -402,8 +330,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: java/11
@@ -414,8 +340,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: java/11-jre
@@ -426,8 +350,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: java/17
@@ -438,8 +360,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: java/17-jre
@@ -450,8 +370,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: java/18
@@ -462,8 +380,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: java/18-jre
@@ -474,8 +390,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: java/19
@@ -486,8 +400,6 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
 
   - package-ecosystem: docker
     directory: java/19-jre
@@ -498,5 +410,3 @@ updates:
       - do-not-merge
       - docker
       - notification-only
-    assignees:
-      - djbender
