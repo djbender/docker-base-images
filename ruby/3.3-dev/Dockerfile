@@ -5,9 +5,9 @@
 # task `rake generate:ruby`
 
 ########## Ruby image ##########################
-FROM 127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/core
-LABEL com.get-bridge.image.authors="get-bridge"
-LABEL org.opencontainers.image.source=https://github.com/get-bridge/docker-base-images
+FROM ghcr.io/djbender/core
+LABEL org.opencontainers.image.authors="djbender"
+LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
 USER root
 
@@ -19,30 +19,13 @@ RUN <<EOT
   apt-get update
   apt-get install --yes --no-install-recommends \
     bzip2 \
+    curl \
     libffi-dev \
     libgmp-dev \
+    libssl-dev \
     libyaml-dev \
     procps \
     zlib1g-dev
-    arch=$(dpkg --print-architecture)
-  if [ "$arch" == "arm64" ]; then
-    # Ruby versions older than or equal to 3.0 require an older version of openssl :| which is really annoying
-    echo "deb http://ports.ubuntu.com/ubuntu-ports/ focal main restricted" >> /etc/apt/sources.list
-    echo "deb http://ports.ubuntu.com/ubuntu-ports/ focal-updates main restricted" >> /etc/apt/sources.list
-    echo "deb http://ports.ubuntu.com/ubuntu-ports/ focal-security main restricted" >> /etc/apt/sources.list
-  else
-    echo "deb http://archive.ubuntu.com/ubuntu/ focal main restricted" >> /etc/apt/sources.list
-    echo "deb http://archive.ubuntu.com/ubuntu/ focal-updates main restricted" >> /etc/apt/sources.list
-    echo "deb http://security.ubuntu.com/ubuntu/ focal-security main restricted" >> /etc/apt/sources.list
-  fi
-  apt-get update
-  apt-get install --yes --allow-downgrades \
-    libssl-dev=1.1.1* \
-    openssl=1.1.1*
-  apt-mark hold \
-    libssl-dev \
-    libssl1.1 \
-    openssl
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
 EOT
 
@@ -52,12 +35,12 @@ install: --no-document
 update: --no-document
 EOT
 
-ENV BUNDLER_VERSION 2.4.5
+ENV BUNDLER_VERSION 2.5.9
 ENV LANG en_US.utf-8
-ENV RUBYGEMS_VERSION 3.4.5
-ENV RUBY_DOWNLOAD_SHA256 b5cbee93e62d85cfb2a408c49fa30a74231ae8409c2b3858e5f5ea254d7ddbd1
-ENV RUBY_MAJOR 3.0
-ENV RUBY_VERSION 3.0.6
+ENV RUBYGEMS_VERSION 3.5.7
+ENV RUBY_DOWNLOAD_SHA256 676b65a36e637e90f982b57b059189b3276b9045034dcd186a7e9078847b975b
+ENV RUBY_MAJOR 3.3
+ENV RUBY_VERSION 3.3.0
 
 # NOTE: some of ruby's build scripts are written in ruby so we need to install ruby
 # in order to compile ruby. We use apt-mark to uninstall packages we don't need.
@@ -122,7 +105,7 @@ RUN <<EOT
   # Update rubygems and bundler
   gem update  --no-document --system $RUBYGEMS_VERSION
   gem install --no-document bundler -v $BUNDLER_VERSION
-  # Install build dependencies for fat image, NOTE: fat image is NOT meant to be deployed to production
+  # Install build dependencies for dev image, NOTE: dev image is NOT meant to be deployed to production
   apt-get update
   apt-get install --yes --no-install-recommends \
     autoconf \

@@ -4,8 +4,8 @@
 
 ########## Ruby image ##########################
 FROM <%= base_image %>
-LABEL com.get-bridge.image.authors="get-bridge"
-LABEL org.opencontainers.image.source=https://github.com/get-bridge/docker-base-images
+LABEL org.opencontainers.image.authors="djbender"
+LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
 USER root
 
@@ -17,6 +17,7 @@ RUN <<EOT
   apt-get update
   apt-get install --yes --no-install-recommends \
     bzip2 \
+    curl \
     libffi-dev \
     libgmp-dev \
   <% if ruby_major >= 3.1 -%>
@@ -125,8 +126,8 @@ RUN <<EOT
   # Update rubygems and bundler
   gem update  --no-document --system $RUBYGEMS_VERSION
   gem install --no-document bundler -v $BUNDLER_VERSION
-<% if flavor == 'fat' -%>
-  # Install build dependencies for fat image, NOTE: fat image is NOT meant to be deployed to production
+<% if flavor == 'dev' -%>
+  # Install build dependencies for dev image, NOTE: dev image is NOT meant to be deployed to production
   apt-get update
   apt-get install --yes --no-install-recommends \
     autoconf \

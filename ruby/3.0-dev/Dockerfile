@@ -123,6 +123,33 @@ RUN <<EOT
   # Update rubygems and bundler
   gem update  --no-document --system $RUBYGEMS_VERSION
   gem install --no-document bundler -v $BUNDLER_VERSION
+  # Install build dependencies for dev image, NOTE: dev image is NOT meant to be deployed to production
+  apt-get update
+  apt-get install --yes --no-install-recommends \
+    autoconf \
+    bison \
+    build-essential \
+    dpkg-dev \
+    g++ \
+    gcc \
+    imagemagick \
+    libbz2-dev \
+    libcurl4-openssl-dev \
+    libevent-dev \
+    libgdbm-compat-dev \
+    libgdbm-dev \
+    libjpeg-dev \
+    libmagickcore-dev \
+    libmagickwand-dev \
+    libmysqlclient-dev \
+    libncurses-dev \
+    libpq-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    make \
+    wget \
+    xz-utils
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
   # Check that ruby commands work
   [ "$(command -v ruby)" = '/usr/local/bin/ruby' ]
   ruby --version

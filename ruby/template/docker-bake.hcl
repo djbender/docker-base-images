@@ -4,12 +4,22 @@
 <%
 # Specify any additional tags here, see defaults defined in lib/metadata.rb
 ruby_tags = [
-  "#{full_ecr_path}:#{ruby_version}-#{flavor}",
-  "#{full_ecr_path}:#{ruby_version}-#{flavor}-#{distribution_code_name}",
-  "#{full_ecr_path}:#{ruby_major}-#{flavor}",
-  "#{full_ecr_path}:#{ruby_major}-#{flavor}-#{distribution_code_name}"
+  # "#{full_image_path}:#{ruby_version}-#{flavor}",
+  # "#{full_image_path}:#{ruby_version}-#{flavor}-#{distribution_code_name}",
+  # "#{full_image_path}:#{ruby_major}-#{flavor}",
+  # "#{full_image_path}:#{ruby_major}-#{flavor}-#{distribution_code_name}"
 ]
-ruby_tags.push("#{full_ecr_path}:#{ruby_version}") if flavor&.casecmp('slim')&.zero?
+if flavor == 'dev'
+  ruby_tags.push("#{full_image_path}:#{ruby_version}-#{flavor}-#{distribution_code_name}")
+  ruby_tags.push("#{full_image_path}:#{ruby_version}-#{flavor}")
+  ruby_tags.push("#{full_image_path}:#{ruby_major}-#{flavor}-#{distribution_code_name}")
+else
+  ruby_tags.push("#{full_image_path}:#{ruby_version}") 
+  ruby_tags.push("#{full_image_path}:#{ruby_version}-#{distribution_code_name}") 
+  ruby_tags.push("#{full_image_path}:#{ruby_major}")
+  ruby_tags.push("#{full_image_path}:#{ruby_major}-#{distribution_code_name}")
+end
+
 custom_tags = docker_tags(ruby_tags)
 -%>
 
@@ -25,11 +35,9 @@ target "<%= image_name %>" {
   context = "${PWD}/<%= image_name %>/<%= version %>"
   platforms = ["linux/amd64", "linux/arm64"]
   cache-from = [
-    "type=gha,scope=<%= image_name %>/<%= version %>",
-    "type=registry,ref=ghcr.io/get-bridge/<%= image_name %>:<%= version %>-cache"
+    "type=gha,scope=<%= image_name %>/<%= version %>"
   ]
   cache-to = [
-    # disabled while GitHub Actions cache is cranky
-    # "type=gha,scope=<%= image_name %>/<%= version %>,mode=max"
+    "type=gha,scope=<%= image_name %>/<%= version %>,mode=max"
   ]
 }

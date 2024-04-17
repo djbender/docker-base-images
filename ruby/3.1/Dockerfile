@@ -5,9 +5,9 @@
 # task `rake generate:ruby`
 
 ########## Ruby image ##########################
-FROM 127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/core
-LABEL com.get-bridge.image.authors="get-bridge"
-LABEL org.opencontainers.image.source=https://github.com/get-bridge/docker-base-images
+FROM ghcr.io/djbender/core
+LABEL org.opencontainers.image.authors="djbender"
+LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
 USER root
 
@@ -19,6 +19,7 @@ RUN <<EOT
   apt-get update
   apt-get install --yes --no-install-recommends \
     bzip2 \
+    curl \
     libffi-dev \
     libgmp-dev \
     libssl-dev \
@@ -34,9 +35,9 @@ install: --no-document
 update: --no-document
 EOT
 
-ENV BUNDLER_VERSION 2.4.5
+ENV BUNDLER_VERSION 2.5.9
 ENV LANG en_US.utf-8
-ENV RUBYGEMS_VERSION 3.4.5
+ENV RUBYGEMS_VERSION 3.5.7
 ENV RUBY_DOWNLOAD_SHA256 1b6d6010e76036c937b9671f4752f065aeca800a6c664f71f6c9a699453af94f
 ENV RUBY_MAJOR 3.1
 ENV RUBY_VERSION 3.1.4

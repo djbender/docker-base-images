@@ -17,11 +17,9 @@ target "core" {
   context = "${PWD}/core/bionic-dev"
   platforms = ["linux/amd64", "linux/arm64"]
   cache-from = [
-    "type=gha,scope=core/bionic-dev",
-    "type=registry,ref=ghcr.io/djbender/core:bionic-dev-cache"
+    "type=gha,scope=core/bionic-dev"
   ]
   cache-to = [
-    # disabled while GitHub Actions cache is cranky
-    # "type=gha,scope=core/bionic-dev,mode=max"
+    "type=gha,scope=core/bionic-dev,mode=max"
   ]
 }

@@ -12,15 +12,13 @@ group "default" {
 
 # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
 target "ruby" {
-  tags = ["127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/ruby:2.7", "127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/ruby:2.7-slim", "127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/ruby:2.7-slim-jammy", "127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/ruby:2.7.8", "127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/ruby:2.7.8-slim", "127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/ruby:2.7.8-slim-jammy"]
+  tags = ["ghcr.io/djbender/ruby:2.7", "ghcr.io/djbender/ruby:2.7-jammy", "ghcr.io/djbender/ruby:2.7.8", "ghcr.io/djbender/ruby:2.7.8-jammy"]
   context = "${PWD}/ruby/2.7"
   platforms = ["linux/amd64", "linux/arm64"]
   cache-from = [
-    "type=gha,scope=ruby/2.7",
-    "type=registry,ref=ghcr.io/get-bridge/ruby:2.7-cache"
+    "type=gha,scope=ruby/2.7"
   ]
   cache-to = [
-    # disabled while GitHub Actions cache is cranky
-    # "type=gha,scope=ruby/2.7,mode=max"
+    "type=gha,scope=ruby/2.7,mode=max"
   ]
 }

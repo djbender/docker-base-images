@@ -171,9 +171,8 @@ node: &NODE
 ruby: &RUBY
   defaults:
     base_image: ghcr.io/djbender/core
-    bundler_version: 2.4.5
-    rubygems_version: 3.4.5
-    flavor: slim
+    bundler_version: 2.5.9
+    rubygems_version: 3.5.7
   versions:
     '2.7': &RUBY27
       ruby_major: 2.7
@@ -198,10 +197,18 @@ ruby: &RUBY
       flavor: dev
     '3.2': &RUBY32
       ruby_major: 3.2
-      ruby_version: 3.2.2
-      ruby_download_sha256: 4b352d0f7ec384e332e3e44cdbfdcd5ff2d594af3c8296b5636c710975149e23
-      latest: true # apply the latest tag
+      ruby_version: 3.2.3
+      ruby_download_sha256: cfb231954b8c241043a538a4c682a1cca0b2016d835fee0b9e4a0be3ceba476b
     '3.2-dev':
       <<: *RUBY32
+      flavor: dev
+      latest: false
+    '3.3': &RUBY33
+      ruby_major: 3.3
+      ruby_version: 3.3.0
+      ruby_download_sha256: 676b65a36e637e90f982b57b059189b3276b9045034dcd186a7e9078847b975b
+      latest: true # apply the latest tag
+    '3.3-dev':
+      <<: *RUBY33
       flavor: dev
       latest: false

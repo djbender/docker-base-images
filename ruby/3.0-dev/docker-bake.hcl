@@ -12,13 +12,13 @@ group "default" {
 
 # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
 target "ruby" {
-  tags = ["ghcr.io/djbender/ruby:3.0", "ghcr.io/djbender/ruby:3.0-jammy", "ghcr.io/djbender/ruby:3.0.6", "ghcr.io/djbender/ruby:3.0.6-jammy"]
-  context = "${PWD}/ruby/3.0"
+  tags = ["ghcr.io/djbender/ruby:3.0-dev", "ghcr.io/djbender/ruby:3.0-dev-jammy", "ghcr.io/djbender/ruby:3.0.6-dev", "ghcr.io/djbender/ruby:3.0.6-dev-jammy"]
+  context = "${PWD}/ruby/3.0-dev"
   platforms = ["linux/amd64", "linux/arm64"]
   cache-from = [
-    "type=gha,scope=ruby/3.0"
+    "type=gha,scope=ruby/3.0-dev"
   ]
   cache-to = [
-    "type=gha,scope=ruby/3.0,mode=max"
+    "type=gha,scope=ruby/3.0-dev,mode=max"
   ]
 }

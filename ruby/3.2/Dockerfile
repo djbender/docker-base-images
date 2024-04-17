@@ -5,9 +5,9 @@
 # task `rake generate:ruby`
 
 ########## Ruby image ##########################
-FROM 127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/core
-LABEL com.get-bridge.image.authors="get-bridge"
-LABEL org.opencontainers.image.source=https://github.com/get-bridge/docker-base-images
+FROM ghcr.io/djbender/core
+LABEL org.opencontainers.image.authors="djbender"
+LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
 USER root
 
@@ -19,6 +19,7 @@ RUN <<EOT
   apt-get update
   apt-get install --yes --no-install-recommends \
     bzip2 \
+    curl \
     libffi-dev \
     libgmp-dev \
     libssl-dev \
@@ -34,12 +35,12 @@ install: --no-document
 update: --no-document
 EOT
 
-ENV BUNDLER_VERSION 2.4.5
+ENV BUNDLER_VERSION 2.5.9
 ENV LANG en_US.utf-8
-ENV RUBYGEMS_VERSION 3.4.5
-ENV RUBY_DOWNLOAD_SHA256 4b352d0f7ec384e332e3e44cdbfdcd5ff2d594af3c8296b5636c710975149e23
+ENV RUBYGEMS_VERSION 3.5.7
+ENV RUBY_DOWNLOAD_SHA256 cfb231954b8c241043a538a4c682a1cca0b2016d835fee0b9e4a0be3ceba476b
 ENV RUBY_MAJOR 3.2
-ENV RUBY_VERSION 3.2.2
+ENV RUBY_VERSION 3.2.3
 
 # NOTE: some of ruby's build scripts are written in ruby so we need to install ruby
 # in order to compile ruby. We use apt-mark to uninstall packages we don't need.

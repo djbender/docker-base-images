@@ -19,11 +19,9 @@ target "<%= image_name %>" {
   context = "${PWD}/<%= image_name %>/<%= version %>"
   platforms = ["linux/amd64", "linux/arm64"]
   cache-from = [
-    "type=gha,scope=<%= image_name %>/<%= version %>",
-    "type=registry,ref=ghcr.io/djbender/<%= image_name %>:<%= version %>-cache"
+    "type=gha,scope=<%= image_name %>/<%= version %>"
   ]
   cache-to = [
-    # disabled while GitHub Actions cache is cranky
-    # "type=gha,scope=<%= image_name %>/<%= version %>,mode=max"
+    "type=gha,scope=<%= image_name %>/<%= version %>,mode=max"
   ]
 }

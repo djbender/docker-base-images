@@ -17,11 +17,9 @@ target "core" {
   context = "${PWD}/core/jammy-dev"
   platforms = ["linux/amd64", "linux/arm64"]
   cache-from = [
-    "type=gha,scope=core/jammy-dev",
-    "type=registry,ref=ghcr.io/djbender/core:jammy-dev-cache"
+    "type=gha,scope=core/jammy-dev"
   ]
   cache-to = [
-    # disabled while GitHub Actions cache is cranky
-    # "type=gha,scope=core/jammy-dev,mode=max"
+    "type=gha,scope=core/jammy-dev,mode=max"
   ]
 }
