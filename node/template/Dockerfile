@@ -4,7 +4,8 @@
 
 ########## Node image ##################
 FROM <%= base_image %>
-LABEL com.get-bridge.image.authors="get-brige"
+LABEL org.opencontainers.image.authors="djbender"
+LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
 USER root
 WORKDIR /usr/src/app
@@ -21,10 +22,12 @@ RUN <<EOT
   chown docker:docker /usr/src/app
   apt-get update
   apt-get install --yes --no-install-recommends \
+    apt-transport-https \
+    curl \
     gnupg
-  curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | apt-key add -
-  echo "deb https://deb.nodesource.com/node_<%= node_major %>.x <%= distribution_code_name %> main" \
-    > /etc/apt/sources.list.d/nodesource.list
+  mkdir -p /usr/share/keyrings
+  curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /usr/share/keyrings/nodesource.gpg
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_<%= node_major %>.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
   apt-get update
   apt-get install --yes --no-install-recommends \
     nodejs
@@ -33,8 +36,8 @@ RUN <<EOT
   npm install --global "yarn@${YARN_VERSION}"
   rm -rf /root/.npm/_cacache
   npm cache clean --force
-<% if flavor == 'fat' -%>
-  # Install build dependencies for fat image, NOTE: fat image is NOT meant to be deployed to production
+<% if flavor == 'dev' -%>
+  # Install build dependencies for dev image, NOTE: dev image is NOT meant to be deployed to production
   apt-get update
   apt-get install --yes --no-install-recommends \
     build-essential

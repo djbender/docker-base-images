@@ -12,13 +12,13 @@ group "default" {
 
 # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
 target "node" {
-  tags = ["ghcr.io/djbender/node:12", "ghcr.io/djbender/node:12-", "ghcr.io/djbender/node:12--bionic", "ghcr.io/djbender/node:12.22.12-", "ghcr.io/djbender/node:12.22.12--bionic"]
-  context = "${PWD}/node/12"
+  tags = ["ghcr.io/djbender/node:10-dev", "ghcr.io/djbender/node:10-dev-bionic", "ghcr.io/djbender/node:10.24.1-dev", "ghcr.io/djbender/node:10.24.1-dev-bionic"]
+  context = "${PWD}/node/10-dev"
   platforms = ["linux/amd64", "linux/arm64"]
   cache-from = [
-    "type=gha,scope=node/12"
+    "type=gha,scope=node/10-dev"
   ]
   cache-to = [
-    "type=gha,scope=node/12,mode=max"
+    "type=gha,scope=node/10-dev,mode=max"
   ]
 }

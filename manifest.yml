@@ -96,7 +96,6 @@ java:
 # NOTE: Yarn defaults to v1 since I don't believe we use anything later than that
 node: &NODE
   defaults:
-    flavor: slim
     base_image: ghcr.io/djbender/core
     yarn_version: 1.22.19
   versions:
@@ -110,6 +109,7 @@ node: &NODE
     '8-dev':
       <<: *NODE8
       flavor: dev
+
     '10': &NODE10
       # there is no deb for node v10 on anything later than bionic
       base_image: ghcr.io/djbender/core:bionic
@@ -120,6 +120,7 @@ node: &NODE
     '10-dev':
       <<: *NODE10
       flavor: dev
+
     '12': &NODE12
       # there is no deb for node v12 on anything later than bionic
       base_image: ghcr.io/djbender/core:bionic
@@ -130,6 +131,7 @@ node: &NODE
     '12-dev':
       <<: *NODE12
       flavor: dev
+
     '14': &NODE14
       node_major: 14
       node_version: 14.21.3
@@ -137,6 +139,7 @@ node: &NODE
     '14-dev':
       <<: *NODE14
       flavor: dev
+
     '16': &NODE16
       node_major: 16
       node_version: 16.20.0
@@ -144,6 +147,7 @@ node: &NODE
     '16-dev':
       <<: *NODE16
       flavor: dev
+
     '18': &NODE18
       node_major: 18
       node_version: 18.16.0
@@ -151,20 +155,22 @@ node: &NODE
     '18-dev':
       <<: *NODE18
       flavor: dev
-    '19': &NODE19
-      node_major: 19
-      node_version: 19.9.0
-      npm_version: 9.6.3
-    '19-dev':
-      <<: *NODE19
-      flavor: dev
+
     '20': &NODE20
       node_major: 20
       node_version: 20.2.0
       npm_version: 9.6.6
-      latest: true
     '20-dev':
       <<: *NODE20
+      flavor: dev
+
+    '21': &NODE21
+      node_major: 21
+      node_version: 21.7.3
+      npm_version: 10.5.2
+      latest: true
+    '21-dev':
+      <<: *NODE21
       flavor: dev
       latest: false
 

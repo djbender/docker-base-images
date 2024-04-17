@@ -2,8 +2,9 @@
 
 
 ########## Node image ##################
-FROM 127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/core
-LABEL com.get-bridge.image.authors="get-brige"
+FROM ghcr.io/djbender/core
+LABEL org.opencontainers.image.authors="djbender"
+LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
 USER root
 WORKDIR /usr/src/app
@@ -20,10 +21,12 @@ RUN <<EOT
   chown docker:docker /usr/src/app
   apt-get update
   apt-get install --yes --no-install-recommends \
+    apt-transport-https \
+    curl \
     gnupg
-  curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | apt-key add -
-  echo "deb https://deb.nodesource.com/node_18.x jammy main" \
-    > /etc/apt/sources.list.d/nodesource.list
+  mkdir -p /usr/share/keyrings
+  curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /usr/share/keyrings/nodesource.gpg
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
   apt-get update
   apt-get install --yes --no-install-recommends \
     nodejs

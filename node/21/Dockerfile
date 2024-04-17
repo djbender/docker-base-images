@@ -2,16 +2,16 @@
 
 
 ########## Node image ##################
-FROM ghcr.io/djbender/core:bionic
+FROM ghcr.io/djbender/core
 LABEL org.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
 USER root
 WORKDIR /usr/src/app
 
-ENV NODE_MAJOR 10
-ENV NODE_VERSION 10.24.1
-ENV NPM_VERSION 6.14.12
+ENV NODE_MAJOR 21
+ENV NODE_VERSION 21.7.3
+ENV NPM_VERSION 10.5.2
 ENV YARN_VERSION 1.22.19
 
 RUN <<EOT
@@ -26,7 +26,7 @@ RUN <<EOT
     gnupg
   mkdir -p /usr/share/keyrings
   curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /usr/share/keyrings/nodesource.gpg
-  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_10.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_21.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
   apt-get update
   apt-get install --yes --no-install-recommends \
     nodejs

@@ -12,15 +12,13 @@ group "default" {
 
 # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
 target "node" {
-  tags = ["127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/node:16", "127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/node:16-slim", "127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/node:16-slim-jammy", "127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/node:16.20.0-slim", "127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/node:16.20.0-slim-jammy"]
+  tags = ["ghcr.io/djbender/node:16", "ghcr.io/djbender/node:16-", "ghcr.io/djbender/node:16--jammy", "ghcr.io/djbender/node:16.20.0-", "ghcr.io/djbender/node:16.20.0--jammy"]
   context = "${PWD}/node/16"
   platforms = ["linux/amd64", "linux/arm64"]
   cache-from = [
-    "type=gha,scope=node/16",
-    "type=registry,ref=ghcr.io/get-bridge/node:16-cache"
+    "type=gha,scope=node/16"
   ]
   cache-to = [
-    # disabled while GitHub Actions cache is cranky
-    # "type=gha,scope=node/16,mode=max"
+    "type=gha,scope=node/16,mode=max"
   ]
 }
