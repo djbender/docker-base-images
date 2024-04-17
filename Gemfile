@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 
 ruby '~> 3.1'
 
-gem 'aws-sdk-ecr', '~> 1.5'
 gem 'nokogiri'
 gem 'rake'
 gem 'rubocop', require: false

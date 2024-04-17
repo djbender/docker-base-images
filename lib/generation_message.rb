@@ -1,9 +1,9 @@
 require 'erb'
 
-GENERATION_MESSAGE_TEMPLATE = <<~MESSAGE
+GENERATION_MESSAGE_TEMPLATE = <<~MESSAGE.freeze
   # GENERATED FILE, DO NOT MODIFY!
   # To update this file please edit the relevant template and run the generation
-  # task `<%= task_name.nil? ? 'rake generate:all' : \"rake \#{task_name}\" %>`
+  # task `<%= task_name.nil? ? 'rake generate:all' : "rake \#{task_name}" %>`
 MESSAGE
 
 class GenerationMessage

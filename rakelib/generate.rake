@@ -28,10 +28,10 @@ namespace :generate do
                             .merge(defaults)
                             .merge(values)
                             .merge(
-                              generation_message: generation_message,
-                              version: version,
-                              image_name: image_name,
-                              output_dir: output_dir
+                              generation_message:,
+                              version:,
+                              image_name:,
+                              output_dir:
                             )
           templates.each do |template|
             template.render(template_values).to(output_dir)

@@ -7,7 +7,7 @@ require 'yaml'
 class Util
   PROJECT_DIR = Rake.original_dir
   PROJECT_PATHNAME = Pathname.new(PROJECT_DIR)
-  BAKE_FILE = 'docker-bake.hcl'
+  BAKE_FILE = 'docker-bake.hcl'.freeze
   MANIFEST = YAML.load_file(File.join(PROJECT_DIR, 'manifest.yml'), aliases: true)
 
   # Get global defaults, and delete from yml so they are not translated into a docker image

@@ -8,11 +8,8 @@ AllCops:
   DisplayCopNames: true
   TargetRubyVersion: 3.2
 
-Style/HashSyntax:
-  EnforcedShorthandSyntax: either
-
 Style/Documentation:
   Enabled: false
 
-Style/FrozenStringLiteralCommen:
+Style/FrozenStringLiteralComment:
   Enabled: false
