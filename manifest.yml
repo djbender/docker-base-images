@@ -179,7 +179,7 @@ ruby: &RUBY
       ruby_version: 2.7.8
       ruby_download_sha256: f22f662da504d49ce2080e446e4bea7008cee11d5ec4858fc69000d0e5b1d7fb
       rubygems_version: 3.3.27
-      bundler_version: 3.3.27
+      bundler_version: 2.3.27
     '2.7-dev':
       <<: *RUBY27
       flavor: dev
