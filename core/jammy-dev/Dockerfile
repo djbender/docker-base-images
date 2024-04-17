@@ -52,9 +52,7 @@ set -exu
 apt-get update
 apt-get install --yes --no-install-recommends \
   ca-certificates \
-  curl \
-  locales \
-  vim-tiny
+  locales 
 
 # create docker user
 addgroup --gid 9999 docker
@@ -65,8 +63,6 @@ update-ca-certificates
 # See the Locals heading at https://hub.docker.com/_/ubuntu
 # Alias created as some languages (such as ruby) require the extra local
 localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
-# vim-tiny only adds about 2mb
-update-alternatives --install /usr/bin/vim vim /usr/bin/vim.tiny 1
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
 EOT
 

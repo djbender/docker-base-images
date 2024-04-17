@@ -1,2 +1,2 @@
 # Docker Base Images
-Official Bridge multi architecture docker base images
+Multi architecture docker base images

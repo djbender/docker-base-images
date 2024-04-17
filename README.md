@@ -1,10 +1,10 @@
 # docker-base-images
-[![Build Images](https://github.com/get-bridge/docker-base-images/actions/workflows/build-images.yml/badge.svg)](https://github.com/get-bridge/docker-base-images/actions/workflows/build-images.yml)
+[![Build Images](https://github.com/djbender/docker-base-images/actions/workflows/build-images.yml/badge.svg)](https://github.com/djbender/docker-base-images/actions/workflows/build-images.yml)
 
-Official Bridge multi architecture docker base images
+Multi architecture docker base images
 
 Available images:
-- [Core - Ubuntu Bionic and Jammy](core/)
+- [Core - Ubuntu Bionic, Jammy, Noble (soon™)](core/)
 - [Ruby](ruby/)
 - [Node](node/)
 - [Java](java/)
@@ -18,7 +18,7 @@ Available images:
 
 Note: without this step, you'll see messages like when building:
 
-    #9 importing cache manifest from ghcr.io/get-bridge/core:jammy-cache
+    #9 importing cache manifest from ghcr.io/djbender/core:jammy-cache
     #9 ERROR: failed to configure registry cache importer: failed to authorize: failed to fetch anonymous token: unexpected status: 401 Unauthorized
 
 - `docker buildx bake -f core/jammy/docker-bake.hcl`
