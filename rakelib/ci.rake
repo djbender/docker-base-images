@@ -14,8 +14,7 @@ namespace :ci do
 
     desc 'Generate non-core index of bake config, cache, and set-matrix output'
     task :'non-core' do
-      # non_core_filter = proc { |image_name| image_name != 'core' && image_name != 'clojure' }
-      non_core_filter = proc { |image_name| image_name == 'ruby' || image_name == 'node' }
+      non_core_filter = proc { |image_name| image_name != 'core' && image_name != 'clojure' }
 
       puts matrix(&non_core_filter).to_json
     end

@@ -12,7 +12,7 @@ group "default" {
 
 # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
 target "java" {
-  tags = ["127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/java:11-jre", "127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/java:11-jre-jammy"]
+  tags = ["ghcr.io/djbender/java:11-jre", "ghcr.io/djbender/java:11-jre-jammy"]
   context = "${PWD}/java/11-jre"
   platforms = ["linux/amd64", "linux/arm64"]
   cache-from = [

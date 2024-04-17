@@ -5,7 +5,7 @@
 # task `rake generate:java`
 
 ########## Java image ##########################
-FROM 127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/core
+FROM ghcr.io/djbender/core
 LABEL com.get-bridge.image.authors="get-bridge"
 LABEL org.opencontainers.image.source=https://github.com/get-bridge/docker-base-images
 
