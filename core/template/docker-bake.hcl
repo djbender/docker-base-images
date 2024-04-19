@@ -4,6 +4,7 @@
 <%
 # Specify any additional tags here, see defaults defined in lib/metadata.rb
 core_tags = []
+core_tags.push("#{full_image_path}:dev") if flavor == 'dev' && !!latest
 custom_tags = docker_tags(core_tags)
 %>
 

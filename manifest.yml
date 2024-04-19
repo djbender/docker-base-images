@@ -40,11 +40,19 @@ clojure:
 
 core:
   versions:
+    noble: 
+      base_image: ubuntu:noble
+      distribution_code_name: noble
+    noble-dev:
+      base_image: ubuntu:noble
+      distribution_code_name: noble
+      flavor: dev
     jammy:
       # NOTE: never tag non-LTS releases as latest, its better to tag the specific LTS release below as latest.
       latest: true
     jammy-dev:
       flavor: dev
+      latest_dev: true
     bionic:
       base_image: ubuntu:bionic
       distribution_code_name: bionic
@@ -184,10 +192,11 @@ ruby: &RUBY
       ruby_major: 2.7
       ruby_version: 2.7.8
       ruby_download_sha256: f22f662da504d49ce2080e446e4bea7008cee11d5ec4858fc69000d0e5b1d7fb
-      rubygems_version: 3.3.27
       bundler_version: 2.3.27
+      rubygems_version: 3.3.27
     '2.7-dev':
       <<: *RUBY27
+      base_image: ghcr.io/djbender/core:dev
       flavor: dev
     '3.0': &RUBY30
       ruby_major: 3.0
@@ -195,6 +204,7 @@ ruby: &RUBY
       ruby_download_sha256: b5cbee93e62d85cfb2a408c49fa30a74231ae8409c2b3858e5f5ea254d7ddbd1
     '3.0-dev':
       <<: *RUBY30
+      base_image: ghcr.io/djbender/core:dev
       flavor: dev
     '3.1': &RUBY31
       ruby_major: 3.1
@@ -202,6 +212,7 @@ ruby: &RUBY
       ruby_download_sha256: 1b6d6010e76036c937b9671f4752f065aeca800a6c664f71f6c9a699453af94f
     '3.1-dev':
       <<: *RUBY31
+      base_image: ghcr.io/djbender/core:dev
       flavor: dev
     '3.2': &RUBY32
       ruby_major: 3.2
@@ -209,6 +220,7 @@ ruby: &RUBY
       ruby_download_sha256: cfb231954b8c241043a538a4c682a1cca0b2016d835fee0b9e4a0be3ceba476b
     '3.2-dev':
       <<: *RUBY32
+      base_image: ghcr.io/djbender/core:dev
       flavor: dev
       latest: false
     '3.3': &RUBY33
@@ -218,5 +230,16 @@ ruby: &RUBY
       latest: true # apply the latest tag
     '3.3-dev':
       <<: *RUBY33
+      base_image: ghcr.io/djbender/core:dev
       flavor: dev
       latest: false
+
+    '3.3-noble': &RUBY33-noble
+      base_image: ghcr.io/djbender/core:noble
+      ruby_major: 3.3
+      ruby_version: 3.3.0
+      ruby_download_sha256: 676b65a36e637e90f982b57b059189b3276b9045034dcd186a7e9078847b975b
+    '3.3-noble-dev':
+      base_image: ghcr.io/djbender/core:noble-dev
+      <<: *RUBY33
+      flavor: dev

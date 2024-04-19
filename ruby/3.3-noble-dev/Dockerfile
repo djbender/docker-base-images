@@ -5,7 +5,7 @@
 # task `rake generate:ruby`
 
 ########## Ruby image ##########################
-FROM ghcr.io/djbender/core:dev
+FROM ghcr.io/djbender/core:noble-dev
 LABEL org.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 

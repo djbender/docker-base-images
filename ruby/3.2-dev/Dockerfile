@@ -5,7 +5,7 @@
 # task `rake generate:ruby`
 
 ########## Ruby image ##########################
-FROM ghcr.io/djbender/core
+FROM ghcr.io/djbender/core:dev
 LABEL org.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
@@ -26,7 +26,7 @@ RUN <<EOT
     libyaml-dev \
     procps \
     zlib1g-dev
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
 EOT
 
 # skip installing gem documentation
@@ -105,12 +105,10 @@ RUN <<EOT
   # Update rubygems and bundler
   gem update  --no-document --system $RUBYGEMS_VERSION
   gem install --no-document bundler -v $BUNDLER_VERSION
-  # Install build dependencies for dev image, NOTE: dev image is NOT meant to be deployed to production
   apt-get update
   apt-get install --yes --no-install-recommends \
     autoconf \
     bison \
-    build-essential \
     dpkg-dev \
     g++ \
     gcc \

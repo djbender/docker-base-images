@@ -40,6 +40,7 @@ class Metadata
       tags_array.push(default_flavor_tag, default_version_tag)
       tags_array.push("#{full_image_path}:#{github_sha}") if github_sha
       tags_array.push("#{full_image_path}:latest") if latest
+      tags_array.push("#{full_image_path}:dev") if latest_dev
       tags_array.push("#{full_image_path}:rolling") if rolling
     end.flatten.compact.uniq
   end

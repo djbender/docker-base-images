@@ -41,6 +41,7 @@ EOT
 ########## Core image ##########################
 FROM <%= base_image %>
 LABEL com.opencontainers.image.authors="djbender"
+LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Create a 'docker' user

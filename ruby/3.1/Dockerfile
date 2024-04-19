@@ -26,7 +26,7 @@ RUN <<EOT
     libyaml-dev \
     procps \
     zlib1g-dev
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
 EOT
 
 # skip installing gem documentation

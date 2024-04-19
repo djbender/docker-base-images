@@ -20,13 +20,13 @@ RUN <<EOT
     curl \
     libffi-dev \
     libgmp-dev \
-  <% if ruby_major >= 3.1 -%>
-  libssl-dev \
-  <% end -%>
-  libyaml-dev \
+<% if ruby_major >= 3.1 -%>
+    libssl-dev \
+<% end -%>
+    libyaml-dev \
     procps \
     zlib1g-dev
-  <% if ruby_major <= 3.0 -%>
+<% if ruby_major <= 3.0 %>
   arch=$(dpkg --print-architecture)
   if [ "$arch" == "arm64" ]; then
     # Ruby versions older than or equal to 3.0 require an older version of openssl :| which is really annoying
@@ -46,7 +46,7 @@ RUN <<EOT
     libssl-dev \
     libssl1.1 \
     openssl
-  <% end -%>
+<% end -%>
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
 EOT
 
@@ -127,12 +127,10 @@ RUN <<EOT
   gem update  --no-document --system $RUBYGEMS_VERSION
   gem install --no-document bundler -v $BUNDLER_VERSION
 <% if flavor == 'dev' -%>
-  # Install build dependencies for dev image, NOTE: dev image is NOT meant to be deployed to production
   apt-get update
   apt-get install --yes --no-install-recommends \
     autoconf \
     bison \
-    build-essential \
     dpkg-dev \
     g++ \
     gcc \

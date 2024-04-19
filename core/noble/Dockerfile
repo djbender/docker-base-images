@@ -6,7 +6,7 @@
 
 ########## tini ##########################
 # Grab tini binary (used as default entrypoint)
-FROM ubuntu:jammy as tini
+FROM ubuntu:noble as tini
 LABEL org.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
@@ -41,7 +41,7 @@ EOT
 
 
 ########## Core image ##########################
-FROM ubuntu:jammy
+FROM ubuntu:noble
 LABEL com.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 ENV DEBIAN_FRONTEND=noninteractive
@@ -52,6 +52,7 @@ RUN <<EOT
 set -exu
 apt-get update
 apt-get install --yes --no-install-recommends \
+  adduser \
   ca-certificates \
   locales 
 
@@ -71,23 +72,6 @@ EOT
 ENV LANG en_US.utf-8
 ENV LANGUAGE en_US:en
 
-RUN <<EOT
-#!/usr/bin/env bash
-set -exu
-apt-get update
-apt-get install --yes --no-install-recommends \
-  build-essential \
-  git \
-  gnupg2 \
-  psmisc \
-  software-properties-common \
-  tzdata
-# gnupg2 and dirmngr will attempt to use IPv6 if it's enabled in Docker, even
-# if the container doesn't have an IPv6 address (this is true on Docker Hub).
-mkdir ~/.gnupg
-echo "disable-ipv6" >> ~/.gnupg/dirmngr.conf
-rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
-EOT
 
 # Install Tini for init use (reaps defunct processes and forwards signals)
 COPY --from=tini /tini /tini

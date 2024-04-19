@@ -6,7 +6,7 @@
 
 ########## tini ##########################
 # Grab tini binary (used as default entrypoint)
-FROM ubuntu:jammy as tini
+FROM ubuntu:noble as tini
 LABEL org.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
@@ -41,7 +41,7 @@ EOT
 
 
 ########## Core image ##########################
-FROM ubuntu:jammy
+FROM ubuntu:noble
 LABEL com.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 ENV DEBIAN_FRONTEND=noninteractive
@@ -52,6 +52,7 @@ RUN <<EOT
 set -exu
 apt-get update
 apt-get install --yes --no-install-recommends \
+  adduser \
   ca-certificates \
   locales 
 

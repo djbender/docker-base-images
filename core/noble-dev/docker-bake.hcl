@@ -13,13 +13,13 @@ group "default" {
 
 # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
 target "core" {
-  tags = ["ghcr.io/djbender/core:dev", "ghcr.io/djbender/core:jammy-dev"]
-  context = "${PWD}/core/jammy-dev"
+  tags = ["ghcr.io/djbender/core:noble-dev"]
+  context = "${PWD}/core/noble-dev"
   platforms = ["linux/amd64", "linux/arm64"]
   cache-from = [
-    "type=gha,scope=core/jammy-dev"
+    "type=gha,scope=core/noble-dev"
   ]
   cache-to = [
-    "type=gha,scope=core/jammy-dev,mode=max"
+    "type=gha,scope=core/noble-dev,mode=max"
   ]
 }
