@@ -100,6 +100,7 @@ jobs:
       || github.event_name == 'push'
       || github.event_name == 'workflow_dispatch'
     needs:
+      - set-matrix
       - build-core-images
     permissions:
       packages: write
