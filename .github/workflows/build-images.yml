@@ -158,7 +158,6 @@ jobs:
       packages: write
       contents: read
     strategy:
-      max-parallel: 8
       fail-fast: false
       matrix: ${{ fromJSON(needs.set-matrix.outputs.common_matrix) }}
     timeout-minutes: 120
@@ -208,7 +207,6 @@ jobs:
       packages: write
       contents: read
     strategy:
-      max-parallel: 4
       fail-fast: false
       matrix: ${{ fromJSON(needs.set-matrix.outputs.post_java_matrix) }}
     timeout-minutes: 120
