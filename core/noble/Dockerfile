@@ -72,7 +72,6 @@ EOT
 ENV LANG en_US.utf-8
 ENV LANGUAGE en_US:en
 
-
 # Install Tini for init use (reaps defunct processes and forwards signals)
 COPY --from=tini /tini /tini
 
