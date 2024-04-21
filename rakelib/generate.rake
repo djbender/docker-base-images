@@ -13,8 +13,8 @@ namespace :generate do
       generation_message = GenerationMessage.new(t.name).render
 
       template_filenames = details.fetch('template_files') { [] }
-      template_filenames << 'Dockerfile' unless template_filenames.include?('Dockerfile')
-      template_filenames << 'docker-bake.hcl' unless template_filenames.include?('docker-bake.hcl')
+      template_filenames << 'Dockerfile.erb' unless template_filenames.include?('Dockerfile.erb')
+      template_filenames << 'docker-bake.hcl.erb' unless template_filenames.include?('docker-bake.hcl.erb')
       templates = template_filenames.map { |filename| Template.new(File.join(template_dir, filename)) }
 
       defaults = details.fetch('defaults', {})

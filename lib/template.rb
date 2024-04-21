@@ -30,7 +30,8 @@ class Template
     end
 
     def to(output_dir)
-      output_path = File.join(output_dir, @template.filename)
+      filename = @template.filename.delete_suffix('.erb')
+      output_path = File.join(output_dir, filename)
       File.write(output_path, to_string)
     end
 
