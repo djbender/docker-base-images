@@ -21,7 +21,7 @@ namespace :ci do
 
     desc 'Generate common index of bake config, cache, and set-matrix output'
     task :common do
-      common_filter = proc { |image_name| !image_name.starts_with('core') && image_name != 'clojure' }
+      common_filter = proc { |image_name| !image_name.start_with?('core') && image_name != 'clojure' }
 
       puts matrix(&common_filter).to_json
     end
