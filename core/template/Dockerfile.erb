@@ -4,7 +4,7 @@
 
 ########## tini ##########################
 # Grab tini binary (used as default entrypoint)
-FROM <%= base_image %> as tini
+FROM ubuntu:<%= distribution_code_name %> as tini
 LABEL org.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
@@ -54,7 +54,7 @@ apt-get install --yes --no-install-recommends \
   adduser \
 <%- end -%>
   ca-certificates \
-  locales 
+  locales
 
 # create docker user
 addgroup --gid 9999 docker

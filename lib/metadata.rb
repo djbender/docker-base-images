@@ -18,6 +18,10 @@ class Metadata
     "ghcr.io/djbender/#{image_name}"
   end
 
+  def context_path
+    "#{original_image_name}/#{original_version}"
+  end
+
   def docker_tags(custom_tags = [])
     custom_tags = custom_tags.push(additional_tags).flatten.compact.uniq
     default_docker_tags.push(custom_tags).flatten.compact.uniq.sort

@@ -12,18 +12,25 @@ namespace :ci do
       puts matrix(&core_filter).to_json
     end
 
-    desc 'Generate non-core index of bake config, cache, and set-matrix output'
-    task :'non-core' do
-      non_core_filter = proc { |image_name| image_name != 'core' && image_name != 'clojure' }
+    desc 'Generate core-dev index of bake config, cache, and set-matrix output'
+    task :'core-dev' do
+      core_dev_filter = proc { |image_name| image_name == 'core-dev' }
 
-      puts matrix(&non_core_filter).to_json
+      puts matrix(&core_dev_filter).to_json
     end
 
-    desc 'Generate clojure index of bake config, cache, and set-matrix output'
-    task :clojure do
-      non_core_filter = proc { |image_name| image_name == 'clojure' }
+    desc 'Generate common index of bake config, cache, and set-matrix output'
+    task :common do
+      common_filter = proc { |image_name| !image_name.starts_with('core') && image_name != 'clojure' }
 
-      puts matrix(&non_core_filter).to_json
+      puts matrix(&common_filter).to_json
+    end
+
+    desc 'Generate post-java index of bake config, cache, and set-matrix output'
+    task :'post-java' do
+      post_java_filter = proc { |image_name| image_name == 'clojure' }
+
+      puts matrix(&post_java_filter).to_json
     end
   end
 end
@@ -58,12 +65,10 @@ def matrix(&)
         {
           bake: Pathname.new("#{image_name}/#{version}") + Util::BAKE_FILE,
           'cache-from' => [
-            "*.cache-from=type=gha,scope=#{image_name}/#{version}",
-            # "*.cache-from=type=registry,ref=#{ghcr_registry}/djbender/#{image_name}:#{version}-cache"
+            "*.cache-from=type=gha,scope=#{image_name}/#{version}"
           ].join("\n"),
           'cache-to' => [
-            "*.cache-to=type=gha,scope=#{image_name}/#{version},mode=max",
-            # "*.cache-to=type=registry,ref=#{ghcr_registry}/djbender/#{image_name}:#{version}-cache,mode=max"
+            "*.cache-to=type=gha,scope=#{image_name}/#{version},mode=max"
           ].join("\n")
         }
       end

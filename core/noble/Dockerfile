@@ -54,7 +54,7 @@ apt-get update
 apt-get install --yes --no-install-recommends \
   adduser \
   ca-certificates \
-  locales 
+  locales
 
 # create docker user
 addgroup --gid 9999 docker

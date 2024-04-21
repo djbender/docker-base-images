@@ -22,17 +22,18 @@ namespace :generate do
         print "- #{version}... "
         values ||= {}
         Util.with_clean_output_dir(image_name, version) do |output_dir|
-          version = values.fetch('version_override', version)
           template_values = Util::GLOBAL_DEFAULTS
-                            .fetch('defaults', {})
-                            .merge(defaults)
-                            .merge(values)
-                            .merge(
-                              generation_message:,
-                              version:,
-                              image_name:,
-                              output_dir:
-                            )
+            .fetch('defaults', {})
+            .merge(defaults)
+            .merge(values)
+            .merge(
+              generation_message:,
+              version: values.fetch('version_override', version),
+              image_name: values.fetch('image_name_override', image_name),
+              output_dir: values.fetch('output_dir_override', output_dir),
+              original_version: version,
+              original_image_name: image_name
+            )
           templates.each do |template|
             template.render(template_values).to(output_dir)
           end

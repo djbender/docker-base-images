@@ -1,6 +1,6 @@
 # GENERATED FILE, DO NOT MODIFY!
 # To update this file please edit the relevant template and run the generation
-# task `rake generate:core`
+# task `rake generate:core-dev`
 
 # https://docs.docker.com/engine/reference/commandline/buildx_bake/#file-definition
 
@@ -8,18 +8,18 @@
 variable "PWD" {default="" }
 
 group "default" {
-    targets = ["core"]
+  targets = ["core"]
 }
 
-# NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
 target "core" {
-  tags = ["ghcr.io/djbender/core:bionic-dev"]
-  context = "${PWD}/core/bionic-dev"
+  tags = ["ghcr.io/djbender/core:noble-dev"]
+  # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
+  context = "${PWD}/core-dev/noble"
   platforms = ["linux/amd64", "linux/arm64"]
   cache-from = [
-    "type=gha,scope=core/bionic-dev"
+    "type=gha,scope=core/noble"
   ]
   cache-to = [
-    "type=gha,scope=core/bionic-dev,mode=max"
+    "type=gha,scope=core/noble,mode=max"
   ]
 }
