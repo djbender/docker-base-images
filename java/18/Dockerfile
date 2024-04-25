@@ -1,6 +1,9 @@
 # syntax=docker/dockerfile:1.4
 
-# GENERATED FILE, DO NOT MODIFY!
+####################################
+# NOTICE: This is a generated file #
+####################################
+#
 # To update this file please edit the relevant template and run the generation
 # task `rake generate:java`
 

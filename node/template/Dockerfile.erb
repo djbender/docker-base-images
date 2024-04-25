@@ -2,8 +2,8 @@
 
 <%= generation_messages -%>
 
-########## Node image ##################
-FROM <%= base_image %>
+########## node image ##################
+FROM <%= base_image %> as node
 LABEL org.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
@@ -44,13 +44,6 @@ RUN <<EOT
   npm install --global "yarn@${YARN_VERSION}"
   rm -rf /root/.npm/_cacache
   npm cache clean --force
-<% if flavor == 'dev' -%>
-  # Install build dependencies for dev image, NOTE: dev image is NOT meant to be deployed to production
-  apt-get update
-  apt-get install --yes --no-install-recommends \
-    build-essential
-  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-<% end -%>
   # Check that node commands work
   [ "$(command -v node)" = '/usr/bin/node' ]
   [ "$(command -v npm)" = '/usr/bin/npm' ]
@@ -58,6 +51,20 @@ RUN <<EOT
   node -v
   npm -v
   yarn -v
+EOT
+
+USER docker
+
+########## node-dev image ##################
+FROM <%= base_image %> as node-dev
+
+USER root
+RUN <<EOT
+#/usr/bin/env bash
+  apt-get update
+  apt-get install --yes --no-install-recommends \
+    build-essential
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 EOT
 
 USER docker

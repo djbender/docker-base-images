@@ -12,13 +12,6 @@ namespace :ci do
       puts matrix(&core_filter).to_json
     end
 
-    desc 'Generate core-dev index of bake config, cache, and set-matrix output'
-    task :'core-dev' do
-      core_dev_filter = proc { |image_name| image_name == 'core-dev' }
-
-      puts matrix(&core_dev_filter).to_json
-    end
-
     desc 'Generate common index of bake config, cache, and set-matrix output'
     task :common do
       common_filter = proc { |image_name| !image_name.start_with?('core') && image_name != 'clojure' }

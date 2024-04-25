@@ -16,7 +16,10 @@ custom_tags = docker_tags(node_tags)
 variable "PWD" {default="" }
 
 group "default" {
-  targets = ["<%= image_name %>"]
+  targets = [
+    "<%= image_name %>",
+    "<%= image_name %>-dev"
+  ]
 }
 
 # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
@@ -30,4 +33,20 @@ target "<%= image_name %>" {
   cache-to = [
     "type=gha,scope=<%= image_name %>/<%= version %>,mode=max"
   ]
+}
+
+<%-
+node_dev_tags = []
+node_dev_tags.push("#{full_image_path}:#{node_version}-dev-#{distribution_code_name}")
+node_dev_tags.push("#{full_image_path}:#{node_version}-dev")
+node_dev_tags.push("#{full_image_path}:#{node_major}-dev-#{distribution_code_name}")
+dev_tags = docker_dev_tags(node_dev_tags)
+-%>
+
+target "<%= image_name %>-dev" {
+  target = "<%= image_name %>-dev"
+  inherits = ["<%= image_name %>"]
+  tags = <%= dev_tags %>
+  cache-from = ["type=gha,scope=<%= image_name %>-dev/<%= version %>"]
+  cache-to = ["type=gha,scope=<%= image_name %>-dev/<%= version %>,mode=max"]
 }

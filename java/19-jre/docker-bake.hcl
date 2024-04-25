@@ -1,4 +1,7 @@
-# GENERATED FILE, DO NOT MODIFY!
+####################################
+# NOTICE: This is a generated file #
+####################################
+#
 # To update this file please edit the relevant template and run the generation
 # task `rake generate:java`
 
@@ -12,7 +15,7 @@ group "default" {
 
 # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
 target "java" {
-  tags = ["ghcr.io/djbender/java:19-jre", "ghcr.io/djbender/java:19-jre-jammy"]
+  tags = ["ghcr.io/djbender/java:19-jre", "ghcr.io/djbender/java:19-jre-noble"]
   context = "${PWD}/java/19-jre"
   platforms = ["linux/amd64", "linux/arm64"]
   cache-from = [

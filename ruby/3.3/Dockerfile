@@ -1,11 +1,14 @@
 # syntax=docker/dockerfile:1.4
 
-# GENERATED FILE, DO NOT MODIFY!
+####################################
+# NOTICE: This is a generated file #
+####################################
+#
 # To update this file please edit the relevant template and run the generation
 # task `rake generate:ruby`
 
 ########## Ruby image ##########################
-FROM ghcr.io/djbender/core
+FROM ghcr.io/djbender/core as ruby
 LABEL org.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
@@ -40,7 +43,7 @@ ENV LANG en_US.utf-8
 ENV RUBYGEMS_VERSION 3.5.7
 ENV RUBY_DOWNLOAD_SHA256 676b65a36e637e90f982b57b059189b3276b9045034dcd186a7e9078847b975b
 ENV RUBY_MAJOR 3.3
-ENV RUBY_VERSION 3.3.0
+ENV RUBY_VERSION 3.3.1
 
 # NOTE: some of ruby's build scripts are written in ruby so we need to install ruby
 # in order to compile ruby. We use apt-mark to uninstall packages we don't need.
@@ -135,3 +138,37 @@ ENV PATH $GEM_HOME/bin:$PATH
 WORKDIR /usr/src/app
 
 CMD [ "irb" ]
+
+########## ruby-dev image ##########################
+FROM ghcr.io/djbender/core as ruby-dev
+
+USER root
+RUN <<EOT
+  apt-get update
+  apt-get install --yes --no-install-recommends \
+    autoconf \
+    bison \
+    dpkg-dev \
+    g++ \
+    gcc \
+    imagemagick \
+    libbz2-dev \
+    libcurl4-openssl-dev \
+    libevent-dev \
+    libgdbm-compat-dev \
+    libgdbm-dev \
+    libjpeg-dev \
+    libmagickcore-dev \
+    libmagickwand-dev \
+    libmysqlclient-dev \
+    libncurses-dev \
+    libpq-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    make \
+    wget \
+    xz-utils
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
+EOT
+
+USER docker

@@ -1,8 +1,8 @@
 # syntax=docker/dockerfile:1.4
 
 
-########## Node image ##################
-FROM ghcr.io/djbender/core:bionic
+########## node image ##################
+FROM ghcr.io/djbender/core:bionic as node
 LABEL org.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
@@ -44,6 +44,20 @@ RUN <<EOT
   node -v
   npm -v
   yarn -v
+EOT
+
+USER docker
+
+########## node-dev image ##################
+FROM ghcr.io/djbender/core:bionic as node-dev
+
+USER root
+RUN <<EOT
+#/usr/bin/env bash
+  apt-get update
+  apt-get install --yes --no-install-recommends \
+    build-essential
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 EOT
 
 USER docker

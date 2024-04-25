@@ -1,11 +1,14 @@
 # syntax=docker/dockerfile:1.4
 
-# GENERATED FILE, DO NOT MODIFY!
+####################################
+# NOTICE: This is a generated file #
+####################################
+#
 # To update this file please edit the relevant template and run the generation
 # task `rake generate:core`
 
 ########## tini ##########################
-# Grab tini binary (used as default entrypoint)
+# prepare tini binary (used as default entrypoint)
 FROM ubuntu:jammy as tini
 LABEL org.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
@@ -40,8 +43,8 @@ mv ./tini-static /tini
 EOT
 
 
-########## Core image ##########################
-FROM ubuntu:jammy
+########## core image ##########################
+FROM ubuntu:jammy as core
 LABEL com.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 ENV DEBIAN_FRONTEND=noninteractive
@@ -84,3 +87,31 @@ ENTRYPOINT ["/tini", "--"]
 # specifying an ENTRYPOINT always clears the CMD that was inheritted by the FROM image
 # ref: https://docs.docker.com/engine/reference/builder/#understand-how-cmd-and-entrypoint-interact
 CMD ["bash"]
+
+########## core-dev image ##########################
+FROM core as core-dev
+
+# base image starts us with 'docker' user so switch back to root to install packages
+USER root
+
+RUN <<EOT
+#!/usr/bin/env bash
+set -exu
+apt-get update
+apt-get install --yes --no-install-recommends \
+  build-essential \
+  git \
+  gnupg2 \
+  psmisc \
+  software-properties-common \
+  tzdata
+
+# gnupg2 and dirmngr will attempt to use IPv6 if it's enabled in Docker, even
+# if the container doesn't have an IPv6 address (this is true on Docker Hub).
+mkdir ~/.gnupg
+echo "disable-ipv6" >> ~/.gnupg/dirmngr.conf
+rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
+EOT
+
+# always switch back to docker user
+USER docker

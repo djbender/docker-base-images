@@ -17,9 +17,8 @@
 globals:
   defaults:
     additional_tags: []
-    base_image: ubuntu:jammy
-    distribution: ubuntu
-    distribution_code_name: jammy
+    base_image: ubuntu:noble
+    distribution_code_name: noble
     docker_syntax: docker/dockerfile:1.4  # https://hub.docker.com/r/docker/dockerfile
     ghcr_registry: ghcr.io
     tini_version: v0.19.0
@@ -41,37 +40,17 @@ clojure:
 core:
   versions:
     noble:
+      # NOTE: never tag non-LTS releases as latest, its better to tag the
+      # specific LTS release below as latest.
+      latest: true
       base_image: ubuntu:noble
       distribution_code_name: noble
     jammy:
+      base_image: ubuntu:jammy
       distribution_code_name: jammy
-      # NOTE: never tag non-LTS releases as latest, its better to tag the specific LTS release below as latest.
-      latest: true
     bionic:
       base_image: ubuntu:bionic
       distribution_code_name: bionic
-
-core-dev:
-  versions:
-    noble:
-      base_image: ghcr.io/djbender/core:noble
-      distribution_code_name: noble
-      flavor: dev
-      image_name_override: core
-      version_override: noble
-    jammy:
-      base_image: ghcr.io/djbender/core:jammy
-      distribution_code_name: jammy
-      flavor: dev
-      image_name_override: core
-      latest_dev: true
-      version_override: jammy
-    bionic:
-      base_image: ghcr.io/djbender/core:bionic
-      distribution_code_name: bionic
-      flavor: dev
-      image_name_override: core
-      version_override: bionic
 
 java:
   defaults:
@@ -126,10 +105,6 @@ node: &NODE
       node_major: 8
       node_version: 8.17.0
       npm_version: 6.13.4
-    '8-dev':
-      <<: *NODE8
-      flavor: dev
-
     '10': &NODE10
       # there is no deb for node v10 on anything later than bionic
       base_image: ghcr.io/djbender/core:bionic
@@ -137,10 +112,6 @@ node: &NODE
       node_major: 10
       node_version: 10.24.1
       npm_version: 6.14.12
-    '10-dev':
-      <<: *NODE10
-      flavor: dev
-
     '12': &NODE12
       # there is no deb for node v12 on anything later than bionic
       base_image: ghcr.io/djbender/core:bionic
@@ -148,51 +119,27 @@ node: &NODE
       node_major: 12
       node_version: 12.22.12
       npm_version: 6.14.16
-    '12-dev':
-      <<: *NODE12
-      flavor: dev
-
     '14': &NODE14
       node_major: 14
       node_version: 14.21.3
       npm_version: 6.14.18
-    '14-dev':
-      <<: *NODE14
-      flavor: dev
-
     '16': &NODE16
       node_major: 16
       node_version: 16.20.0
       npm_version: 8.19.4
-    '16-dev':
-      <<: *NODE16
-      flavor: dev
-
     '18': &NODE18
       node_major: 18
       node_version: 18.16.0
       npm_version: 9.5.1
-    '18-dev':
-      <<: *NODE18
-      flavor: dev
-
     '20': &NODE20
       node_major: 20
       node_version: 20.2.0
       npm_version: 9.6.6
-    '20-dev':
-      <<: *NODE20
-      flavor: dev
-
     '21': &NODE21
       node_major: 21
       node_version: 21.7.3
       npm_version: 10.5.2
       latest: true
-    '21-dev':
-      <<: *NODE21
-      flavor: dev
-      latest: false
 
 ruby: &RUBY
   defaults:
@@ -206,52 +153,20 @@ ruby: &RUBY
       ruby_download_sha256: f22f662da504d49ce2080e446e4bea7008cee11d5ec4858fc69000d0e5b1d7fb
       bundler_version: 2.3.27
       rubygems_version: 3.3.27
-    '2.7-dev':
-      <<: *RUBY27
-      base_image: ghcr.io/djbender/core:dev
-      flavor: dev
     '3.0': &RUBY30
       ruby_major: 3.0
       ruby_version: 3.0.6
       ruby_download_sha256: b5cbee93e62d85cfb2a408c49fa30a74231ae8409c2b3858e5f5ea254d7ddbd1
-    '3.0-dev':
-      <<: *RUBY30
-      base_image: ghcr.io/djbender/core:dev
-      flavor: dev
     '3.1': &RUBY31
       ruby_major: 3.1
       ruby_version: 3.1.4
       ruby_download_sha256: 1b6d6010e76036c937b9671f4752f065aeca800a6c664f71f6c9a699453af94f
-    '3.1-dev':
-      <<: *RUBY31
-      base_image: ghcr.io/djbender/core:dev
-      flavor: dev
     '3.2': &RUBY32
       ruby_major: 3.2
       ruby_version: 3.2.3
       ruby_download_sha256: cfb231954b8c241043a538a4c682a1cca0b2016d835fee0b9e4a0be3ceba476b
-    '3.2-dev':
-      <<: *RUBY32
-      base_image: ghcr.io/djbender/core:dev
-      flavor: dev
-      latest: false
     '3.3': &RUBY33
       ruby_major: 3.3
-      ruby_version: 3.3.0
+      ruby_version: 3.3.1
       ruby_download_sha256: 676b65a36e637e90f982b57b059189b3276b9045034dcd186a7e9078847b975b
       latest: true # apply the latest tag
-    '3.3-dev':
-      <<: *RUBY33
-      base_image: ghcr.io/djbender/core:dev
-      flavor: dev
-      latest: false
-
-    '3.3-noble': &RUBY33-noble
-      base_image: ghcr.io/djbender/core:noble
-      ruby_major: 3.3
-      ruby_version: 3.3.0
-      ruby_download_sha256: 676b65a36e637e90f982b57b059189b3276b9045034dcd186a7e9078847b975b
-    '3.3-noble-dev':
-      base_image: ghcr.io/djbender/core:noble-dev
-      <<: *RUBY33
-      flavor: dev

@@ -27,6 +27,11 @@ class Metadata
     default_docker_tags.push(custom_tags).flatten.compact.uniq.sort
   end
 
+  def docker_dev_tags(custom_tags = [])
+    custom_tags = custom_tags.push(additional_dev_tags).flatten.compact.uniq
+    default_dev_docker_tags.push(custom_tags).flatten.compact.uniq.sort
+  end
+
   # return nil if you try to call a method that doesn't exist
   def method_missing(_method_name, *_args, &); end
   def respond_to_missing?(_method_name); end
@@ -44,8 +49,14 @@ class Metadata
       tags_array.push(default_flavor_tag, default_version_tag)
       tags_array.push("#{full_image_path}:#{github_sha}") if github_sha
       tags_array.push("#{full_image_path}:latest") if latest
-      tags_array.push("#{full_image_path}:dev") if latest_dev
       tags_array.push("#{full_image_path}:rolling") if rolling
+    end.flatten.compact.uniq
+  end
+
+  def default_dev_docker_tags
+    [].tap do |tags_array|
+      tags_array.push("#{full_image_path}:#{github_sha}") if github_sha
+      tags_array.push("#{full_image_path}:dev") if latest
     end.flatten.compact.uniq
   end
 

@@ -4,6 +4,7 @@ ruby '~> 3.1'
 
 gem 'nokogiri'
 gem 'rake'
+gem 'rspec', require: false
 gem 'rubocop', require: false
 gem 'rubocop-performance', require: false
 gem 'rubocop-rake', require: false

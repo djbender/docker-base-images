@@ -1,4 +1,7 @@
-# GENERATED FILE, DO NOT MODIFY!
+####################################
+# NOTICE: This is a generated file #
+####################################
+#
 # To update this file please edit the relevant template and run the generation
 # task `rake generate:clojure`
 
@@ -12,7 +15,7 @@ group "default" {
 
 # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
 target "clojure" {
-  tags = ["ghcr.io/djbender/clojure:11", "ghcr.io/djbender/clojure:11-dev", "ghcr.io/djbender/clojure:11-jammy", "ghcr.io/djbender/clojure:11-lein-2.9.1", "ghcr.io/djbender/clojure:11-lein-2.9.1-jammy", "ghcr.io/djbender/clojure:latest"]
+  tags = ["ghcr.io/djbender/clojure:11", "ghcr.io/djbender/clojure:11-dev", "ghcr.io/djbender/clojure:11-lein-2.9.1", "ghcr.io/djbender/clojure:11-lein-2.9.1-noble", "ghcr.io/djbender/clojure:11-noble", "ghcr.io/djbender/clojure:latest"]
   context = "${PWD}/clojure/11"
   platforms = ["linux/amd64", "linux/arm64"]
   cache-from = [
