@@ -54,7 +54,7 @@ core:
 
 java:
   defaults:
-    base_image: ghcr.io/djbender/core
+    base_image: ghcr.io/djbender/core:noble
   versions:
     '8':
       java_version: 8
@@ -77,15 +77,30 @@ java:
     '18':
       java_version: 18
       flavor: jdk
+      base_image: ghcr.io/djbender/core:jammy
+      distribution_code_name: jammy
     '18-jre':
       java_version: 18
       flavor: jre
+      base_image: ghcr.io/djbender/core:jammy
+      distribution_code_name: jammy
     '19':
       java_version: 19
       flavor: jdk
       latest: true
+      base_image: ghcr.io/djbender/core:jammy
+      distribution_code_name: jammy
     '19-jre':
       java_version: 19
+      flavor: jre
+      base_image: ghcr.io/djbender/core:jammy
+      distribution_code_name: jammy
+    '21':
+      java_version: 21
+      flavor: jdk
+      latest: true
+    '21-jre':
+      java_version: 21
       flavor: jre
 
 # NOTE: versions for node and npm were sourced from here:

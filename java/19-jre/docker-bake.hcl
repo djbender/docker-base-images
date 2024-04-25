@@ -15,7 +15,7 @@ group "default" {
 
 # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
 target "java" {
-  tags = ["ghcr.io/djbender/java:19-jre", "ghcr.io/djbender/java:19-jre-noble"]
+  tags = ["ghcr.io/djbender/java:19-jre", "ghcr.io/djbender/java:19-jre-jammy"]
   context = "${PWD}/java/19-jre"
   platforms = ["linux/amd64", "linux/arm64"]
   cache-from = [

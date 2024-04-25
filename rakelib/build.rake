@@ -41,6 +41,19 @@ namespace :build do
     end
   end
 
+  desc 'Build java images'
+  task :java do
+    core_filter = proc { |image_name| image_name == 'java' }
+
+    Build.matrix(&core_filter).each do |bake_file|
+      puts "Building #{bake_file}..."
+      system(
+        "docker buildx bake --file #{bake_file} --set *.platform=linux/arm64 --load",
+        exception: true
+      )
+    end
+  end
+
   desc 'Build node images'
   task :node do
     core_filter = proc { |image_name| image_name == 'node' }

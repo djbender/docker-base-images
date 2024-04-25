@@ -15,13 +15,13 @@ group "default" {
 
 # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
 target "java" {
-  tags = ["ghcr.io/djbender/java:18", "ghcr.io/djbender/java:18-jdk", "ghcr.io/djbender/java:18-jdk-jammy"]
-  context = "${PWD}/java/18"
+  tags = ["ghcr.io/djbender/java:21-jre", "ghcr.io/djbender/java:21-jre-noble"]
+  context = "${PWD}/java/21-jre"
   platforms = ["linux/amd64", "linux/arm64"]
   cache-from = [
-    "type=gha,scope=java/18"
+    "type=gha,scope=java/21-jre"
   ]
   cache-to = [
-    "type=gha,scope=java/18,mode=max"
+    "type=gha,scope=java/21-jre,mode=max"
   ]
 }
