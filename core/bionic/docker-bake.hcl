@@ -30,7 +30,7 @@ target "core" {
 target "core-dev" {
   target = "core-dev"
   inherits = ["core"]
-  tags = []
+  tags = ["ghcr.io/djbender/core:bionic-dev"]
   cache-from = ["type=gha,scope=core-dev/bionic"]
   cache-to = ["type=gha,scope=core-dev/bionic,mode=max"]
 }

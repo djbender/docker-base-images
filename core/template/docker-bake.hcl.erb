@@ -26,7 +26,9 @@ target "<%= image_name %>" {
   cache-to = ["type=gha,scope=<%= image_name %>/<%= version %>,mode=max"]
 }
 <%-
-core_dev_tags = []
+core_dev_tags = [
+  "#{full_image_path}:#{distribution_code_name}-dev"
+]
 dev_tags = docker_dev_tags(core_dev_tags)
 -%>
 
