@@ -66,6 +66,9 @@ namespace :build do
       )
     end
   end
+
+  desc 'Build all images'
+  task all: Rake.application.tasks.select { |t| t.name.start_with?('build') }.map(&:name)
 end
 
 module Build

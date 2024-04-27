@@ -18,7 +18,7 @@ group "default" {
 
 # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
 target "node" {
-  tags = ["ghcr.io/djbender/node:21", "ghcr.io/djbender/node:21-", "ghcr.io/djbender/node:21--noble", "ghcr.io/djbender/node:21.7.3-", "ghcr.io/djbender/node:21.7.3--noble", "ghcr.io/djbender/node:latest"]
+  tags = ["ghcr.io/djbender/node:21", "ghcr.io/djbender/node:21-noble", "ghcr.io/djbender/node:21.7.3", "ghcr.io/djbender/node:21.7.3-noble", "ghcr.io/djbender/node:latest"]
   context = "${PWD}/node/21"
   platforms = ["linux/amd64", "linux/arm64"]
   cache-from = [

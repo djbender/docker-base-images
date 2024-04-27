@@ -9,8 +9,8 @@
 
 ########## Clojure image ##########################
 FROM ghcr.io/djbender/java:11
-LABEL com.get-bridge.image.authors="get-bridge"
-LABEL org.opencontainers.image.source=https://github.com/get-bridge/docker-base-images
+LABEL org.opencontainers.image.authors="djbender"
+LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
 USER root
 

@@ -3,7 +3,7 @@
 ##################################################################
 ### Gems build container
 ##################################################################
-FROM 127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/ruby:2.7-fat AS gem_builder
+FROM ghcr.io/djbender/ruby:2.7-dev AS gem_builder
 
 ENV POSTGRESQL_VERSION 11
 ENV APP_USER=docker
@@ -44,7 +44,7 @@ EOF
 ##################################################################
 ### Deploy container
 ##################################################################
-FROM 127178877223.dkr.ecr.us-east-2.amazonaws.com/get-bridge/ruby:2.7 AS deploy
+FROM ghcr.io/djbender/ruby:2.7 AS deploy
 
 ENV POSTGRESQL_VERSION 11
 

@@ -4,7 +4,7 @@
 Multi architecture docker base images
 
 Available images:
-- [Core - Ubuntu Bionic, Jammy, Noble (soon™)](core/)
+- [Core - Ubuntu Bionic, Jammy, Noble](core/)
 - [Ruby](ruby/)
 - [Node](node/)
 - [Java](java/)
