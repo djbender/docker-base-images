@@ -26,7 +26,7 @@ RUN <<EOT
   else
     aptFile=/etc/apt/sources.list
   fi
-  sed 's@ports.ubuntu.com@${APT_MIRROR:-ports.ubuntu.com}@' -i $aptFile
+  sed "s@ports.ubuntu.com@${APT_MIRROR:-ports.ubuntu.com}@" -i $aptFile
   apt-get update
   apt-get install --yes --no-install-recommends \
     bzip2 \
@@ -162,7 +162,7 @@ RUN <<EOT
   else
     aptFile=/etc/apt/sources.list
   fi
-  sed 's@ports.ubuntu.com@${APT_MIRROR:-ports.ubuntu.com}@' -i $aptFile
+  sed "s@ports.ubuntu.com@${APT_MIRROR:-ports.ubuntu.com}@" -i $aptFile
   apt-get update
   apt-get install --yes --no-install-recommends \
     autoconf \
