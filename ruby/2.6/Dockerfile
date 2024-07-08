@@ -173,6 +173,7 @@ CMD [ "irb" ]
 ########## ruby-dev image ##########################
 FROM ghcr.io/djbender/core:bionic as ruby-dev
 
+ARG APT_MIRROR
 USER root
 RUN <<EOT
 #!/usr/bin/env bash
