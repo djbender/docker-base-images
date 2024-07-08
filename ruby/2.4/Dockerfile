@@ -8,7 +8,7 @@
 # task `rake generate:ruby`
 
 ########## Ruby image ##########################
-FROM ghcr.io/djbender/core as ruby
+FROM ghcr.io/djbender/core:bionic as ruby
 LABEL org.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
@@ -33,10 +33,30 @@ RUN <<EOT
     curl \
     libffi-dev \
     libgmp-dev \
-    libssl-dev \
     libyaml-dev \
     procps \
     zlib1g-dev
+
+  arch=$(dpkg --print-architecture)
+  if [ "$arch" == "arm64" ]; then
+    # Ruby versions older than or equal to 3.0 require an older version of openssl :| which is really annoying
+    echo "deb http://${APT_MIRROR:-ports.ubuntu.com}/ubuntu-ports/ focal main restricted" >> /etc/apt/sources.list
+    echo "deb http://${APT_MIRROR:-ports.ubuntu.com}/ubuntu-ports/ focal-updates main restricted" >> /etc/apt/sources.list
+    echo "deb http://${APT_MIRROR:-ports.ubuntu.com}/ubuntu-ports/ focal-security main restricted" >> /etc/apt/sources.list
+  else
+    echo "deb http://${APT_MIRROR:-archive.ubuntu.com}/ubuntu/ focal main restricted" >> /etc/apt/sources.list
+    echo "deb http://${APT_MIRROR:-archive.ubuntu.com}/ubuntu/ focal-updates main restricted" >> /etc/apt/sources.list
+    echo "deb http://${APT_MIRROR:-security.ubuntu.com}/ubuntu/ focal-security main restricted" >> /etc/apt/sources.list
+  fi
+
+  apt-get update
+  apt-get install --yes --allow-downgrades \
+    libssl-dev=1.1.1* \
+    openssl=1.1.1*
+  apt-mark hold \
+    libssl-dev \
+    libssl1.1 \
+    openssl
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
 EOT
 
@@ -46,12 +66,12 @@ install: --no-document
 update: --no-document
 EOT
 
-ENV BUNDLER_VERSION 2.5.14
+ENV BUNDLER_VERSION 2.3.27
 ENV LANG en_US.utf-8
-ENV RUBYGEMS_VERSION 3.5.14
-ENV RUBY_DOWNLOAD_SHA256 e7f1653d653232ec433472489a91afbc7433c9f760cc822defe7437c9d95791b
-ENV RUBY_MAJOR 3.2
-ENV RUBY_VERSION 3.2.4
+ENV RUBYGEMS_VERSION 3.3.27
+ENV RUBY_DOWNLOAD_SHA256 d5668ed11544db034f70aec37d11e157538d639ed0d0a968e2f587191fc530df
+ENV RUBY_MAJOR 2.4
+ENV RUBY_VERSION 2.4.10
 
 # NOTE: some of ruby's build scripts are written in ruby so we need to install ruby
 # in order to compile ruby. We use apt-mark to uninstall packages we don't need.
@@ -90,11 +110,8 @@ RUN <<EOT
   # hack in "ENABLE_PATH_CHECK" disabling to suppress: warning: Insecure world writable dir
   sed -i 's/define ENABLE_PATH_CHECK 1/define ENABLE_PATH_CHECK 0/g' file.c
   autoconf
-  # Should return something like `arm64`
-  arch=$(dpkg --print-architecture)
-  # Should return something like `linux-gnu`
-  operating_system=$(uname -o | awk '{split($0,a,"/"); print tolower(a[2])"-"tolower(a[1])}')
-  gnuArch="$arch-$operating_system"
+
+  gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; 
 
   ./configure --build="$gnuArch" --disable-install-doc --enable-shared
   make -j "$(nproc)"
@@ -151,7 +168,7 @@ WORKDIR /usr/src/app
 CMD [ "irb" ]
 
 ########## ruby-dev image ##########################
-FROM ghcr.io/djbender/core as ruby-dev
+FROM ghcr.io/djbender/core:bionic as ruby-dev
 
 USER root
 RUN <<EOT

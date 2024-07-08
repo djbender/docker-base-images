@@ -159,29 +159,53 @@ node: &NODE
 ruby: &RUBY
   defaults:
     base_image: ghcr.io/djbender/core
-    bundler_version: 2.5.9
-    rubygems_version: 3.5.7
+    bundler_version: 2.5.14
+    rubygems_version: 3.5.14
   versions:
-    '2.7': &RUBY27
+    '2.4':
+      base_image: ghcr.io/djbender/core:bionic
+      distribution_code_name: bionic
+      ruby_major: 2.4
+      ruby_version: 2.4.10
+      ruby_download_sha256: d5668ed11544db034f70aec37d11e157538d639ed0d0a968e2f587191fc530df 
+      bundler_version: 2.3.27
+      rubygems_version: 3.3.27
+    '2.5':
+      base_image: ghcr.io/djbender/core:bionic
+      distribution_code_name: bionic
+      ruby_major: 2.5
+      ruby_version: 2.5.9
+      ruby_download_sha256: a87f2fa901408cc77652c1a55ff976695bbe54830ff240e370039eca14b358f0
+      bundler_version: 2.3.27
+      rubygems_version: 3.3.27
+    '2.6':
+      base_image: ghcr.io/djbender/core:bionic
+      distribution_code_name: bionic
+      ruby_major: 2.6
+      ruby_version: 2.6.10
+      ruby_download_sha256: 5fd8ded51321b88fdc9c1b4b0eb1b951d2eddbc293865da0151612c2e814c1f2
+      bundler_version: 2.4.22
+      rubygems_version: 3.4.22
+    '2.7':
       ruby_major: 2.7
       ruby_version: 2.7.8
       ruby_download_sha256: f22f662da504d49ce2080e446e4bea7008cee11d5ec4858fc69000d0e5b1d7fb
-      bundler_version: 2.3.27
-      rubygems_version: 3.3.27
-    '3.0': &RUBY30
+      bundler_version: 2.4.22
+      rubygems_version: 3.4.22
+    '3.0':
       ruby_major: 3.0
-      ruby_version: 3.0.6
-      ruby_download_sha256: b5cbee93e62d85cfb2a408c49fa30a74231ae8409c2b3858e5f5ea254d7ddbd1
-    '3.1': &RUBY31
+      ruby_version: 3.0.7
+      ruby_download_sha256: 1748338373c4fad80129921080d904aca326e41bd9589b498aa5ee09fd575bab
+    '3.1':
       ruby_major: 3.1
-      ruby_version: 3.1.4
-      ruby_download_sha256: 1b6d6010e76036c937b9671f4752f065aeca800a6c664f71f6c9a699453af94f
-    '3.2': &RUBY32
+      ruby_version: 3.1.5
+      ruby_download_sha256: f9375a45bdf1cc41298558e7ac6c367f7b6cdcccf7196618b21f0886ff583b91
+    '3.2':
       ruby_major: 3.2
-      ruby_version: 3.2.3
-      ruby_download_sha256: cfb231954b8c241043a538a4c682a1cca0b2016d835fee0b9e4a0be3ceba476b
-    '3.3': &RUBY33
+      ruby_version: 3.2.4
+      ruby_download_sha256: e7f1653d653232ec433472489a91afbc7433c9f760cc822defe7437c9d95791b
+    '3.3':
       ruby_major: 3.3
-      ruby_version: 3.3.1
-      ruby_download_sha256: 676b65a36e637e90f982b57b059189b3276b9045034dcd186a7e9078847b975b
+      ruby_version: 3.3.3
+      ruby_download_sha256: 83c0995388399c9555bad87e70af069755b5a9d84bbaa74aa22d1e37ff70fc1e
       latest: true # apply the latest tag

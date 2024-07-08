@@ -14,11 +14,19 @@ LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-im
 
 USER root
 
+ARG APT_MIRROR
+
 RUN <<EOT
 #!/usr/bin/env bash
   set -eux
   mkdir -p /usr/src/app
   chown docker:docker /usr/src/app
+  if [ -f /etc/apt/sources.list.d/ubuntu.sources ]; then
+    aptFile=/etc/apt/sources.list.d/ubuntu.sources
+  else
+    aptFile=/etc/apt/sources.list
+  fi
+  sed 's@ports.ubuntu.com@${APT_MIRROR:-ports.ubuntu.com}@' -i $aptFile
   apt-get update
   apt-get install --yes --no-install-recommends \
     bzip2 \
@@ -32,14 +40,15 @@ RUN <<EOT
   arch=$(dpkg --print-architecture)
   if [ "$arch" == "arm64" ]; then
     # Ruby versions older than or equal to 3.0 require an older version of openssl :| which is really annoying
-    echo "deb http://ports.ubuntu.com/ubuntu-ports/ focal main restricted" >> /etc/apt/sources.list
-    echo "deb http://ports.ubuntu.com/ubuntu-ports/ focal-updates main restricted" >> /etc/apt/sources.list
-    echo "deb http://ports.ubuntu.com/ubuntu-ports/ focal-security main restricted" >> /etc/apt/sources.list
+    echo "deb http://${APT_MIRROR:-ports.ubuntu.com}/ubuntu-ports/ focal main restricted" >> /etc/apt/sources.list
+    echo "deb http://${APT_MIRROR:-ports.ubuntu.com}/ubuntu-ports/ focal-updates main restricted" >> /etc/apt/sources.list
+    echo "deb http://${APT_MIRROR:-ports.ubuntu.com}/ubuntu-ports/ focal-security main restricted" >> /etc/apt/sources.list
   else
-    echo "deb http://archive.ubuntu.com/ubuntu/ focal main restricted" >> /etc/apt/sources.list
-    echo "deb http://archive.ubuntu.com/ubuntu/ focal-updates main restricted" >> /etc/apt/sources.list
-    echo "deb http://security.ubuntu.com/ubuntu/ focal-security main restricted" >> /etc/apt/sources.list
+    echo "deb http://${APT_MIRROR:-archive.ubuntu.com}/ubuntu/ focal main restricted" >> /etc/apt/sources.list
+    echo "deb http://${APT_MIRROR:-archive.ubuntu.com}/ubuntu/ focal-updates main restricted" >> /etc/apt/sources.list
+    echo "deb http://${APT_MIRROR:-security.ubuntu.com}/ubuntu/ focal-security main restricted" >> /etc/apt/sources.list
   fi
+
   apt-get update
   apt-get install --yes --allow-downgrades \
     libssl-dev=1.1.1* \
@@ -57,12 +66,12 @@ install: --no-document
 update: --no-document
 EOT
 
-ENV BUNDLER_VERSION 2.5.9
+ENV BUNDLER_VERSION 2.5.14
 ENV LANG en_US.utf-8
-ENV RUBYGEMS_VERSION 3.5.7
-ENV RUBY_DOWNLOAD_SHA256 b5cbee93e62d85cfb2a408c49fa30a74231ae8409c2b3858e5f5ea254d7ddbd1
+ENV RUBYGEMS_VERSION 3.5.14
+ENV RUBY_DOWNLOAD_SHA256 1748338373c4fad80129921080d904aca326e41bd9589b498aa5ee09fd575bab
 ENV RUBY_MAJOR 3.0
-ENV RUBY_VERSION 3.0.6
+ENV RUBY_VERSION 3.0.7
 
 # NOTE: some of ruby's build scripts are written in ruby so we need to install ruby
 # in order to compile ruby. We use apt-mark to uninstall packages we don't need.
@@ -105,7 +114,9 @@ RUN <<EOT
   arch=$(dpkg --print-architecture)
   # Should return something like `linux-gnu`
   operating_system=$(uname -o | awk '{split($0,a,"/"); print tolower(a[2])"-"tolower(a[1])}')
-  ./configure --build="$arch-$operating_system" --disable-install-doc --enable-shared
+  gnuArch="$arch-$operating_system"
+
+  ./configure --build="$gnuArch" --disable-install-doc --enable-shared
   make -j "$(nproc)"
   make install
   apt-mark auto '.*' > /dev/null
@@ -115,6 +126,7 @@ RUN <<EOT
           | sort -u \
           | grep -vE '^/usr/local/lib/' \
           | xargs -r dpkg-query --search \
+          | grep -v 'diversion' \
           | cut -d: -f1 \
           | sort -u \
           | xargs -r apt-mark manual
@@ -163,6 +175,14 @@ FROM ghcr.io/djbender/core as ruby-dev
 
 USER root
 RUN <<EOT
+#!/usr/bin/env bash
+  set -eux
+  if [ -f /etc/apt/sources.list.d/ubuntu.sources ]; then
+    aptFile=/etc/apt/sources.list.d/ubuntu.sources
+  else
+    aptFile=/etc/apt/sources.list
+  fi
+  sed 's@ports.ubuntu.com@${APT_MIRROR:-ports.ubuntu.com}@' -i $aptFile
   apt-get update
   apt-get install --yes --no-install-recommends \
     autoconf \
