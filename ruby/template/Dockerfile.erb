@@ -116,7 +116,7 @@ RUN <<EOT
   operating_system=$(uname -o | awk '{split($0,a,"/"); print tolower(a[2])"-"tolower(a[1])}')
   gnuArch="$arch-$operating_system"
 <% else %>
-  gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; 
+  gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)";
 <% end %>
   ./configure --build="$gnuArch" --disable-install-doc --enable-shared
   make -j "$(nproc)"
@@ -173,7 +173,7 @@ WORKDIR /usr/src/app
 CMD [ "irb" ]
 
 ########## ruby-dev image ##########################
-FROM <%= base_image %> as ruby-dev
+FROM ruby as ruby-dev
 
 ARG APT_MIRROR
 USER root
@@ -210,6 +210,13 @@ RUN <<EOT
     make \
     wget \
     xz-utils
+  # Ensure the system ruby is still not present
+  if dpkg -l | grep -i ruby; then exit 1; fi;
+  # Check that ruby commands work
+  [ "$(command -v ruby)" = '/usr/local/bin/ruby' ]
+  ruby --version
+  gem --version
+  bundle --version
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
 EOT
 

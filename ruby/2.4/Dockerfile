@@ -111,7 +111,7 @@ RUN <<EOT
   sed -i 's/define ENABLE_PATH_CHECK 1/define ENABLE_PATH_CHECK 0/g' file.c
   autoconf
 
-  gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; 
+  gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)";
 
   ./configure --build="$gnuArch" --disable-install-doc --enable-shared
   make -j "$(nproc)"
@@ -168,7 +168,7 @@ WORKDIR /usr/src/app
 CMD [ "irb" ]
 
 ########## ruby-dev image ##########################
-FROM ghcr.io/djbender/core:bionic as ruby-dev
+FROM ruby as ruby-dev
 
 ARG APT_MIRROR
 USER root
@@ -205,6 +205,13 @@ RUN <<EOT
     make \
     wget \
     xz-utils
+  # Ensure the system ruby is still not present
+  if dpkg -l | grep -i ruby; then exit 1; fi;
+  # Check that ruby commands work
+  [ "$(command -v ruby)" = '/usr/local/bin/ruby' ]
+  ruby --version
+  gem --version
+  bundle --version
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
 EOT
 

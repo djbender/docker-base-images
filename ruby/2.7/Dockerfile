@@ -171,7 +171,7 @@ WORKDIR /usr/src/app
 CMD [ "irb" ]
 
 ########## ruby-dev image ##########################
-FROM ghcr.io/djbender/core as ruby-dev
+FROM ruby as ruby-dev
 
 ARG APT_MIRROR
 USER root
@@ -208,6 +208,13 @@ RUN <<EOT
     make \
     wget \
     xz-utils
+  # Ensure the system ruby is still not present
+  if dpkg -l | grep -i ruby; then exit 1; fi;
+  # Check that ruby commands work
+  [ "$(command -v ruby)" = '/usr/local/bin/ruby' ]
+  ruby --version
+  gem --version
+  bundle --version
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
 EOT
 
