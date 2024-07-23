@@ -18,7 +18,7 @@ group "default" {
 
 # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
 target "ruby" {
-  target = ""
+  target = "ruby"
   tags = ["ghcr.io/djbender/ruby:2.4", "ghcr.io/djbender/ruby:2.4-bionic", "ghcr.io/djbender/ruby:2.4.10", "ghcr.io/djbender/ruby:2.4.10-bionic"]
   context = "${PWD}/ruby/2.4"
   platforms = ["linux/amd64", "linux/arm64"]

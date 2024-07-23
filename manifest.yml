@@ -167,7 +167,7 @@ ruby: &RUBY
       distribution_code_name: bionic
       ruby_major: 2.4
       ruby_version: 2.4.10
-      ruby_download_sha256: d5668ed11544db034f70aec37d11e157538d639ed0d0a968e2f587191fc530df 
+      ruby_download_sha256: d5668ed11544db034f70aec37d11e157538d639ed0d0a968e2f587191fc530df
       bundler_version: 2.3.27
       rubygems_version: 3.3.27
     '2.5':
@@ -198,14 +198,14 @@ ruby: &RUBY
       ruby_download_sha256: 1748338373c4fad80129921080d904aca326e41bd9589b498aa5ee09fd575bab
     '3.1':
       ruby_major: 3.1
-      ruby_version: 3.1.5
-      ruby_download_sha256: f9375a45bdf1cc41298558e7ac6c367f7b6cdcccf7196618b21f0886ff583b91
+      ruby_version: 3.1.6
+      ruby_download_sha256: 597bd1849f252d8a6863cb5d38014ac54152b508c36dca156f6356a9e63c6102
     '3.2':
       ruby_major: 3.2
       ruby_version: 3.2.4
       ruby_download_sha256: e7f1653d653232ec433472489a91afbc7433c9f760cc822defe7437c9d95791b
     '3.3':
       ruby_major: 3.3
-      ruby_version: 3.3.3
-      ruby_download_sha256: 83c0995388399c9555bad87e70af069755b5a9d84bbaa74aa22d1e37ff70fc1e
+      ruby_version: 3.3.4
+      ruby_download_sha256: 1caaee9a5a6befef54bab67da68ace8d985e4fb59cd17ce23c28d9ab04f4ddad
       latest: true # apply the latest tag
