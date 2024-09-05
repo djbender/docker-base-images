@@ -206,6 +206,6 @@ ruby: &RUBY
       ruby_download_sha256: 7780d91130139406d39b29ed8fe16bba350d8fa00e510c76bef9b8ec1340903c
     '3.3':
       ruby_major: 3.3
-      ruby_version: 3.3.4
-      ruby_download_sha256: 1caaee9a5a6befef54bab67da68ace8d985e4fb59cd17ce23c28d9ab04f4ddad
+      ruby_version: 3.3.5
+      ruby_download_sha256: 51aec7ea89b46125a2c9adc6f36766b65023d47952b916b1aed300ddcc042359
       latest: true # apply the latest tag
