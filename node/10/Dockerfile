@@ -2,17 +2,17 @@
 
 
 ########## node image ##################
-FROM ghcr.io/djbender/core:bionic as node
+FROM ghcr.io/djbender/core:bionic AS node
 LABEL org.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
 USER root
 WORKDIR /usr/src/app
 
-ENV NODE_MAJOR 10
-ENV NODE_VERSION 10.24.1
-ENV NPM_VERSION 6.14.12
-ENV YARN_VERSION 1.22.19
+ENV NODE_MAJOR=10
+ENV NODE_VERSION=10.24.1
+ENV NPM_VERSION=6.14.12
+ENV YARN_VERSION=1.22.19
 
 RUN <<EOT
 #/usr/bin/env bash
@@ -49,7 +49,7 @@ EOT
 USER docker
 
 ########## node-dev image ##################
-FROM ghcr.io/djbender/core:bionic as node-dev
+FROM node AS node-dev
 
 USER root
 RUN <<EOT

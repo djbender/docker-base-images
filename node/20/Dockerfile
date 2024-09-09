@@ -2,17 +2,17 @@
 
 
 ########## node image ##################
-FROM ghcr.io/djbender/core as node
+FROM ghcr.io/djbender/core AS node
 LABEL org.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
 USER root
 WORKDIR /usr/src/app
 
-ENV NODE_MAJOR 20
-ENV NODE_VERSION 20.2.0
-ENV NPM_VERSION 9.6.6
-ENV YARN_VERSION 1.22.19
+ENV NODE_MAJOR=20
+ENV NODE_VERSION=20.17.0
+ENV NPM_VERSION=10.8.3
+ENV YARN_VERSION=1.22.19
 
 RUN <<EOT
 #/usr/bin/env bash
@@ -49,7 +49,7 @@ EOT
 USER docker
 
 ########## node-dev image ##################
-FROM ghcr.io/djbender/core as node-dev
+FROM node AS node-dev
 
 USER root
 RUN <<EOT

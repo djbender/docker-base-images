@@ -18,6 +18,7 @@ group "default" {
 
 # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
 target "node" {
+  target = "node"
   tags = ["ghcr.io/djbender/node:10", "ghcr.io/djbender/node:10-bionic", "ghcr.io/djbender/node:10.24.1", "ghcr.io/djbender/node:10.24.1-bionic"]
   context = "${PWD}/node/10"
   platforms = ["linux/amd64", "linux/arm64"]
@@ -33,7 +34,7 @@ target "node" {
 target "node-dev" {
   target = "node-dev"
   inherits = ["node"]
-  tags = ["ghcr.io/djbender/node:10-dev-bionic", "ghcr.io/djbender/node:10.24.1-dev", "ghcr.io/djbender/node:10.24.1-dev-bionic"]
+  tags = ["ghcr.io/djbender/node:10-dev", "ghcr.io/djbender/node:10-dev-bionic", "ghcr.io/djbender/node:10.24.1-dev", "ghcr.io/djbender/node:10.24.1-dev-bionic"]
   cache-from = ["type=gha,scope=node-dev/10"]
   cache-to = ["type=gha,scope=node-dev/10,mode=max"]
 }
