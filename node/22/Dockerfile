@@ -1,18 +1,18 @@
 # syntax=docker/dockerfile:1.4
 
 
-########## Node image ##################
-FROM ghcr.io/djbender/core
+########## node image ##################
+FROM ghcr.io/djbender/core AS node
 LABEL org.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
 USER root
 WORKDIR /usr/src/app
 
-ENV NODE_MAJOR 19
-ENV NODE_VERSION 19.9.0
-ENV NPM_VERSION 9.6.3
-ENV YARN_VERSION 1.22.19
+ENV NODE_MAJOR=22
+ENV NODE_VERSION=22.8.0
+ENV NPM_VERSION=10.8.3
+ENV YARN_VERSION=1.22.19
 
 RUN <<EOT
 #/usr/bin/env bash
@@ -21,11 +21,14 @@ RUN <<EOT
   chown docker:docker /usr/src/app
   apt-get update
   apt-get install --yes --no-install-recommends \
+    apt-transport-https \
     curl \
     gnupg
-  curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | apt-key add -
-  echo "deb https://deb.nodesource.com/node_19.x jammy main" \
-    > /etc/apt/sources.list.d/nodesource.list
+
+  mkdir -p /usr/share/keyrings
+  curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /usr/share/keyrings/nodesource.gpg
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+
   apt-get update
   apt-get install --yes --no-install-recommends \
     nodejs
@@ -41,6 +44,20 @@ RUN <<EOT
   node -v
   npm -v
   yarn -v
+EOT
+
+USER docker
+
+########## node-dev image ##################
+FROM node AS node-dev
+
+USER root
+RUN <<EOT
+#/usr/bin/env bash
+  apt-get update
+  apt-get install --yes --no-install-recommends \
+    build-essential
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 EOT
 
 USER docker

@@ -24,6 +24,7 @@ group "default" {
 
 # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
 target "<%= image_name %>" {
+  target = "<%= image_name %>"
   tags = <%= custom_tags %>
   context = "${PWD}/<%= image_name %>/<%= version %>"
   platforms = ["linux/amd64", "linux/arm64"]
@@ -40,6 +41,7 @@ node_dev_tags = []
 node_dev_tags.push("#{full_image_path}:#{node_version}-dev-#{distribution_code_name}")
 node_dev_tags.push("#{full_image_path}:#{node_version}-dev")
 node_dev_tags.push("#{full_image_path}:#{node_major}-dev-#{distribution_code_name}")
+node_dev_tags.push("#{full_image_path}:#{node_major}-dev")
 dev_tags = docker_dev_tags(node_dev_tags)
 -%>
 

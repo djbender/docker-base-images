@@ -3,17 +3,17 @@
 <%= generation_messages -%>
 
 ########## node image ##################
-FROM <%= base_image %> as node
+FROM <%= base_image %> AS node
 LABEL org.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
 USER root
 WORKDIR /usr/src/app
 
-ENV NODE_MAJOR <%= node_major %>
-ENV NODE_VERSION <%= node_version %>
-ENV NPM_VERSION <%= npm_version %>
-ENV YARN_VERSION <%= yarn_version %>
+ENV NODE_MAJOR=<%= node_major %>
+ENV NODE_VERSION=<%= node_version %>
+ENV NPM_VERSION=<%= npm_version %>
+ENV YARN_VERSION=<%= yarn_version %>
 
 RUN <<EOT
 #/usr/bin/env bash
@@ -56,7 +56,7 @@ EOT
 USER docker
 
 ########## node-dev image ##################
-FROM <%= base_image %> as node-dev
+FROM node AS node-dev
 
 USER root
 RUN <<EOT

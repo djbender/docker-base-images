@@ -134,26 +134,26 @@ node: &NODE
       node_major: 12
       node_version: 12.22.12
       npm_version: 6.14.16
-    '14': &NODE14
-      node_major: 14
-      node_version: 14.21.3
-      npm_version: 6.14.18
-    '16': &NODE16
-      node_major: 16
-      node_version: 16.20.0
-      npm_version: 8.19.4
+    # '14': &NODE14
+    #   node_major: 14
+    #   node_version: 14.21.3
+    #   npm_version: 6.14.18
+    # '16': &NODE16
+    #   node_major: 16
+    #   node_version: 16.20.0
+    #   npm_version: 8.19.4
     '18': &NODE18
       node_major: 18
-      node_version: 18.16.0
-      npm_version: 9.5.1
+      node_version: 18.20.4
+      npm_version: 10.8.3
     '20': &NODE20
       node_major: 20
-      node_version: 20.2.0
-      npm_version: 9.6.6
-    '21': &NODE21
-      node_major: 21
-      node_version: 21.7.3
-      npm_version: 10.5.2
+      node_version: 20.17.0
+      npm_version: 10.8.3
+    '22': &NODE22
+      node_major: 22
+      node_version: 22.8.0
+      npm_version: 10.8.3
       latest: true
 
 ruby: &RUBY
