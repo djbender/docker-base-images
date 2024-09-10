@@ -48,9 +48,9 @@ RUN <<EOT
   [ "$(command -v node)" = '/usr/bin/node' ]
   [ "$(command -v npm)" = '/usr/bin/npm' ]
   [ "$(command -v yarn)" = '/usr/bin/yarn' ]
-  node -v
-  npm -v
-  yarn -v
+  [ "$(node -v)" = "v${NODE_VERSION}" ]
+  [ "$(npm -v)" = "${NPM_VERSION}" ]
+  [ "$(yarn -v)" = "${YARN_VERSION}" ]
 EOT
 
 USER docker

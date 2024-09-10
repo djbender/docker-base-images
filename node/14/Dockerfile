@@ -2,7 +2,7 @@
 
 
 ########## node image ##################
-FROM ghcr.io/djbender/core AS node
+FROM ghcr.io/djbender/core:jammy AS node
 LABEL org.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
@@ -26,7 +26,7 @@ RUN <<EOT
     gnupg
 
   curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | apt-key add -
-  echo "deb https://deb.nodesource.com/node_14.x noble main" \
+  echo "deb https://deb.nodesource.com/node_14.x jammy main" \
     > /etc/apt/sources.list.d/nodesource.list
 
   apt-get update
@@ -41,9 +41,9 @@ RUN <<EOT
   [ "$(command -v node)" = '/usr/bin/node' ]
   [ "$(command -v npm)" = '/usr/bin/npm' ]
   [ "$(command -v yarn)" = '/usr/bin/yarn' ]
-  node -v
-  npm -v
-  yarn -v
+  [ "$(node -v)" = "v${NODE_VERSION}" ]
+  [ "$(npm -v)" = "${NPM_VERSION}" ]
+  [ "$(yarn -v)" = "${YARN_VERSION}" ]
 EOT
 
 USER docker
