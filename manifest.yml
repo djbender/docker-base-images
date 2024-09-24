@@ -152,7 +152,7 @@ node: &NODE
       npm_version: 10.8.3
     '22': &NODE22
       node_major: 22
-      node_version: 22.8.0
+      node_version: 22.9.0
       npm_version: 10.8.3
       latest: true
 
