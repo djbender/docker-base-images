@@ -2,16 +2,16 @@
 
 
 ########## node image ##################
-FROM ghcr.io/djbender/core AS node
+FROM ghcr.io/djbender/core:jammy AS node
 LABEL org.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
 USER root
 WORKDIR /usr/src/app
 
-ENV NODE_MAJOR=22
-ENV NODE_VERSION=22.8.0
-ENV NPM_VERSION=10.8.3
+ENV NODE_MAJOR=16
+ENV NODE_VERSION=16.20.2
+ENV NPM_VERSION=8.19.4
 ENV YARN_VERSION=1.22.19
 
 RUN <<EOT
@@ -27,7 +27,7 @@ RUN <<EOT
 
   mkdir -p /usr/share/keyrings
   curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /usr/share/keyrings/nodesource.gpg
-  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_16.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
 
   apt-get update
   apt-get install --yes --no-install-recommends \
