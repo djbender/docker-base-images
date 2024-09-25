@@ -39,8 +39,8 @@ jobs:
 
       - name: debug
         run: |
-          echo ${{ fromJSON(steps.set-matrix.outputs.core_matrix).matrix.cache-from }}
-          echo ${{ fromJSON(steps.set-matrix.outputs.core_matrix).matrix.cache-to }}
+          echo ${{ fromJSON(steps.set-matrix.outputs.core_matrix) }}
+          echo ${{ fromJSON(steps.set-matrix.outputs.core_matrix.matrix.cache-to) }}
 
   # build-core-images:
   #   runs-on: ubuntu-latest
