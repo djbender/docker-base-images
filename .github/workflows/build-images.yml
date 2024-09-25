@@ -88,8 +88,8 @@ jobs:
           push: ${{ github.ref == 'refs/heads/main' }}
           files: ${{ matrix.bake }}
           set: |
-            ${{ matrix.cache-from }}
-            ${{ matrix.cache-to }}
+            ${{ join(matrix.cache-from, '\n') }}
+            ${{ join(matrix.cache-to, '\n') }}
 
   build-common-images:
     runs-on: ubuntu-latest
@@ -138,8 +138,8 @@ jobs:
           push: ${{ github.ref == 'refs/heads/main' }}
           files: ${{ matrix.bake }}
           set: |
-            ${{ matrix.cache-from }}
-            ${{ matrix.cache-to }}
+            ${{ join(matrix.cache-from, '\n') }}
+            ${{ join(matrix.cache-to, '\n') }}
 
   build-post-java-images:
     runs-on: ubuntu-latest
@@ -188,5 +188,5 @@ jobs:
           push: ${{ github.ref == 'refs/heads/main' }}
           files: ${{ matrix.bake }}
           set: |
-            ${{ matrix.cache-from }}
-            ${{ matrix.cache-to }}
+            ${{ join(matrix.cache-from, '\n') }}
+            ${{ join(matrix.cache-to, '\n') }}
