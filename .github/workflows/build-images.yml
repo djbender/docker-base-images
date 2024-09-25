@@ -83,8 +83,8 @@ jobs:
 
       - name: debug
         run: |
-          echo ${{ join(matrix.cache-from, '\n') }}
-          echo ${{ join(matrix.cache-to, '\n') }}
+          echo ${{ matrix.cache-from }}
+          echo ${{ matrix.cache-to }}
 
       - name: Build and push
         uses: docker/bake-action@v4.1.0
