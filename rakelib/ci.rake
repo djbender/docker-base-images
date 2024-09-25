@@ -1,4 +1,4 @@
-require 'json'
+require 'hcl'
 
 # lib/util has shared constants and methods used in rake tasks
 require_relative '../lib/util'
@@ -52,18 +52,26 @@ end
 # }
 #
 def matrix(&)
+  cache_keys = %w[cache-from cache-to]
   {
     include: Util::MANIFEST.select(&).flat_map do |image_name, details|
       details.fetch('versions').keys.map do |version|
+        bake_file = Pathname.new("#{image_name}/#{version}") + Util::BAKE_FILE
+        hcl_data = bake_file
+          .read
+          .lines
+          .reject { |l| l.start_with?('#') }
+          .join
+        data = HCL::Parser.new(hcl_data).parse
+
+        image = data.fetch('target').fetch(image_name)
+
+        cache = cache_keys.to_h do |key|
+          [key, image.fetch(key).map { |v| v.dup.prepend("*.#{key}=") }]
+        end
         {
-          bake: Pathname.new("#{image_name}/#{version}") + Util::BAKE_FILE,
-          'cache-from' => [
-            "*.cache-from=type=gha,scope=#{image_name}/#{version}"
-          ].join("\n"),
-          'cache-to' => [
-            "*.cache-to=type=gha,scope=#{image_name}/#{version},mode=max"
-          ].join("\n")
-        }
+          bake: Pathname.new("#{image_name}/#{version}") + Util::BAKE_FILE
+        }.merge(cache)
       end
     end
   }

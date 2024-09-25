@@ -39,7 +39,7 @@ target "core-dev" {
   tags = ["ghcr.io/djbender/core:dev", "ghcr.io/djbender/core:noble-dev"]
   cache-from = [
     "type=gha,scope=core-dev/noble",
-    "type=registry,ref=ghcr.io/djbender/core-dev:noble-buildcache",
+    "type=registry,ref=ghcr.io/djbender/core-dev:noble-buildcache"
   ]
   cache-to = [
     "type=gha,scope=core-dev/noble,mode=max",

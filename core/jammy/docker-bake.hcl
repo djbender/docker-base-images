@@ -39,7 +39,7 @@ target "core-dev" {
   tags = ["ghcr.io/djbender/core:jammy-dev"]
   cache-from = [
     "type=gha,scope=core-dev/jammy",
-    "type=registry,ref=ghcr.io/djbender/core-dev:jammy-buildcache",
+    "type=registry,ref=ghcr.io/djbender/core-dev:jammy-buildcache"
   ]
   cache-to = [
     "type=gha,scope=core-dev/jammy,mode=max",

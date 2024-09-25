@@ -39,7 +39,7 @@ target "core-dev" {
   tags = ["ghcr.io/djbender/core:bionic-dev"]
   cache-from = [
     "type=gha,scope=core-dev/bionic",
-    "type=registry,ref=ghcr.io/djbender/core-dev:bionic-buildcache",
+    "type=registry,ref=ghcr.io/djbender/core-dev:bionic-buildcache"
   ]
   cache-to = [
     "type=gha,scope=core-dev/bionic,mode=max",
