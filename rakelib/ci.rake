@@ -71,7 +71,7 @@ def matrix(&)
         end
         {
           bake: Pathname.new("#{image_name}/#{version}") + Util::BAKE_FILE
-        }.merge(cache)
+        } #.merge(cache)
       end
     end
   }
