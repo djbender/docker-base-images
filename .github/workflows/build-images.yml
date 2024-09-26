@@ -88,8 +88,8 @@ jobs:
           push: ${{ github.ref == 'refs/heads/main' }}
           files: ${{ matrix.bake }}
           set: |
-            ${{ join(matrix.cache-from, '\\r\\n') }}
-            ${{ join(matrix.cache-to, '\\r\\n') }}
+            ${{ join(matrix.cache-from) }}
+            ${{ join(matrix.cache-to) }}
 
   # build-common-images:
   #   runs-on: ubuntu-latest
