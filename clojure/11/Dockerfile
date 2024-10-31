@@ -8,7 +8,7 @@
 # task `rake generate:clojure`
 
 ########## Clojure image ##########################
-FROM ghcr.io/djbender/java:11
+FROM ghcr.io/djbender/java:19
 LABEL org.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
