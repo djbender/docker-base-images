@@ -32,27 +32,7 @@ updates:
       - notification-only
 
   - package-ecosystem: docker
-    directory: core/jammy-fat
-    schedule:
-      interval: daily
-    labels:
-      - dependencies
-      - do-not-merge
-      - docker
-      - notification-only
-
-  - package-ecosystem: docker
     directory: core/bionic
-    schedule:
-      interval: daily
-    labels:
-      - dependencies
-      - do-not-merge
-      - docker
-      - notification-only
-
-  - package-ecosystem: docker
-    directory: core/bionic-fat
     schedule:
       interval: daily
     labels:
@@ -72,27 +52,7 @@ updates:
       - notification-only
 
   - package-ecosystem: docker
-    directory: node/8-fat
-    schedule:
-      interval: daily
-    labels:
-      - dependencies
-      - do-not-merge
-      - docker
-      - notification-only
-
-  - package-ecosystem: docker
     directory: node/10
-    schedule:
-      interval: daily
-    labels:
-      - dependencies
-      - do-not-merge
-      - docker
-      - notification-only
-
-  - package-ecosystem: docker
-    directory: node/10-fat
     schedule:
       interval: daily
     labels:
@@ -112,27 +72,7 @@ updates:
       - notification-only
 
   - package-ecosystem: docker
-    directory: node/12-fat
-    schedule:
-      interval: daily
-    labels:
-      - dependencies
-      - do-not-merge
-      - docker
-      - notification-only
-
-  - package-ecosystem: docker
     directory: node/14
-    schedule:
-      interval: daily
-    labels:
-      - dependencies
-      - do-not-merge
-      - docker
-      - notification-only
-
-  - package-ecosystem: docker
-    directory: node/14-fat
     schedule:
       interval: daily
     labels:
@@ -152,47 +92,7 @@ updates:
       - notification-only
 
   - package-ecosystem: docker
-    directory: node/16-fat
-    schedule:
-      interval: daily
-    labels:
-      - dependencies
-      - do-not-merge
-      - docker
-      - notification-only
-
-  - package-ecosystem: docker
     directory: node/18
-    schedule:
-      interval: daily
-    labels:
-      - dependencies
-      - do-not-merge
-      - docker
-      - notification-only
-
-  - package-ecosystem: docker
-    directory: node/18-fat
-    schedule:
-      interval: daily
-    labels:
-      - dependencies
-      - do-not-merge
-      - docker
-      - notification-only
-
-  - package-ecosystem: docker
-    directory: node/19
-    schedule:
-      interval: daily
-    labels:
-      - dependencies
-      - do-not-merge
-      - docker
-      - notification-only
-
-  - package-ecosystem: docker
-    directory: node/19-fat
     schedule:
       interval: daily
     labels:
@@ -212,7 +112,37 @@ updates:
       - notification-only
 
   - package-ecosystem: docker
-    directory: node/20-fat
+    directory: node/22
+    schedule:
+      interval: daily
+    labels:
+      - dependencies
+      - do-not-merge
+      - docker
+      - notification-only
+
+  - package-ecosystem: docker
+    directory: ruby/2.4
+    schedule:
+      interval: daily
+    labels:
+      - dependencies
+      - do-not-merge
+      - docker
+      - notification-only
+
+  - package-ecosystem: docker
+    directory: ruby/2.5
+    schedule:
+      interval: daily
+    labels:
+      - dependencies
+      - do-not-merge
+      - docker
+      - notification-only
+
+  - package-ecosystem: docker
+    directory: ruby/2.6
     schedule:
       interval: daily
     labels:
@@ -232,27 +162,7 @@ updates:
       - notification-only
 
   - package-ecosystem: docker
-    directory: ruby/2.7-fat
-    schedule:
-      interval: daily
-    labels:
-      - dependencies
-      - do-not-merge
-      - docker
-      - notification-only
-
-  - package-ecosystem: docker
     directory: ruby/3.0
-    schedule:
-      interval: daily
-    labels:
-      - dependencies
-      - do-not-merge
-      - docker
-      - notification-only
-
-  - package-ecosystem: docker
-    directory: ruby/3.0-fat
     schedule:
       interval: daily
     labels:
@@ -272,27 +182,7 @@ updates:
       - notification-only
 
   - package-ecosystem: docker
-    directory: ruby/3.1-fat
-    schedule:
-      interval: daily
-    labels:
-      - dependencies
-      - do-not-merge
-      - docker
-      - notification-only
-
-  - package-ecosystem: docker
     directory: ruby/3.2
-    schedule:
-      interval: daily
-    labels:
-      - dependencies
-      - do-not-merge
-      - docker
-      - notification-only
-
-  - package-ecosystem: docker
-    directory: ruby/3.2-fat
     schedule:
       interval: daily
     labels:
