@@ -192,6 +192,16 @@ updates:
       - notification-only
 
   - package-ecosystem: docker
+    directory: ruby/3.3
+    schedule:
+      interval: daily
+    labels:
+      - dependencies
+      - do-not-merge
+      - docker
+      - notification-only
+
+  - package-ecosystem: docker
     directory: java/8
     schedule:
       interval: daily
