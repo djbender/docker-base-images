@@ -149,15 +149,19 @@ node: &NODE
     '18': &NODE18
       node_major: 18
       node_version: 18.20.4
-      npm_version: 10.8.3
+      npm_version: 10.7.0
     '20': &NODE20
       node_major: 20
       node_version: 20.18.0
-      npm_version: 10.8.3
+      npm_version: 10.8.2
     '22': &NODE22
       node_major: 22
       node_version: 22.11.0
-      npm_version: 10.8.3
+      npm_version: 10.9.0
+    '23': &NODE23
+      node_major: 23
+      node_version: 23.2.0
+      npm_version: 10.9.0
       latest: true
 
 ruby: &RUBY
