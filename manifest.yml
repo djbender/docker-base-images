@@ -156,11 +156,11 @@ node: &NODE
       npm_version: 10.8.2
     '22': &NODE22
       node_major: 22
-      node_version: 22.11.0
+      node_version: 22.12.0
       npm_version: 10.9.0
     '23': &NODE23
       node_major: 23
-      node_version: 23.2.0
+      node_version: 23.3.0
       npm_version: 10.9.0
       latest: true
 
