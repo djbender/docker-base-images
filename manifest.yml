@@ -160,7 +160,7 @@ node: &NODE
       npm_version: 10.9.0
     '23': &NODE23
       node_major: 23
-      node_version: 23.3.0
+      node_version: 23.4.0
       npm_version: 10.9.0
       latest: true
 
