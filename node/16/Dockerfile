@@ -12,7 +12,7 @@ WORKDIR /usr/src/app
 ENV NODE_MAJOR=16
 ENV NODE_VERSION=16.20.2
 ENV NPM_VERSION=8.19.4
-ENV YARN_VERSION=1.22.19
+ENV YARN_VERSION=1.22.22
 
 RUN <<EOT
 #/usr/bin/env bash
@@ -33,10 +33,9 @@ RUN <<EOT
   apt-get install --yes --no-install-recommends \
     nodejs
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-  npm install --global "npm@${NPM_VERSION}"
-  npm install --global "yarn@${YARN_VERSION}"
-  rm -rf /root/.npm/_cacache
-  npm cache clean --force
+
+  corepack enable
+
   # Check that node commands work
   [ "$(command -v node)" = '/usr/bin/node' ]
   [ "$(command -v npm)" = '/usr/bin/npm' ]
