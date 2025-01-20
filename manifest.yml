@@ -111,7 +111,7 @@ java:
 node: &NODE
   defaults:
     base_image: ghcr.io/djbender/core
-    yarn_version: 1.22.19
+    yarn_version: 1.22.22
   versions:
     '8': &NODE8
       # there is no deb for node v8 on anything later than bionic
@@ -149,19 +149,19 @@ node: &NODE
     '18': &NODE18
       node_major: 18
       node_version: 18.20.5
-      npm_version: 10.7.0
+      npm_version: 10.8.2
     '20': &NODE20
       node_major: 20
       node_version: 20.18.1
       npm_version: 10.8.2
     '22': &NODE22
       node_major: 22
-      node_version: 22.12.0
-      npm_version: 10.9.0
+      node_version: 22.13.0
+      npm_version: 10.9.2
     '23': &NODE23
       node_major: 23
-      node_version: 23.5.0
-      npm_version: 10.9.0
+      node_version: 23.6.0
+      npm_version: 10.9.2
       latest: true
 
 ruby: &RUBY
