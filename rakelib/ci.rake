@@ -66,7 +66,7 @@ def matrix(&)
           'cache-to' => [
             "*.cache-to=type=gha,scope=#{image_name}/#{version},mode=max"
           ].join("\n"),
-          'platform' => platforms
+          'platform' => platform.join("\n")
         }
       end
     end
@@ -77,10 +77,10 @@ def main_branch?
   Git.open(Dir.getwd).current_branch == DEFAULT_BRANCH
 end
 
-def platforms
-  return "" if main_branch?
+def platform
+  return [] if main_branch?
 
-  "*.platforms=#{os}/#{arch}"
+  ["*.platform=#{os}/#{arch}"]
 end
 
 def os
@@ -88,7 +88,16 @@ def os
 end
 
 def arch
-  RbConfig::CONFIG['host_cpu']
+  cpu = RbConfig::CONFIG['host_cpu']
+
+  case cpu
+  when /x86_64/
+    'amd64'
+  when /arm64|aarch64/
+    'arm64'
+  else
+    'unknown'
+  end
 end
 
 def ghcr_registry
