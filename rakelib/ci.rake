@@ -1,7 +1,10 @@
 require 'json'
+require 'git'
 
 # lib/util has shared constants and methods used in rake tasks
 require_relative '../lib/util'
+
+DEFAULT_BRANCH = 'main'
 
 namespace :ci do
   namespace 'set-matrix' do
@@ -62,11 +65,39 @@ def matrix(&)
           ].join("\n"),
           'cache-to' => [
             "*.cache-to=type=gha,scope=#{image_name}/#{version},mode=max"
-          ].join("\n")
+          ].join("\n"),
+          'platform' => platform.join("\n")
         }
       end
     end
   }
+end
+
+def main_branch?
+  Git.open(Dir.getwd).current_branch == DEFAULT_BRANCH
+end
+
+def platform
+  return [] if main_branch?
+
+  ["*.platform=#{os}/#{arch}"]
+end
+
+def os
+  'linux'
+end
+
+def arch
+  cpu = RbConfig::CONFIG['host_cpu']
+
+  case cpu
+  when /x86_64/
+    'amd64'
+  when /arm64|aarch64/
+    'arm64'
+  else
+    'unknown'
+  end
 end
 
 def ghcr_registry

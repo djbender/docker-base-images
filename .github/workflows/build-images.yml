@@ -91,6 +91,7 @@ jobs:
           set: |
             ${{ matrix.cache-from }}
             ${{ matrix.cache-to }}
+            ${{ matrix.platform }}
 
   build-common-images:
     runs-on: ubuntu-latest
@@ -142,6 +143,7 @@ jobs:
           set: |
             ${{ matrix.cache-from }}
             ${{ matrix.cache-to }}
+            ${{ matrix.platform }}
 
   build-post-java-images:
     runs-on: ubuntu-latest
@@ -193,3 +195,4 @@ jobs:
           set: |
             ${{ matrix.cache-from }}
             ${{ matrix.cache-to }}
+            ${{ matrix.platform }}
