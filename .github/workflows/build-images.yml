@@ -33,9 +33,17 @@ jobs:
       - name: Set matrix output
         id: set-matrix
         run: |
-          echo "core_matrix=$(bundle exec rake ci:set-matrix:core)" >> $GITHUB_OUTPUT
-          echo "common_matrix=$(bundle exec rake ci:set-matrix:common)" >> $GITHUB_OUTPUT
-          echo "post_java_matrix=$(bundle exec rake ci:set-matrix:post-java)" >> $GITHUB_OUTPUT
+          core_matrix=$(bundle exec rake ci:set-matrix:core)
+          echo "$core_matrix" | jq .
+          echo "core_matrix=$core_matrix" >> $GITHUB_OUTPUT
+
+          common_matrix=$(bundle exec rake ci:set-matrix:common)
+          echo "$common_matrix" | jq .
+          echo "common_matrix=$common_matrix" >> $GITHUB_OUTPUT
+
+          post_java_matrix=$(bundle exec rake ci:set-matrix:post-java)
+          echo "$post_java_matrix" | jq .
+          echo "post_java_matrix=$post_java_matrix" >> $GITHUB_OUTPUT
 
   build-core-images:
     runs-on: ubuntu-latest
