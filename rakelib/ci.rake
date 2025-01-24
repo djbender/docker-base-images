@@ -73,14 +73,18 @@ def matrix(&)
   }
 end
 
-def main_branch?
-  Git.open(Dir.getwd).current_branch == DEFAULT_BRANCH
-end
-
 def platform
   return [] if main_branch?
 
   ["*.platform=#{os}/#{arch}"]
+end
+
+def main_branch?
+  current_branch == "refs/heads/#{DEFAULT_BRANCH}"
+end
+
+def current_branch
+  ENV['GITHUB_REF'] || "refs/heads/#{Git.open(Dir.getwd).current_branch}"
 end
 
 def os
