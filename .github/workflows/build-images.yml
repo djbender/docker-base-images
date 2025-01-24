@@ -33,7 +33,6 @@ jobs:
       - name: Set matrix output
         id: set-matrix
         run: |
-          echo ${{ github.ref }}
           core_matrix=$(bundle exec rake ci:set-matrix:core)
           echo "$core_matrix" | jq .
           echo "core_matrix=$core_matrix" >> $GITHUB_OUTPUT
