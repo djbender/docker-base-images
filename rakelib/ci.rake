@@ -74,9 +74,7 @@ def matrix(&)
 end
 
 def main_branch?
-  Git.open(Dir.getwd).current_branch.tap do |branch|
-    puts "Current branch is: '#{branch}'"
-  end == DEFAULT_BRANCH
+  Git.open(Dir.getwd).current_branch == DEFAULT_BRANCH
 end
 
 def platform
