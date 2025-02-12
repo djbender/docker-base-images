@@ -21,7 +21,6 @@ globals:
     distribution_code_name: noble
     docker_syntax: docker/dockerfile:1.4  # https://hub.docker.com/r/docker/dockerfile
     ghcr_registry: ghcr.io
-    tini_version: v0.19.0
 
 ############### Image definitions #################################
 
