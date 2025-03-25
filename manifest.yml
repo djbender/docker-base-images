@@ -24,18 +24,6 @@ globals:
 
 ############### Image definitions #################################
 
-clojure:
-  defaults:
-    flavor: dev
-  versions:
-    '11':
-      base_image: ghcr.io/djbender/java
-      latest: true
-      java_version: '11'
-      lein_version: '2.9.1'
-      package_sha: 'a4c239b407576f94e2fef5bfa107f0d3f97d0b19c253b08860d9609df4ab8b29'
-      jar_sha: 'ea7c831a4f5c38b6fc3926c6ad32d1d4b9b91bf830a715ecff5a70a18bda55f8'
-
 core:
   versions:
     noble:
@@ -50,57 +38,6 @@ core:
     bionic:
       base_image: ubuntu:bionic
       distribution_code_name: bionic
-
-java:
-  defaults:
-    base_image: ghcr.io/djbender/core:noble
-  versions:
-    '8':
-      java_version: 8
-      flavor: jdk
-    '8-jre':
-      java_version: 8
-      flavor: jre
-    '11':
-      java_version: 11
-      flavor: jdk
-    '11-jre':
-      java_version: 11
-      flavor: jre
-    '17':
-      java_version: 17
-      flavor: jdk
-    '17-jre':
-      java_version: 17
-      flavor: jre
-    '18':
-      java_version: 18
-      flavor: jdk
-      base_image: ghcr.io/djbender/core:jammy
-      distribution_code_name: jammy
-    '18-jre':
-      java_version: 18
-      flavor: jre
-      base_image: ghcr.io/djbender/core:jammy
-      distribution_code_name: jammy
-    '19':
-      java_version: 19
-      flavor: jdk
-      latest: true
-      base_image: ghcr.io/djbender/core:jammy
-      distribution_code_name: jammy
-    '19-jre':
-      java_version: 19
-      flavor: jre
-      base_image: ghcr.io/djbender/core:jammy
-      distribution_code_name: jammy
-    '21':
-      java_version: 21
-      flavor: jdk
-      latest: true
-    '21-jre':
-      java_version: 21
-      flavor: jre
 
 # NOTE: versions for node and npm were sourced from here:
 #       https://nodejs.org/en/download/releases

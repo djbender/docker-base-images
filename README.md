@@ -7,8 +7,6 @@ Available images:
 - [Core - Ubuntu Bionic, Jammy, Noble](core/)
 - [Ruby](ruby/)
 - [Node](node/)
-- [Java](java/)
-- [Clojure](clojure/)
 
 # How to build
 - [Optional] Log in to ghcr.io for build cache
