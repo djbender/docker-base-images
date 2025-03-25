@@ -17,7 +17,7 @@ namespace :build do
 
   desc 'Build common images'
   task :common do
-    core_filter = proc { |image_name| image_name != 'core' && image_name != 'clojure' }
+    core_filter = proc { |image_name| image_name != 'core' }
 
     Build.matrix(&core_filter).each do |bake_file|
       puts "Building #{bake_file}..."
@@ -31,19 +31,6 @@ namespace :build do
   desc 'Build ruby images'
   task :ruby do
     core_filter = proc { |image_name| image_name == 'ruby' }
-
-    Build.matrix(&core_filter).each do |bake_file|
-      puts "Building #{bake_file}..."
-      system(
-        "docker buildx bake --file #{bake_file} --set *.platform=linux/arm64 --load",
-        exception: true
-      )
-    end
-  end
-
-  desc 'Build java images'
-  task :java do
-    core_filter = proc { |image_name| image_name == 'java' }
 
     Build.matrix(&core_filter).each do |bake_file|
       puts "Building #{bake_file}..."
