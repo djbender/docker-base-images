@@ -8,4 +8,4 @@ gem 'rubocop', require: false
 gem 'rubocop-performance', require: false
 gem 'rubocop-rake', require: false
 
-gem "git", "~> 2.3"
+gem "git", "~> 3.0"
