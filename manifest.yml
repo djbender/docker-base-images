@@ -84,7 +84,7 @@ node: &NODE
       npm_version: 8.19.4
     '18': &NODE18
       node_major: 18
-      node_version: 18.20.6
+      node_version: 18.20.8
       npm_version: 10.8.2
     '20': &NODE20
       node_major: 20
@@ -96,7 +96,7 @@ node: &NODE
       npm_version: 10.9.2
     '23': &NODE23
       node_major: 23
-      node_version: 23.10.0
+      node_version: 23.11.0
       npm_version: 10.9.2
       latest: true
 
