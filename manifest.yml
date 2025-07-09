@@ -100,7 +100,7 @@ node: &NODE
       npm_version: 10.9.2
     '24': &NODE24
       node_major: 24
-      node_version: 24.3.0
+      node_version: 24.4.0
       npm_version: 11.4.2
       latest: true
 
