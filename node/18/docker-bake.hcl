@@ -19,7 +19,7 @@ group "default" {
 # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
 target "node" {
   target = "node"
-  tags = ["ghcr.io/djbender/node:18", "ghcr.io/djbender/node:18-noble", "ghcr.io/djbender/node:18.20.6", "ghcr.io/djbender/node:18.20.6-noble"]
+  tags = ["ghcr.io/djbender/node:18", "ghcr.io/djbender/node:18-noble", "ghcr.io/djbender/node:18.20.8", "ghcr.io/djbender/node:18.20.8-noble"]
   context = "${PWD}/node/18"
   platforms = ["linux/amd64", "linux/arm64"]
   cache-from = [
@@ -34,7 +34,7 @@ target "node" {
 target "node-dev" {
   target = "node-dev"
   inherits = ["node"]
-  tags = ["ghcr.io/djbender/node:18-dev", "ghcr.io/djbender/node:18-dev-noble", "ghcr.io/djbender/node:18.20.6-dev", "ghcr.io/djbender/node:18.20.6-dev-noble"]
+  tags = ["ghcr.io/djbender/node:18-dev", "ghcr.io/djbender/node:18-dev-noble", "ghcr.io/djbender/node:18.20.8-dev", "ghcr.io/djbender/node:18.20.8-dev-noble"]
   cache-from = ["type=gha,scope=node-dev/18"]
   cache-to = ["type=gha,scope=node-dev/18,mode=max"]
 }

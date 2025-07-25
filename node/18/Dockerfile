@@ -10,7 +10,7 @@ USER root
 WORKDIR /usr/src/app
 
 ENV NODE_MAJOR=18
-ENV NODE_VERSION=18.20.6
+ENV NODE_VERSION=18.20.8
 ENV NPM_VERSION=10.8.2
 ENV YARN_VERSION=1.22.22
 
@@ -30,6 +30,14 @@ RUN <<EOT
   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
 
   apt-get update
+  echo "Now checking that upstream version matches what we expect before continuing..."
+  REPO_VERSION=$(apt-cache policy nodejs | grep Candidate | awk '{print $2}' | cut -d'+' -f1 | cut -d'-' -f1)
+  if [ "${REPO_VERSION}" = "${NODE_VERSION}" ]; then
+    echo "Versions match!"
+  else
+    echo "[ERROR]: Versions did not match!"
+    exit 1
+  fi
   apt-get install --yes --no-install-recommends \
     nodejs
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

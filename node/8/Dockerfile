@@ -30,6 +30,14 @@ RUN <<EOT
     > /etc/apt/sources.list.d/nodesource.list
 
   apt-get update
+  echo "Now checking that upstream version matches what we expect before continuing..."
+  REPO_VERSION=$(apt-cache policy nodejs | grep Candidate | awk '{print $2}' | cut -d'+' -f1 | cut -d'-' -f1)
+  if [ "${REPO_VERSION}" = "${NODE_VERSION}" ]; then
+    echo "Versions match!"
+  else
+    echo "[ERROR]: Versions did not match!"
+    exit 1
+  fi
   apt-get install --yes --no-install-recommends \
     nodejs
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
