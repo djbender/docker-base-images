@@ -22,14 +22,20 @@ target "ruby" {
   tags = ["ghcr.io/djbender/ruby:3.4", "ghcr.io/djbender/ruby:3.4-noble", "ghcr.io/djbender/ruby:3.4.3", "ghcr.io/djbender/ruby:3.4.3-noble", "ghcr.io/djbender/ruby:latest"]
   context = "${PWD}/ruby/3.4"
   platforms = ["linux/amd64", "linux/arm64"]
-  cache-from = ["type=gha,scope=ruby/3.4"]
-  cache-to = ["type=gha,scope=ruby/3.4,mode=max"]
+  cache-from = [
+    "type=registry,ref=ghcr.io/djbender/ruby:cache-3.4",
+    "type=registry,ref=ghcr.io/djbender/ruby:3.4"
+  ]
+  cache-to = ["type=registry,ref=ghcr.io/djbender/ruby:cache-3.4,mode=max"]
 }
 
 target "ruby-dev" {
   target = "ruby-dev"
   inherits = ["ruby"]
   tags = ["ghcr.io/djbender/ruby:3.4-dev-noble", "ghcr.io/djbender/ruby:3.4.3-dev", "ghcr.io/djbender/ruby:3.4.3-dev-noble", "ghcr.io/djbender/ruby:dev"]
-  cache-from = ["type=gha,scope=ruby-dev/3.4"]
-  cache-to = ["type=gha,scope=ruby-dev/3.4,mode=max"]
+  cache-from = [
+    "type=registry,ref=ghcr.io/djbender/ruby:cache-dev-3.4",
+    "type=registry,ref=ghcr.io/djbender/ruby:dev-3.4"
+  ]
+  cache-to = ["type=registry,ref=ghcr.io/djbender/ruby:cache-dev-3.4,mode=max"]
 }

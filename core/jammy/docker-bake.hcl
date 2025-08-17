@@ -23,14 +23,20 @@ target "core" {
   tags = ["ghcr.io/djbender/core:jammy"]
   context = "${PWD}/core/jammy"
   platforms = ["linux/amd64", "linux/arm64"]
-  cache-from = ["type=gha,scope=core/jammy"]
-  cache-to = ["type=gha,scope=core/jammy,mode=max"]
+  cache-from = [
+    "type=registry,ref=ghcr.io/djbender/core:cache-jammy",
+    "type=registry,ref=ghcr.io/djbender/core:jammy"
+  ]
+  cache-to = ["type=registry,ref=ghcr.io/djbender/core:cache-jammy,mode=max"]
 }
 
 target "core-dev" {
   target = "core-dev"
   inherits = ["core"]
   tags = ["ghcr.io/djbender/core:jammy-dev"]
-  cache-from = ["type=gha,scope=core-dev/jammy"]
-  cache-to = ["type=gha,scope=core-dev/jammy,mode=max"]
+  cache-from = [
+    "type=registry,ref=ghcr.io/djbender/core:cache-dev-jammy",
+    "type=registry,ref=ghcr.io/djbender/core:dev-jammy"
+  ]
+  cache-to = ["type=registry,ref=ghcr.io/djbender/core:cache-dev-jammy,mode=max"]
 }
