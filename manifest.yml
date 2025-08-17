@@ -101,7 +101,7 @@ node: &NODE
     '24': &NODE24
       node_major: 24
       node_version: 24.5.0
-      npm_version: 11.4.2
+      npm_version: 11.5.1
       latest: true
 
 ruby: &RUBY
