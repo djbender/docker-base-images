@@ -71,22 +71,17 @@ def matrix(&)
         end
 
         [
-          # Primary image configuration
+          # Combined matrix entry with separate target and cache configurations
           {
             bake: Pathname.new("#{image_name}/#{version}") + Util::BAKE_FILE,
-            target: image_name,
-            'cache-from' => primary_cache_from.join("\n"),
-            'cache-to' => [
+            primary_target: image_name,
+            dev_target: "#{image_name}-dev",
+            primary_cache_from: primary_cache_from.join("\n"),
+            primary_cache_to: [
               "#{image_name}.cache-to=type=registry,ref=ghcr.io/djbender/#{image_name}:cache-#{version}#{branch_suffix},mode=max"
             ].join("\n"),
-            'platform' => platform.join("\n")
-          },
-          # Dev image configuration
-          {
-            bake: Pathname.new("#{image_name}/#{version}") + Util::BAKE_FILE,
-            target: "#{image_name}-dev",
-            'cache-from' => dev_cache_from.join("\n"),
-            'cache-to' => [
+            dev_cache_from: dev_cache_from.join("\n"),
+            dev_cache_to: [
               "#{image_name}-dev.cache-to=type=registry,ref=ghcr.io/djbender/#{image_name}:cache-dev-#{version}#{branch_suffix},mode=max"
             ].join("\n"),
             'platform' => platform.join("\n")

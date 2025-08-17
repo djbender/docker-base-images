@@ -88,17 +88,30 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Build and push primary images
         uses: docker/bake-action@v6.8.0
         with:
           pull: true
           push: ${{ github.ref == 'refs/heads/main' }}
           files: ${{ matrix.bake }}
-          targets: ${{ matrix.target }}
+          targets: ${{ matrix.primary_target }}
           source: .
           set: |
-            ${{ matrix.cache-from }}
-            ${{ matrix.cache-to }}
+            ${{ matrix.primary_cache_from }}
+            ${{ matrix.primary_cache_to }}
+            ${{ matrix.platform }}
+
+      - name: Build and push dev images
+        uses: docker/bake-action@v6.8.0
+        with:
+          pull: true
+          push: ${{ github.ref == 'refs/heads/main' }}
+          files: ${{ matrix.bake }}
+          targets: ${{ matrix.dev_target }}
+          source: .
+          set: |
+            ${{ matrix.dev_cache_from }}
+            ${{ matrix.dev_cache_to }}
             ${{ matrix.platform }}
 
   build-common-images:
@@ -141,15 +154,28 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Build and push primary images
         uses: docker/bake-action@v6.8.0
         with:
           pull: true
           push: ${{ github.ref == 'refs/heads/main' }}
           files: ${{ matrix.bake }}
-          targets: ${{ matrix.target }}
+          targets: ${{ matrix.primary_target }}
           source: .
           set: |
-            ${{ matrix.cache-from }}
-            ${{ matrix.cache-to }}
+            ${{ matrix.primary_cache_from }}
+            ${{ matrix.primary_cache_to }}
+            ${{ matrix.platform }}
+
+      - name: Build and push dev images
+        uses: docker/bake-action@v6.8.0
+        with:
+          pull: true
+          push: ${{ github.ref == 'refs/heads/main' }}
+          files: ${{ matrix.bake }}
+          targets: ${{ matrix.dev_target }}
+          source: .
+          set: |
+            ${{ matrix.dev_cache_from }}
+            ${{ matrix.dev_cache_to }}
             ${{ matrix.platform }}
