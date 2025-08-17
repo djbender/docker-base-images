@@ -22,14 +22,20 @@ target "ruby" {
   tags = ["ghcr.io/djbender/ruby:3.2", "ghcr.io/djbender/ruby:3.2-noble", "ghcr.io/djbender/ruby:3.2.8", "ghcr.io/djbender/ruby:3.2.8-noble"]
   context = "${PWD}/ruby/3.2"
   platforms = ["linux/amd64", "linux/arm64"]
-  cache-from = ["type=gha,scope=ruby/3.2"]
-  cache-to = ["type=gha,scope=ruby/3.2,mode=max"]
+  cache-from = [
+    "type=registry,ref=ghcr.io/djbender/ruby:cache-3.2",
+    "type=registry,ref=ghcr.io/djbender/ruby:3.2"
+  ]
+  cache-to = ["type=registry,ref=ghcr.io/djbender/ruby:cache-3.2,mode=max"]
 }
 
 target "ruby-dev" {
   target = "ruby-dev"
   inherits = ["ruby"]
   tags = ["ghcr.io/djbender/ruby:3.2-dev-noble", "ghcr.io/djbender/ruby:3.2.8-dev", "ghcr.io/djbender/ruby:3.2.8-dev-noble"]
-  cache-from = ["type=gha,scope=ruby-dev/3.2"]
-  cache-to = ["type=gha,scope=ruby-dev/3.2,mode=max"]
+  cache-from = [
+    "type=registry,ref=ghcr.io/djbender/ruby:cache-dev-3.2",
+    "type=registry,ref=ghcr.io/djbender/ruby:dev-3.2"
+  ]
+  cache-to = ["type=registry,ref=ghcr.io/djbender/ruby:cache-dev-3.2,mode=max"]
 }

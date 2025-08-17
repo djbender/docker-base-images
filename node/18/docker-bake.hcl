@@ -23,10 +23,11 @@ target "node" {
   context = "${PWD}/node/18"
   platforms = ["linux/amd64", "linux/arm64"]
   cache-from = [
-    "type=gha,scope=node/18"
+    "type=registry,ref=ghcr.io/djbender/node:cache-18",
+    "type=registry,ref=ghcr.io/djbender/node:18"
   ]
   cache-to = [
-    "type=gha,scope=node/18,mode=max"
+    "type=registry,ref=ghcr.io/djbender/node:cache-18,mode=max"
   ]
 }
 
@@ -35,6 +36,9 @@ target "node-dev" {
   target = "node-dev"
   inherits = ["node"]
   tags = ["ghcr.io/djbender/node:18-dev", "ghcr.io/djbender/node:18-dev-noble", "ghcr.io/djbender/node:18.20.8-dev", "ghcr.io/djbender/node:18.20.8-dev-noble"]
-  cache-from = ["type=gha,scope=node-dev/18"]
-  cache-to = ["type=gha,scope=node-dev/18,mode=max"]
+  cache-from = [
+    "type=registry,ref=ghcr.io/djbender/node:cache-dev-18",
+    "type=registry,ref=ghcr.io/djbender/node:dev-18"
+  ]
+  cache-to = ["type=registry,ref=ghcr.io/djbender/node:cache-dev-18,mode=max"]
 }

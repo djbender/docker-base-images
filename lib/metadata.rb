@@ -32,6 +32,11 @@ class Metadata
     default_dev_docker_tags.push(custom_tags).flatten.compact.uniq.sort
   end
 
+  def branch_suffix
+    branch_name = ENV['GITHUB_REF_NAME'] || 'main'
+    branch_name == 'main' ? '' : "-#{branch_name.gsub(/[^a-zA-Z0-9\-_]/, '-')}"
+  end
+
   # return nil if you try to call a method that doesn't exist
   def method_missing(_method_name, *_args, &); end
   def respond_to_missing?(_method_name); end
