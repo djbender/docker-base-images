@@ -92,16 +92,16 @@ node: &NODE
       npm_version: 10.8.2
     '22': &NODE22
       node_major: 22
-      node_version: 22.17.1
-      npm_version: 10.9.2
+      node_version: 22.18.0
+      npm_version: 10.9.3
     '23': &NODE23
       node_major: 23
       node_version: 23.11.1
       npm_version: 10.9.2
     '24': &NODE24
       node_major: 24
-      node_version: 24.4.1
-      npm_version: 11.4.2
+      node_version: 24.5.0
+      npm_version: 11.5.1
       latest: true
 
 ruby: &RUBY
