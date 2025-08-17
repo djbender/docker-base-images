@@ -48,20 +48,50 @@ end
 # }
 #
 def matrix(&)
+  branch_suffix = current_branch == DEFAULT_BRANCH ? '' : "-#{current_branch.gsub(/[^a-zA-Z0-9\-_]/, '-')}"
+
   {
     include: Util::MANIFEST.select(&).flat_map do |image_name, details|
-      details.fetch('versions').keys.map do |version|
-        {
-          bake: Pathname.new("#{image_name}/#{version}") + Util::BAKE_FILE,
-          'cache-from' => [
-            "*.cache-from=type=registry,ref=ghcr.io/djbender/#{image_name}:cache-#{version}",
-            "*.cache-from=type=registry,ref=ghcr.io/djbender/#{image_name}:#{version}"
-          ].join("\n"),
-          'cache-to' => [
-            "*.cache-to=type=registry,ref=ghcr.io/djbender/#{image_name}:cache-#{version},mode=max"
-          ].join("\n"),
-          'platform' => platform.join("\n")
-        }
+      details.fetch('versions').keys.flat_map do |version|
+        # Build cache-from arrays
+        if main_branch?
+          # Main branch: only use the main cache
+          primary_cache_from = ["#{image_name}.cache-from=type=registry,ref=ghcr.io/djbender/#{image_name}:cache-#{version}"]
+          dev_cache_from = ["#{image_name}-dev.cache-from=type=registry,ref=ghcr.io/djbender/#{image_name}:cache-dev-#{version}"]
+        else
+          # Feature branch: use branch-specific cache with fallback to main cache
+          primary_cache_from = [
+            "#{image_name}.cache-from=type=registry,ref=ghcr.io/djbender/#{image_name}:cache-#{version}#{branch_suffix}",
+            "#{image_name}.cache-from=type=registry,ref=ghcr.io/djbender/#{image_name}:cache-#{version}"
+          ]
+          dev_cache_from = [
+            "#{image_name}-dev.cache-from=type=registry,ref=ghcr.io/djbender/#{image_name}:cache-dev-#{version}#{branch_suffix}",
+            "#{image_name}-dev.cache-from=type=registry,ref=ghcr.io/djbender/#{image_name}:cache-dev-#{version}"
+          ]
+        end
+
+        [
+          # Primary image configuration
+          {
+            bake: Pathname.new("#{image_name}/#{version}") + Util::BAKE_FILE,
+            target: image_name,
+            'cache-from' => primary_cache_from.join("\n"),
+            'cache-to' => [
+              "#{image_name}.cache-to=type=registry,ref=ghcr.io/djbender/#{image_name}:cache-#{version}#{branch_suffix},mode=max"
+            ].join("\n"),
+            'platform' => platform.join("\n")
+          },
+          # Dev image configuration
+          {
+            bake: Pathname.new("#{image_name}/#{version}") + Util::BAKE_FILE,
+            target: "#{image_name}-dev",
+            'cache-from' => dev_cache_from.join("\n"),
+            'cache-to' => [
+              "#{image_name}-dev.cache-to=type=registry,ref=ghcr.io/djbender/#{image_name}:cache-dev-#{version}#{branch_suffix},mode=max"
+            ].join("\n"),
+            'platform' => platform.join("\n")
+          }
+        ]
       end
     end
   }
@@ -74,11 +104,12 @@ def platform
 end
 
 def main_branch?
-  current_branch == "refs/heads/#{DEFAULT_BRANCH}"
+  current_branch == DEFAULT_BRANCH
 end
 
 def current_branch
-  ENV['GITHUB_REF'] || "refs/heads/#{Git.open(Dir.getwd).current_branch}"
+  branch = ENV['GITHUB_REF'] || "refs/heads/#{Git.open(Dir.getwd).current_branch}"
+  branch.gsub('refs/heads/', '')
 end
 
 def os

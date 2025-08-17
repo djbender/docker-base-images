@@ -94,6 +94,7 @@ jobs:
           pull: true
           push: ${{ github.ref == 'refs/heads/main' }}
           files: ${{ matrix.bake }}
+          targets: ${{ matrix.target }}
           source: .
           set: |
             ${{ matrix.cache-from }}
@@ -146,6 +147,7 @@ jobs:
           pull: true
           push: ${{ github.ref == 'refs/heads/main' }}
           files: ${{ matrix.bake }}
+          targets: ${{ matrix.target }}
           source: .
           set: |
             ${{ matrix.cache-from }}
