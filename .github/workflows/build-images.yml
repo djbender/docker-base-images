@@ -89,7 +89,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push primary images
-        uses: docker/bake-action@v6.8.0
+        uses: docker/bake-action@v6.9.0
         with:
           pull: true
           push: ${{ github.ref == 'refs/heads/main' }}
@@ -102,7 +102,7 @@ jobs:
             ${{ matrix.platform }}
 
       - name: Build and push dev images
-        uses: docker/bake-action@v6.8.0
+        uses: docker/bake-action@v6.9.0
         with:
           pull: true
           push: ${{ github.ref == 'refs/heads/main' }}
@@ -155,7 +155,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push primary images
-        uses: docker/bake-action@v6.8.0
+        uses: docker/bake-action@v6.9.0
         with:
           pull: true
           push: ${{ github.ref == 'refs/heads/main' }}
@@ -168,7 +168,7 @@ jobs:
             ${{ matrix.platform }}
 
       - name: Build and push dev images
-        uses: docker/bake-action@v6.8.0
+        uses: docker/bake-action@v6.9.0
         with:
           pull: true
           push: ${{ github.ref == 'refs/heads/main' }}
