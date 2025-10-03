@@ -88,7 +88,7 @@ node: &NODE
       npm_version: 10.8.2
     '20': &NODE20
       node_major: 20
-      node_version: 20.19.4
+      node_version: 20.19.5
       npm_version: 10.8.2
     '22': &NODE22
       node_major: 22
@@ -101,7 +101,7 @@ node: &NODE
     '24': &NODE24
       node_major: 24
       node_version: 24.9.0
-      npm_version: 11.5.1
+      npm_version: 11.6.0
       latest: true
 
 ruby: &RUBY
