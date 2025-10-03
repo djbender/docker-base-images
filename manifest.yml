@@ -159,5 +159,5 @@ ruby: &RUBY
     '3.4':
       ruby_major: 3.4
       ruby_version: 3.4.6
-      ruby_download_sha256: e3c19ab9e8f41b3723124fbc0114cde7cbf55e65aa9c58c12acd89ec9c0dd1b9
+      ruby_download_sha256: 804995bc22938aa475127000d3103cb133409ad3955edfc0e7412be66a4859b8
       latest: true # apply the latest tag
