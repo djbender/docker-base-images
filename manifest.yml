@@ -150,14 +150,14 @@ ruby: &RUBY
       ruby_download_sha256: 658acc455b6bda87ac6cc1380e86552b9c1af87055e7a127589c5bf7ed80b035
     '3.2':
       ruby_major: 3.2
-      ruby_version: 3.2.8
-      ruby_download_sha256: 1cccd3100155275293ae5d4ea0a1a1068f5de69e71732220f144acce26327a3c
+      ruby_version: 3.2.9
+      ruby_download_sha256: cf6699d0084c588e7944d92e1a8edda28b1cc3ee471a1f0aebb4b3d32c9753b2
     '3.3':
       ruby_major: 3.3
-      ruby_version: 3.3.8
-      ruby_download_sha256: 44ae70fee043da3ce48289b7a52618ebe32dc083253993d486211c7e445c8642
+      ruby_version: 3.3.9
+      ruby_download_sha256: 2b24a2180a2f7f63c099851a1d01e6928cf56d515d136a91bd2075423a7a76bb
     '3.4':
       ruby_major: 3.4
-      ruby_version: 3.4.3
-      ruby_download_sha256: 174dcd8c516694f833fd3c93ea227fa6c3321464577a3882a6fc7e4fe20237fd
+      ruby_version: 3.4.6
+      ruby_download_sha256: e3c19ab9e8f41b3723124fbc0114cde7cbf55e65aa9c58c12acd89ec9c0dd1b9
       latest: true # apply the latest tag
