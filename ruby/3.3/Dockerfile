@@ -49,9 +49,9 @@ EOT
 ENV BUNDLER_VERSION 2.5.14
 ENV LANG en_US.utf-8
 ENV RUBYGEMS_VERSION 3.5.14
-ENV RUBY_DOWNLOAD_SHA256 44ae70fee043da3ce48289b7a52618ebe32dc083253993d486211c7e445c8642
+ENV RUBY_DOWNLOAD_SHA256 2b24a2180a2f7f63c099851a1d01e6928cf56d515d136a91bd2075423a7a76bb
 ENV RUBY_MAJOR 3.3
-ENV RUBY_VERSION 3.3.8
+ENV RUBY_VERSION 3.3.9
 
 # NOTE: some of ruby's build scripts are written in ruby so we need to install ruby
 # in order to compile ruby. We use apt-mark to uninstall packages we don't need.
