@@ -1,5 +1,7 @@
 class ImageGenerator
-  attr_accessor :details, :image_name, :task_name
+  GENERATED_FILE = '.generated.yml'
+
+  attr_reader :details, :image_name, :task_name
 
   def initialize(image_name:, details:, task_name:)
     @details = details
@@ -9,6 +11,7 @@ class ImageGenerator
 
   def generate
     puts "Generating #{image_name} Dockerfiles"
+    cleanup_orphaned_directories
     @details.fetch('versions').each do |version, values|
       print "- #{version}... "
       values ||= {}
@@ -16,11 +19,13 @@ class ImageGenerator
         templates.each do |template|
           template.render(template_values(values:, version:, output_dir:)).to(output_dir)
         end
-        # copy_non_template_files(output_dir:)
       end
       puts 'Done!'
     end
+    save_generated_dirs
   end
+
+  private
 
   def template_values(values:, version:, output_dir:)
     Util::GLOBAL_DEFAULTS
@@ -59,10 +64,39 @@ class ImageGenerator
     @details.fetch('defaults', {})
   end
 
-  def copy_non_template_files(output_dir:)
-    files_to_copy = Dir.glob(File.join(template_dir, '**')).reject do |path|
-      templates.any? { |template| File.identical?(path, template.path) }
+  def cleanup_orphaned_directories
+    previously_generated = read_generated_file.fetch(image_name, [])
+    orphans = previously_generated - version_directories
+    return if orphans.empty?
+
+    puts "Found orphaned directories not in manifest:"
+    orphans.each { |dir| puts "  - #{dir}" }
+    if $stdin.tty?
+      print "Remove these directories? [y/N] "
+      return unless $stdin.gets.chomp.downcase == 'y'
     end
-    FileUtils.cp_r(files_to_copy, output_dir, preserve: true)
+
+    orphans.each do |dir|
+      next unless File.directory?(dir)
+
+      puts "Removing: #{dir}"
+      FileUtils.rm_r(dir)
+    end
+  end
+
+  def save_generated_dirs
+    all_generated = read_generated_file
+    all_generated[image_name] = version_directories.sort
+    File.write(GENERATED_FILE, all_generated.to_yaml)
+  end
+
+  def version_directories
+    @details.fetch('versions').keys.map { |v| "#{image_name}/#{v}" }
+  end
+
+  def read_generated_file
+    return {} unless File.exist?(GENERATED_FILE)
+
+    YAML.safe_load_file(GENERATED_FILE, permitted_classes: []) || {}
   end
 end
