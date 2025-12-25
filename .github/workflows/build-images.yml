@@ -4,8 +4,7 @@ on:
   push:
     branches-ignore:
       - "dependabot/**"
-  pull_request_target:
-    types: [labeled]
+  pull_request:
   workflow_dispatch: {}
 
 permissions:
@@ -14,10 +13,6 @@ permissions:
 jobs:
   set-matrix:
     runs-on: ubuntu-latest
-    if: >
-      contains(github.event.pull_request.labels.*.name, 'dependencies')
-      || github.event_name == 'push'
-      || github.event_name == 'workflow_dispatch'
     outputs:
       core_matrix: ${{ steps.set-matrix.outputs.core_matrix }}
       common_matrix: ${{ steps.set-matrix.outputs.common_matrix }}
@@ -46,10 +41,6 @@ jobs:
 
   build-core-images:
     runs-on: ubuntu-latest
-    if: >
-      contains(github.event.pull_request.labels.*.name, 'dependencies')
-      || github.event_name == 'push'
-      || github.event_name == 'workflow_dispatch'
     needs:
       - set-matrix
     permissions:
@@ -119,10 +110,6 @@ jobs:
     needs:
       - set-matrix
       - build-core-images
-    if: >
-      contains(github.event.pull_request.labels.*.name, 'dependencies')
-      || github.event_name == 'push'
-      || github.event_name == 'workflow_dispatch'
     permissions:
       packages: write
       contents: read
