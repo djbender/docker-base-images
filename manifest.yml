@@ -103,6 +103,10 @@ node: &NODE
       node_version: 24.12.0
       npm_version: 11.6.2
       latest: true
+    '25': &NODE25
+      node_major: 25
+      node_version: 25.2.0
+      npm_version: 11.6.2
 
 ruby: &RUBY
   defaults:

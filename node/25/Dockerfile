@@ -1,19 +1,18 @@
-# syntax=<%= docker_syntax %>
+# syntax=docker/dockerfile:1.4
 
-<%= generation_messages -%>
 
 ########## node image ##################
-FROM <%= base_image %> AS node
+FROM ghcr.io/djbender/core AS node
 LABEL org.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 
 USER root
 WORKDIR /usr/src/app
 
-ENV NODE_MAJOR=<%= node_major %>
-ENV NODE_VERSION=<%= node_version %>
-ENV NPM_VERSION=<%= npm_version %>
-ENV YARN_VERSION=<%= yarn_version %>
+ENV NODE_MAJOR=25
+ENV NODE_VERSION=25.2.0
+ENV NPM_VERSION=11.6.2
+ENV YARN_VERSION=1.22.22
 
 RUN <<EOT
 #/usr/bin/env bash
@@ -26,15 +25,9 @@ RUN <<EOT
     curl \
     gnupg
 
-<% if node_major < 16 -%>
-  curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | apt-key add -
-  echo "deb https://deb.nodesource.com/node_<%= node_major %>.x <%= distribution_code_name %> main" \
-    > /etc/apt/sources.list.d/nodesource.list
-<% else -%>
   mkdir -p /usr/share/keyrings
   curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /usr/share/keyrings/nodesource.gpg
-  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_<%= node_major %>.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
-<% end -%>
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_25.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
 
   apt-get update
   echo "Now checking that upstream version matches what we expect before continuing..."
@@ -48,16 +41,10 @@ RUN <<EOT
   apt-get install --yes --no-install-recommends \
     nodejs
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-<% if node_major < 16 %>
-  npm install --global "yarn@${YARN_VERSION}"
-  rm -rf /root/.npm/_cacache
-  npm cache clean --force
-<% else %>
-<% if node_major >= 25 -%>
+
   npm install --global corepack
-<% end -%>
   corepack enable
-<% end %>
+
   # Check that node commands work
   [ "$(command -v node)" = '/usr/bin/node' ]
   [ "$(command -v npm)" = '/usr/bin/npm' ]
