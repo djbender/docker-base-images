@@ -132,7 +132,7 @@ updates:
       - notification-only
 
   - package-ecosystem: docker
-    directory: node/23
+    directory: node/24
     schedule:
       interval: daily
     labels:
@@ -142,7 +142,7 @@ updates:
       - notification-only
 
   - package-ecosystem: docker
-    directory: node/24
+    directory: node/25
     schedule:
       interval: daily
     labels:

@@ -94,10 +94,6 @@ node: &NODE
       node_major: 22
       node_version: 22.21.0
       npm_version: 10.9.4
-    '23': &NODE23
-      node_major: 23
-      node_version: 23.11.1
-      npm_version: 10.9.2
     '24': &NODE24
       node_major: 24
       node_version: 24.12.0
