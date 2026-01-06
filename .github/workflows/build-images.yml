@@ -22,7 +22,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: ruby/setup-ruby@v1.278.0
+      - uses: ruby/setup-ruby@v1.279.0
         with:
           ruby-version: .ruby-version
           bundler-cache: true
