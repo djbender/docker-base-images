@@ -18,7 +18,7 @@ jobs:
       common_matrix: ${{ steps.set-matrix.outputs.common_matrix }}
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v6.0.1
+      - uses: actions/checkout@v6.0.2
         with:
           persist-credentials: false
 
@@ -59,7 +59,7 @@ jobs:
       - name: set PWD environment variable
         run: echo "PWD=$(pwd)" >> $GITHUB_ENV
 
-      - uses: actions/checkout@v6.0.1
+      - uses: actions/checkout@v6.0.2
         with:
           persist-credentials: false
 
@@ -121,7 +121,7 @@ jobs:
       - name: set PWD environment variable
         run: echo "PWD=$(pwd)" >> $GITHUB_ENV
 
-      - uses: actions/checkout@v6.0.1
+      - uses: actions/checkout@v6.0.2
         with:
           persist-credentials: false
 
