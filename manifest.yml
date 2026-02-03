@@ -160,4 +160,8 @@ ruby: &RUBY
       ruby_major: 3.4
       ruby_version: 3.4.8
       ruby_download_sha256: 53a8ec71111449cbbd42224d8d27c493fa6ded228636731051c48604d4255d68
+    '4.0':
+      ruby_major: 4.0
+      ruby_version: 4.0.0
+      ruby_download_sha256: a72bacee9de07283ebc19baa4ac243b193129f21aa4e168c7186fb1fe7d07fe1
       latest: true # apply the latest tag
