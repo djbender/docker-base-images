@@ -3,6 +3,8 @@
 ## Unreleased
 
 ### Added
+- CI gate job for stable branch protection check
+- Ruby 4.0 support (4.0.1)
 - Node 25 support
 - Orphan directory cleanup during generation - prompts before removing directories no longer in manifest (auto-confirms in non-TTY/CI environments)
 - `.generated.yml` tracks generated directories for cleanup detection
