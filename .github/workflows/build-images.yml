@@ -162,3 +162,16 @@ jobs:
             ${{ matrix.dev_cache_from }}
             ${{ matrix.dev_cache_to }}
             ${{ matrix.platform }}
+
+  ci:
+    runs-on: ubuntu-slim
+    needs: build-common-images
+    if: always()
+    steps:
+      - name: Check all jobs passed
+        run: |
+          if [[ "${{ needs.build-common-images.result }}" != "success" ]]; then
+            echo "One or more jobs failed"
+            exit 1
+          fi
+          echo "All jobs passed"
