@@ -240,3 +240,13 @@ updates:
       - do-not-merge
       - docker
       - notification-only
+
+  - package-ecosystem: docker
+    directory: ruby/4.0
+    schedule:
+      interval: daily
+    labels:
+      - dependencies
+      - do-not-merge
+      - docker
+      - notification-only
