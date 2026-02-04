@@ -32,7 +32,7 @@ target "ruby" {
 target "ruby-dev" {
   target = "ruby-dev"
   inherits = ["ruby"]
-  tags = ["ghcr.io/djbender/ruby:2.6-dev-bionic", "ghcr.io/djbender/ruby:2.6.10-dev", "ghcr.io/djbender/ruby:2.6.10-dev-bionic"]
+  tags = ["ghcr.io/djbender/ruby:2.6-dev", "ghcr.io/djbender/ruby:2.6-dev-bionic", "ghcr.io/djbender/ruby:2.6.10-dev", "ghcr.io/djbender/ruby:2.6.10-dev-bionic"]
   cache-from = [
     "type=registry,ref=ghcr.io/djbender/ruby:cache-dev-2.6",
     "type=registry,ref=ghcr.io/djbender/ruby:dev-2.6"

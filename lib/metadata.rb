@@ -1,7 +1,10 @@
+require_relative 'tag_generator'
+
 # This class could be replaced with something like OpenStruct,
-# but haveing a dedicated class makes it easy to add helper methods to the ERB templates
+# but having a dedicated class makes it easy to add helper methods to the ERB templates
 class Metadata
   def initialize(values)
+    @values = values
     values.each do |key, value|
       instance_variable_set(:"@#{key}", value)
       define_singleton_method(key.to_s) { value }
@@ -9,7 +12,7 @@ class Metadata
   end
 
   # NOTE: see ../manifest.yml for values passed into the initialize method
-  # some of the methods defined here, use those vaules if they exist
+  # some of the methods defined here, use those values if they exist
   def get_binding # rubocop:disable Naming/AccessorMethodName
     binding
   end
@@ -22,14 +25,13 @@ class Metadata
     "#{original_image_name}/#{original_version}"
   end
 
-  def docker_tags(custom_tags = [])
-    custom_tags = custom_tags.push(additional_tags).flatten.compact.uniq
-    default_docker_tags.push(custom_tags).flatten.compact.uniq.sort
+  # Delegate to TagGenerator for consistent tag generation
+  def docker_tags(_custom_tags = [])
+    TagGenerator.primary_tags(image_name, @values)
   end
 
-  def docker_dev_tags(custom_tags = [])
-    custom_tags = custom_tags.push(additional_dev_tags).flatten.compact.uniq
-    default_dev_docker_tags.push(custom_tags).flatten.compact.uniq.sort
+  def docker_dev_tags(_custom_tags = [])
+    TagGenerator.dev_tags(image_name, @values)
   end
 
   def branch_suffix
@@ -40,54 +42,4 @@ class Metadata
   # return nil if you try to call a method that doesn't exist
   def method_missing(_method_name, *_args, &); end
   def respond_to_missing?(_method_name); end
-
-  private
-
-  def github_sha
-    ENV.fetch('GITHUB_SHA', nil)
-  end
-
-  # Examples
-  # "#{full_image_path}:#{version}" == ghcr.io/djbender/ruby:3.3
-  def default_docker_tags
-    [].tap do |tags_array|
-      tags_array.push(default_flavor_tag, default_version_tag)
-      tags_array.push("#{full_image_path}:#{github_sha}") if github_sha
-      tags_array.push("#{full_image_path}:latest") if latest
-      tags_array.push("#{full_image_path}:rolling") if rolling
-    end.flatten.compact.uniq
-  end
-
-  def default_dev_docker_tags
-    [].tap do |tags_array|
-      tags_array.push("#{full_image_path}:#{github_sha}") if github_sha
-      tags_array.push("#{full_image_path}:dev") if latest
-    end.flatten.compact.uniq
-  end
-
-  # Ensures flavor tags exist
-  # Example:
-  #   ruby:3.1-slim ruby:3.1-dev
-  def default_flavor_tag
-    if flavor && !flavor&.empty?
-      local_flavor_tag = version.include?(flavor) ? version : "#{version}-#{flavor}"
-      default_flavor_tag = "#{full_image_path}:#{local_flavor_tag}"
-      [default_flavor_tag]
-    else
-      []
-    end
-  end
-
-  # Ensures non flavor tags exist
-  # and if flavor exists, apply it != dev image
-  # Example:
-  #   ruby:3.1 ruby:3.1-slim point at the same image
-  #   ruby:3.1-dev will not have the non flavor tag
-  def default_version_tag
-    if flavor&.casecmp('dev')&.zero?
-      []
-    else
-      ["#{full_image_path}:#{version}"]
-    end
-  end
 end
