@@ -11,6 +11,25 @@ permissions:
   contents: read
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6.0.2
+        with:
+          persist-credentials: false
+
+      - uses: ruby/setup-ruby@v1.288.0
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Run RSpec
+        run: bundle exec rspec
+
+      - name: Run RuboCop
+        run: bundle exec rubocop lib/ spec/ rakelib/
+
   set-matrix:
     runs-on: ubuntu-latest
     outputs:
@@ -235,6 +254,7 @@ jobs:
   ci:
     runs-on: ubuntu-slim
     needs:
+      - test
       - build-core-images
       - build-common-images
       - merge-core-manifests
@@ -243,7 +263,7 @@ jobs:
     steps:
       - name: Check all jobs passed
         run: |
-          results="${{ needs.build-core-images.result }} ${{ needs.build-common-images.result }}"
+          results="${{ needs.test.result }} ${{ needs.build-core-images.result }} ${{ needs.build-common-images.result }}"
           if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             results="$results ${{ needs.merge-core-manifests.result }} ${{ needs.merge-common-manifests.result }}"
           fi

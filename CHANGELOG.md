@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### Added
+- RSpec and RuboCop run in CI workflow
 - SimpleCov with branch coverage for RSpec tests
 - Native ARM64 builds using `ubuntu-24.04-arm` runners - significantly faster than QEMU emulation (ruby builds drop from ~40min to ~10min)
 - `lib/tag_generator.rb` - centralized tag generation for all image types
