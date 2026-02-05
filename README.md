@@ -11,7 +11,17 @@ Available images:
 # How to build
 
 ```bash
-docker buildx bake -f core/jammy/docker-bake.hcl
+docker buildx bake -f ruby/4.0/docker-bake.hcl
+```
+
+To build only for your native architecture (faster, loads image locally):
+
+```bash
+docker buildx bake -f ruby/4.0/docker-bake.hcl \
+  --set '*.platform=linux/arm64' \
+  --set '*.cache-from=' \
+  --set '*.cache-to=' \
+  --load
 ```
 
 ## Build cache (optional)
