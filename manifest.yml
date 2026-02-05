@@ -101,8 +101,8 @@ node: &NODE
       latest: true
     '25': &NODE25
       node_major: 25
-      node_version: 25.3.0
-      npm_version: 11.6.2
+      node_version: 25.6.0
+      npm_version: 11.8.0
 
 ruby: &RUBY
   defaults:
