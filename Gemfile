@@ -1,11 +1,12 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
-ruby file: ".ruby-version"
+ruby file: '.ruby-version'
 
-gem "rake"
-gem "rspec", require: false
-gem "rubocop", require: false
-gem "rubocop-performance", require: false
-gem "rubocop-rake", require: false
+gem 'rake'
+gem 'rspec', require: false
+gem 'rubocop', require: false
+gem 'rubocop-performance', require: false
+gem 'rubocop-rake', require: false
+gem 'simplecov', require: false
 
-gem "git", "~> 4.3"
+gem 'git', '~> 4.3'
