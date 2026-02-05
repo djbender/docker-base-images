@@ -10,10 +10,6 @@ on:
 permissions:
   contents: read
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_OWNER: djbender
-
 jobs:
   set-matrix:
     runs-on: ubuntu-latest
@@ -94,7 +90,7 @@ jobs:
             ${{ matrix.primary_cache_from }}
             ${{ matrix.primary_cache_to }}
             *.platform=${{ matrix.platform }}
-            *.tags=${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ matrix.primary_target }}:${{ matrix.version }}-${{ github.run_id }}-${{ matrix.arch }}
+            *.tags=${{ matrix.registry }}/${{ matrix.primary_target }}:${{ matrix.version }}-${{ github.run_id }}-${{ matrix.arch }}
 
       - name: Build and push dev images
         uses: docker/bake-action@v6.10.0
@@ -108,7 +104,7 @@ jobs:
             ${{ matrix.dev_cache_from }}
             ${{ matrix.dev_cache_to }}
             *.platform=${{ matrix.platform }}
-            *.tags=${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ matrix.primary_target }}:${{ matrix.version }}-dev-${{ github.run_id }}-${{ matrix.arch }}
+            *.tags=${{ matrix.registry }}/${{ matrix.primary_target }}:${{ matrix.version }}-dev-${{ github.run_id }}-${{ matrix.arch }}
 
   merge-core-manifests:
     runs-on: ubuntu-slim
@@ -123,7 +119,7 @@ jobs:
       fail-fast: false
       matrix: ${{ fromJSON(needs.set-matrix.outputs.core_merge_matrix) }}
     env:
-      IMAGE_BASE: ghcr.io/djbender/${{ matrix.primary_target }}:${{ matrix.version }}
+      IMAGE_BASE: ${{ matrix.registry }}/${{ matrix.primary_target }}:${{ matrix.version }}
     steps:
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3.7.0
@@ -186,7 +182,7 @@ jobs:
             ${{ matrix.primary_cache_from }}
             ${{ matrix.primary_cache_to }}
             *.platform=${{ matrix.platform }}
-            *.tags=${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ matrix.primary_target }}:${{ matrix.version }}-${{ github.run_id }}-${{ matrix.arch }}
+            *.tags=${{ matrix.registry }}/${{ matrix.primary_target }}:${{ matrix.version }}-${{ github.run_id }}-${{ matrix.arch }}
 
       - name: Build and push dev images
         uses: docker/bake-action@v6.10.0
@@ -200,7 +196,7 @@ jobs:
             ${{ matrix.dev_cache_from }}
             ${{ matrix.dev_cache_to }}
             *.platform=${{ matrix.platform }}
-            *.tags=${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ matrix.primary_target }}:${{ matrix.version }}-dev-${{ github.run_id }}-${{ matrix.arch }}
+            *.tags=${{ matrix.registry }}/${{ matrix.primary_target }}:${{ matrix.version }}-dev-${{ github.run_id }}-${{ matrix.arch }}
 
   merge-common-manifests:
     runs-on: ubuntu-slim
@@ -215,7 +211,7 @@ jobs:
       fail-fast: false
       matrix: ${{ fromJSON(needs.set-matrix.outputs.common_merge_matrix) }}
     env:
-      IMAGE_BASE: ghcr.io/djbender/${{ matrix.primary_target }}:${{ matrix.version }}
+      IMAGE_BASE: ${{ matrix.registry }}/${{ matrix.primary_target }}:${{ matrix.version }}
     steps:
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3.7.0

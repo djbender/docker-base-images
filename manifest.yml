@@ -12,6 +12,7 @@
 #       sqlite_version: 2 # overrides the 3 from defaults above
 #       additional_tags: foo:latest # Adds additonal tags to docker-bake.hcl
 #       platforms: [linux/amd64] # override global platforms for this version
+#       base_image: "%{registry}/core:jammy" # %{registry} interpolated at generation time
 
 # Define global defaults here, that apply to all images.
 # Can be overriden by image specific defaults
@@ -21,10 +22,10 @@ globals:
     base_image: ubuntu:noble
     distribution_code_name: noble
     docker_syntax: docker/dockerfile:1.4  # https://hub.docker.com/r/docker/dockerfile
-    ghcr_registry: ghcr.io
     platforms:
       - linux/amd64
       - linux/arm64
+    registry: ghcr.io/djbender  # combined registry+owner, single source of truth
 
 ############### Image definitions #################################
 
@@ -50,11 +51,11 @@ core:
 # NOTE: Yarn defaults to v1 since I don't believe we use anything later than that
 node: &NODE
   defaults:
-    base_image: ghcr.io/djbender/core
+    base_image: "%{registry}/core"
     yarn_version: 1.22.22
   versions:
     '16': &NODE16
-      base_image: ghcr.io/djbender/core:jammy
+      base_image: "%{registry}/core:jammy"
       distribution_code_name: jammy
       node_major: 16
       node_version: 16.20.2
@@ -83,12 +84,12 @@ node: &NODE
 
 ruby: &RUBY
   defaults:
-    base_image: ghcr.io/djbender/core
+    base_image: "%{registry}/core"
     bundler_version: 2.5.14
     rubygems_version: 3.5.14
   versions:
     '2.4':
-      base_image: ghcr.io/djbender/core:bionic
+      base_image: "%{registry}/core:bionic"
       distribution_code_name: bionic
       ruby_major: 2.4
       ruby_version: 2.4.10
@@ -96,7 +97,7 @@ ruby: &RUBY
       bundler_version: 2.3.27
       rubygems_version: 3.3.27
     '2.5':
-      base_image: ghcr.io/djbender/core:bionic
+      base_image: "%{registry}/core:bionic"
       distribution_code_name: bionic
       ruby_major: 2.5
       ruby_version: 2.5.9
@@ -104,7 +105,7 @@ ruby: &RUBY
       bundler_version: 2.3.27
       rubygems_version: 3.3.27
     '2.6':
-      base_image: ghcr.io/djbender/core:bionic
+      base_image: "%{registry}/core:bionic"
       distribution_code_name: bionic
       ruby_major: 2.6
       ruby_version: 2.6.10

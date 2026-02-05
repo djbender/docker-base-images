@@ -1,5 +1,13 @@
 class ImageGenerator
-  GENERATED_FILE = '.generated.yml'
+  DEFAULT_GENERATED_FILE = '.generated.yml'
+
+  class << self
+    attr_writer :generated_file
+
+    def generated_file
+      @generated_file || DEFAULT_GENERATED_FILE
+    end
+  end
 
   attr_reader :details, :image_name, :task_name
 
@@ -28,7 +36,7 @@ class ImageGenerator
   private
 
   def template_values(values:, version:, output_dir:)
-    Util::GLOBAL_DEFAULTS
+    merged = Util::GLOBAL_DEFAULTS
       .fetch('defaults', {})
       .merge(defaults)
       .merge(values)
@@ -38,6 +46,18 @@ class ImageGenerator
         image_name:,
         output_dir:
       )
+    interpolate_registry(merged)
+  end
+
+  def interpolate_registry(values)
+    values.transform_values.with_index do |v, _|
+      next v unless v.is_a?(String)
+
+      format(v, registry: Util::REGISTRY)
+    rescue KeyError => e
+      key = values.key(v)
+      raise KeyError, "Unknown placeholder in #{image_name} manifest key '#{key}': #{e.message}. Only %{registry} is supported."
+    end
   end
 
   def template_filenames
@@ -87,7 +107,7 @@ class ImageGenerator
   def save_generated_dirs
     all_generated = read_generated_file
     all_generated[image_name] = version_directories.sort
-    File.write(GENERATED_FILE, all_generated.to_yaml)
+    File.write(self.class.generated_file, all_generated.to_yaml)
   end
 
   def version_directories
@@ -95,8 +115,8 @@ class ImageGenerator
   end
 
   def read_generated_file
-    return {} unless File.exist?(GENERATED_FILE)
+    return {} unless File.exist?(self.class.generated_file)
 
-    YAML.safe_load_file(GENERATED_FILE, permitted_classes: []) || {}
+    YAML.safe_load_file(self.class.generated_file, permitted_classes: []) || {}
   end
 end

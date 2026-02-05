@@ -65,20 +65,20 @@ def matrix(&)
           # Build cache refs
           cache_tag = "#{version}-#{arch_suffix}"
           cache_tag_branch = "#{cache_tag}#{branch_suffix}"
-          registry = "ghcr.io/djbender/#{image_name}"
+          cache_registry = "#{Util::REGISTRY}/#{image_name}"
 
           if main_branch?
-            primary_cache_from = [cache_from_ref(image_name, registry, cache_tag)]
-            dev_cache_from = [cache_from_ref("#{image_name}-dev", registry, "dev-#{cache_tag}")]
+            primary_cache_from = [cache_from_ref(image_name, cache_registry, cache_tag)]
+            dev_cache_from = [cache_from_ref("#{image_name}-dev", cache_registry, "dev-#{cache_tag}")]
           else
             # Feature branch: branch+arch cache with fallback to main arch cache
             primary_cache_from = [
-              cache_from_ref(image_name, registry, cache_tag_branch),
-              cache_from_ref(image_name, registry, cache_tag)
+              cache_from_ref(image_name, cache_registry, cache_tag_branch),
+              cache_from_ref(image_name, cache_registry, cache_tag)
             ]
             dev_cache_from = [
-              cache_from_ref("#{image_name}-dev", registry, "dev-#{cache_tag_branch}"),
-              cache_from_ref("#{image_name}-dev", registry, "dev-#{cache_tag}")
+              cache_from_ref("#{image_name}-dev", cache_registry, "dev-#{cache_tag_branch}"),
+              cache_from_ref("#{image_name}-dev", cache_registry, "dev-#{cache_tag}")
             ]
           end
 
@@ -90,10 +90,11 @@ def matrix(&)
             platform: platform,
             arch: arch_suffix,
             runner: runner,
+            registry: Util::REGISTRY,
             primary_cache_from: primary_cache_from.join("\n"),
-            primary_cache_to: cache_to_ref(image_name, registry, cache_tag_branch),
+            primary_cache_to: cache_to_ref(image_name, cache_registry, cache_tag_branch),
             dev_cache_from: dev_cache_from.join("\n"),
-            dev_cache_to: cache_to_ref("#{image_name}-dev", registry, "dev-#{cache_tag_branch}")
+            dev_cache_to: cache_to_ref("#{image_name}-dev", cache_registry, "dev-#{cache_tag_branch}")
           }
         end
       end
@@ -120,6 +121,7 @@ def merge_matrix(&)
         {
           version: version,
           primary_target: image_name,
+          registry: Util::REGISTRY,
           primary_tags: TagGenerator.primary_tags(image_name, values).join(' '),
           dev_tags: TagGenerator.dev_tags(image_name, values).join(' ')
         }
@@ -143,8 +145,4 @@ end
 def current_branch
   branch = ENV['GITHUB_REF'] || "refs/heads/#{Git.open(Dir.getwd).current_branch}"
   branch.gsub('refs/heads/', '')
-end
-
-def ghcr_registry
-  Util::GLOBAL_DEFAULTS.fetch('defaults').fetch('ghcr_registry')
 end
