@@ -5,7 +5,7 @@ require 'git'
 require_relative '../lib/util'
 require_relative '../lib/tag_generator'
 
-DEFAULT_BRANCH = 'main'
+DEFAULT_BRANCH = 'main'.freeze
 PLATFORMS = %w[linux/amd64 linux/arm64].freeze
 
 namespace :ci do

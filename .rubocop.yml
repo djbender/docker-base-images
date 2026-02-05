@@ -16,3 +16,39 @@ Style/FrozenStringLiteralComment:
 
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*_spec.rb'
+    - 'rakelib/**/*.rake'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'lib/image_generator.rb'
+    - 'lib/tag_generator.rb'
+    - 'rakelib/**/*.rake'
+
+Metrics/AbcSize:
+  Exclude:
+    - 'lib/image_generator.rb'
+    - 'lib/tag_generator.rb'
+    - 'rakelib/**/*.rake'
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'lib/tag_generator.rb'
+    - 'rakelib/**/*.rake'
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'lib/tag_generator.rb'
+    - 'rakelib/**/*.rake'
+
+Lint/DuplicateBranch:
+  Exclude:
+    - 'lib/tag_generator.rb'
+
+# %{registry} placeholder is intentional - used by Kernel#format
+Style/FormatStringToken:
+  Exclude:
+    - 'lib/image_generator.rb'

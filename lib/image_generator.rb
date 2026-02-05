@@ -1,5 +1,5 @@
 class ImageGenerator
-  DEFAULT_GENERATED_FILE = '.generated.yml'
+  DEFAULT_GENERATED_FILE = '.generated.yml'.freeze
 
   class << self
     attr_writer :generated_file
@@ -56,7 +56,8 @@ class ImageGenerator
       format(v, registry: Util::REGISTRY)
     rescue KeyError => e
       key = values.key(v)
-      raise KeyError, "Unknown placeholder in #{image_name} manifest key '#{key}': #{e.message}. Only %{registry} is supported."
+      raise KeyError,
+            "Unknown placeholder in #{image_name} manifest key '#{key}': #{e.message}. Only %{registry} is supported."
     end
   end
 
@@ -89,10 +90,10 @@ class ImageGenerator
     orphans = previously_generated - version_directories
     return if orphans.empty?
 
-    puts "Found orphaned directories not in manifest:"
+    puts 'Found orphaned directories not in manifest:'
     orphans.each { |dir| puts "  - #{dir}" }
     if $stdin.tty?
-      print "Remove these directories? [y/N] "
+      print 'Remove these directories? [y/N] '
       return unless $stdin.gets.chomp.downcase == 'y'
     end
 
