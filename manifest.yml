@@ -49,33 +49,6 @@ node: &NODE
     base_image: ghcr.io/djbender/core
     yarn_version: 1.22.22
   versions:
-    '8': &NODE8
-      # there is no deb for node v8 on anything later than bionic
-      base_image: ghcr.io/djbender/core:bionic
-      distribution_code_name: bionic
-      node_major: 8
-      node_version: 8.17.0
-      npm_version: 6.13.4
-    '10': &NODE10
-      # there is no deb for node v10 on anything later than bionic
-      base_image: ghcr.io/djbender/core:bionic
-      distribution_code_name: bionic
-      node_major: 10
-      node_version: 10.24.1
-      npm_version: 6.14.12
-    '12': &NODE12
-      # there is no deb for node v12 on anything later than bionic
-      base_image: ghcr.io/djbender/core:bionic
-      distribution_code_name: bionic
-      node_major: 12
-      node_version: 12.22.12
-      npm_version: 6.14.16
-    '14': &NODE14
-      base_image: ghcr.io/djbender/core:jammy
-      distribution_code_name: jammy
-      node_major: 14
-      node_version: 14.21.3
-      npm_version: 6.14.18
     '16': &NODE16
       base_image: ghcr.io/djbender/core:jammy
       distribution_code_name: jammy

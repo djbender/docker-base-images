@@ -10,6 +10,7 @@
 - `.generated.yml` tracks generated directories for cleanup detection
 
 ### Removed
+- Node 8, 10, 12, 14 (NodeSource GPG key no longer available for old repos)
 - Node 21
 - Node 23
 
