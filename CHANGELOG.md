@@ -19,6 +19,7 @@
 - Node 23
 
 ### Changed
+- Centralize `platforms` config in `manifest.yml` globals (previously hardcoded in templates)
 - Node 25: 25.3.0 → 25.6.0
 - dependabot.yml updated for node version changes
 - .rubocop.yml migrated from `require` to `plugins` syntax

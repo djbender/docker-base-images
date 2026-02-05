@@ -16,7 +16,7 @@ target "<%= image_name %>" {
   target = "<%= image_name %>"
   tags = <%= docker_tags %>
   context = "${PWD}/<%= image_name %>/<%= version %>"
-  platforms = ["linux/amd64", "linux/arm64"]
+  platforms = <%= platforms.inspect %>
   cache-from = [
     "type=registry,ref=ghcr.io/djbender/<%= image_name %>:cache-<%= version %>",
     "type=registry,ref=ghcr.io/djbender/<%= image_name %>:<%= version %>"
