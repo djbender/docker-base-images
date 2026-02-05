@@ -1,0 +1,23 @@
+name: Cleanup intermediate tags
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Weekly on Sunday
+  workflow_dispatch: {}
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: [core, ruby, node]
+    steps:
+      - uses: snok/container-retention-policy@v3
+        with:
+          account: djbender
+          token: ${{ secrets.GITHUB_TOKEN }}
+          image-names: ${{ matrix.package }}
+          cut-off: 1 week ago UTC
+          # Delete tags matching run_id pattern (digits only between version and arch)
+          tag-regex: '.*-\d{9,}-(?:amd64|arm64)$'
+          keep-n-most-recent: 0

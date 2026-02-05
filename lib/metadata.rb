@@ -26,11 +26,11 @@ class Metadata
   end
 
   # Delegate to TagGenerator for consistent tag generation
-  def docker_tags(_custom_tags = [])
+  def docker_tags
     TagGenerator.primary_tags(image_name, @values)
   end
 
-  def docker_dev_tags(_custom_tags = [])
+  def docker_dev_tags
     TagGenerator.dev_tags(image_name, @values)
   end
 
