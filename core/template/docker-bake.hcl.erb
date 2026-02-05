@@ -18,10 +18,10 @@ target "<%= image_name %>" {
   context = "${PWD}/<%= image_name %>/<%= version %>"
   platforms = <%= platforms %>
   cache-from = [
-    "type=registry,ref=ghcr.io/djbender/<%= image_name %>:cache-<%= version %>",
-    "type=registry,ref=ghcr.io/djbender/<%= image_name %>:<%= version %>"
+    "type=registry,ref=<%= registry %>/<%= image_name %>:cache-<%= version %>",
+    "type=registry,ref=<%= registry %>/<%= image_name %>:<%= version %>"
   ]
-  cache-to = ["type=registry,ref=ghcr.io/djbender/<%= image_name %>:cache-<%= version %>,mode=max"]
+  cache-to = ["type=registry,ref=<%= registry %>/<%= image_name %>:cache-<%= version %>,mode=max"]
 }
 
 target "<%= image_name %>-dev" {
@@ -29,8 +29,8 @@ target "<%= image_name %>-dev" {
   inherits = ["<%= image_name %>"]
   tags = <%= docker_dev_tags %>
   cache-from = [
-    "type=registry,ref=ghcr.io/djbender/<%= image_name %>:cache-dev-<%= version %>",
-    "type=registry,ref=ghcr.io/djbender/<%= image_name %>:dev-<%= version %>"
+    "type=registry,ref=<%= registry %>/<%= image_name %>:cache-dev-<%= version %>",
+    "type=registry,ref=<%= registry %>/<%= image_name %>:dev-<%= version %>"
   ]
-  cache-to = ["type=registry,ref=ghcr.io/djbender/<%= image_name %>:cache-dev-<%= version %>,mode=max"]
+  cache-to = ["type=registry,ref=<%= registry %>/<%= image_name %>:cache-dev-<%= version %>,mode=max"]
 }

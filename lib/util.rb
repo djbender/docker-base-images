@@ -12,6 +12,7 @@ class Util
 
   # Get global defaults, and delete from yml so they are not translated into a docker image
   GLOBAL_DEFAULTS = MANIFEST.delete('globals')
+  REGISTRY = GLOBAL_DEFAULTS.fetch('defaults').fetch('registry').freeze
 
   # Used by Util#with_clean_output_dir to build out paths
   # example:

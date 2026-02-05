@@ -1,7 +1,9 @@
+require_relative 'util'
+
 # Centralized tag generation for Docker images
 # Used by both ERB templates and CI matrix generation
 module TagGenerator
-  REGISTRY = 'ghcr.io/djbender'.freeze
+  REGISTRY = Util::REGISTRY
 
   class << self
     # Generate primary (non-dev) tags for an image
