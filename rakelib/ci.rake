@@ -3,8 +3,10 @@ require 'git'
 
 # lib/util has shared constants and methods used in rake tasks
 require_relative '../lib/util'
+require_relative '../lib/tag_generator'
 
 DEFAULT_BRANCH = 'main'
+PLATFORMS = %w[linux/amd64 linux/arm64].freeze
 
 namespace :ci do
   namespace 'set-matrix' do
@@ -21,6 +23,20 @@ namespace :ci do
 
       puts matrix(&common_filter).to_json
     end
+
+    desc 'Generate core merge matrix (one entry per version, no platform expansion)'
+    task 'core-merge' do
+      core_filter = proc { |image_name| image_name == 'core' }
+
+      puts merge_matrix(&core_filter).to_json
+    end
+
+    desc 'Generate common merge matrix (one entry per version, no platform expansion)'
+    task 'common-merge' do
+      common_filter = proc { |image_name| !image_name.start_with?('core') }
+
+      puts merge_matrix(&common_filter).to_json
+    end
   end
 end
 
@@ -32,20 +48,8 @@ end
 #
 #     matrix(&filter)
 #
-# this returns an object that looks something like:
-#
-# {
-#   "include": [
-#     {
-#       "bake": "core/jammy/docker-bake.hcl",
-#       "cache": [
-#         "type=gha,scope=core/jammy",
-#         "ghcr.io/djbender/core:jammy-cache"
-#       ]
-#     },
-#     {...}
-#   ]
-# }
+# Generates matrix entries for each version × platform combination
+# Each entry includes platform-specific cache keys and runner selection
 #
 def matrix(&)
   branch_suffix = current_branch == DEFAULT_BRANCH ? '' : "-#{current_branch.gsub(/[^a-zA-Z0-9\-_]/, '-')}"
@@ -53,49 +57,83 @@ def matrix(&)
   {
     include: Util::MANIFEST.select(&).flat_map do |image_name, details|
       details.fetch('versions').keys.flat_map do |version|
-        # Build cache-from arrays
-        if main_branch?
-          # Main branch: only use the main cache
-          primary_cache_from = ["#{image_name}.cache-from=type=registry,ref=ghcr.io/djbender/#{image_name}:cache-#{version}"]
-          dev_cache_from = ["#{image_name}-dev.cache-from=type=registry,ref=ghcr.io/djbender/#{image_name}:cache-dev-#{version}"]
-        else
-          # Feature branch: use branch-specific cache with fallback to main cache
-          primary_cache_from = [
-            "#{image_name}.cache-from=type=registry,ref=ghcr.io/djbender/#{image_name}:cache-#{version}#{branch_suffix}",
-            "#{image_name}.cache-from=type=registry,ref=ghcr.io/djbender/#{image_name}:cache-#{version}"
-          ]
-          dev_cache_from = [
-            "#{image_name}-dev.cache-from=type=registry,ref=ghcr.io/djbender/#{image_name}:cache-dev-#{version}#{branch_suffix}",
-            "#{image_name}-dev.cache-from=type=registry,ref=ghcr.io/djbender/#{image_name}:cache-dev-#{version}"
-          ]
-        end
+        # Generate entry for each platform (native builds on both archs)
+        PLATFORMS.map do |platform|
+          arch_suffix = platform == 'linux/arm64' ? 'arm64' : 'amd64'
+          runner = platform == 'linux/arm64' ? 'ubuntu-24.04-arm' : 'ubuntu-24.04'
 
-        [
-          # Combined matrix entry with separate target and cache configurations
+          # Build cache refs
+          cache_tag = "#{version}-#{arch_suffix}"
+          cache_tag_branch = "#{cache_tag}#{branch_suffix}"
+          registry = "ghcr.io/djbender/#{image_name}"
+
+          if main_branch?
+            primary_cache_from = [cache_from_ref(image_name, registry, cache_tag)]
+            dev_cache_from = [cache_from_ref("#{image_name}-dev", registry, "dev-#{cache_tag}")]
+          else
+            # Feature branch: branch+arch cache with fallback to main arch cache
+            primary_cache_from = [
+              cache_from_ref(image_name, registry, cache_tag_branch),
+              cache_from_ref(image_name, registry, cache_tag)
+            ]
+            dev_cache_from = [
+              cache_from_ref("#{image_name}-dev", registry, "dev-#{cache_tag_branch}"),
+              cache_from_ref("#{image_name}-dev", registry, "dev-#{cache_tag}")
+            ]
+          end
+
           {
             bake: Pathname.new("#{image_name}/#{version}") + Util::BAKE_FILE,
+            version: version,
             primary_target: image_name,
             dev_target: "#{image_name}-dev",
+            platform: platform,
+            arch: arch_suffix,
+            runner: runner,
             primary_cache_from: primary_cache_from.join("\n"),
-            primary_cache_to: [
-              "#{image_name}.cache-to=type=registry,ref=ghcr.io/djbender/#{image_name}:cache-#{version}#{branch_suffix},mode=max"
-            ].join("\n"),
+            primary_cache_to: cache_to_ref(image_name, registry, cache_tag_branch),
             dev_cache_from: dev_cache_from.join("\n"),
-            dev_cache_to: [
-              "#{image_name}-dev.cache-to=type=registry,ref=ghcr.io/djbender/#{image_name}:cache-dev-#{version}#{branch_suffix},mode=max"
-            ].join("\n"),
-            'platform' => platform.join("\n")
+            dev_cache_to: cache_to_ref("#{image_name}-dev", registry, "dev-#{cache_tag_branch}")
           }
-        ]
+        end
       end
     end
   }
 end
 
-def platform
-  return [] if main_branch?
+# Generates merge matrix entries (one per version, no platform expansion)
+# Used by merge jobs to create multi-arch manifests
+# Includes all tags from TagGenerator for manifest creation
+def merge_matrix(&)
+  {
+    include: Util::MANIFEST.select(&).flat_map do |image_name, details|
+      defaults = details.fetch('defaults', {})
 
-  ["*.platform=#{os}/#{arch}"]
+      details.fetch('versions').keys.map do |version|
+        version_values = details.fetch('versions').fetch(version) || {}
+        values = Util::GLOBAL_DEFAULTS
+          .fetch('defaults', {})
+          .merge(defaults)
+          .merge(version_values)
+          .merge('version' => version, 'image_name' => image_name)
+
+        {
+          version: version,
+          primary_target: image_name,
+          primary_tags: TagGenerator.primary_tags(image_name, values).join(' '),
+          dev_tags: TagGenerator.dev_tags(image_name, values).join(' ')
+        }
+      end
+    end
+  }
+end
+
+def cache_from_ref(target, registry, tag)
+  "#{target}.cache-from=type=registry,ref=#{registry}:cache-#{tag}"
+end
+
+def cache_to_ref(target, registry, tag)
+  "#{target}.cache-to=type=registry,ref=#{registry}:cache-#{tag},mode=max"
 end
 
 def main_branch?
@@ -105,23 +143,6 @@ end
 def current_branch
   branch = ENV['GITHUB_REF'] || "refs/heads/#{Git.open(Dir.getwd).current_branch}"
   branch.gsub('refs/heads/', '')
-end
-
-def os
-  'linux'
-end
-
-def arch
-  cpu = RbConfig::CONFIG['host_cpu']
-
-  case cpu
-  when /x86_64/
-    'amd64'
-  when /arm64|aarch64/
-    'arm64'
-  else
-    'unknown'
-  end
 end
 
 def ghcr_registry

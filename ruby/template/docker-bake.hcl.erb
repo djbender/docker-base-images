@@ -1,16 +1,6 @@
 <%= generation_message -%>
 
 # https://docs.docker.com/engine/reference/commandline/buildx_bake/#file-definition
-<%
-# Specify any additional tags here, see defaults defined in lib/metadata.rb
-ruby_tags = []
-ruby_tags.push("#{full_image_path}:#{ruby_version}")
-ruby_tags.push("#{full_image_path}:#{ruby_version}-#{distribution_code_name}")
-ruby_tags.push("#{full_image_path}:#{ruby_major}")
-ruby_tags.push("#{full_image_path}:#{ruby_major}-#{distribution_code_name}")
-
-custom_tags = docker_tags(ruby_tags)
--%>
 
 variable "PWD" {default="" }
 
@@ -24,7 +14,7 @@ group "default" {
 # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
 target "<%= image_name %>" {
   target = "<%= image_name %>"
-  tags = <%= custom_tags %>
+  tags = <%= docker_tags %>
   context = "${PWD}/<%= image_name %>/<%= version %>"
   platforms = ["linux/amd64", "linux/arm64"]
   cache-from = [
@@ -33,18 +23,11 @@ target "<%= image_name %>" {
   ]
   cache-to = ["type=registry,ref=ghcr.io/djbender/<%= image_name %>:cache-<%= version %>,mode=max"]
 }
-<%-
-ruby_dev_tags = []
-ruby_dev_tags.push("#{full_image_path}:#{ruby_version}-dev-#{distribution_code_name}")
-ruby_dev_tags.push("#{full_image_path}:#{ruby_version}-dev")
-ruby_dev_tags.push("#{full_image_path}:#{ruby_major}-dev-#{distribution_code_name}")
-dev_tags = docker_dev_tags(ruby_dev_tags)
--%>
 
 target "<%= image_name %>-dev" {
   target = "<%= image_name %>-dev"
   inherits = ["<%= image_name %>"]
-  tags = <%= dev_tags %>
+  tags = <%= docker_dev_tags %>
   cache-from = [
     "type=registry,ref=ghcr.io/djbender/<%= image_name %>:cache-dev-<%= version %>",
     "type=registry,ref=ghcr.io/djbender/<%= image_name %>:dev-<%= version %>"

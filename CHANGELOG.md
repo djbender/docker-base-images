@@ -3,6 +3,10 @@
 ## Unreleased
 
 ### Added
+- Native ARM64 builds using `ubuntu-24.04-arm` runners - significantly faster than QEMU emulation (ruby builds drop from ~40min to ~10min)
+- `lib/tag_generator.rb` - centralized tag generation for all image types
+- Merge jobs to create multi-arch manifests after platform-specific builds
+- `{major}-dev` tag for Ruby images (e.g., `ruby:3.3-dev`) - now matches Node pattern
 - CI gate job for stable branch protection check
 - Ruby 4.0 support (4.0.1)
 - Node 25 support

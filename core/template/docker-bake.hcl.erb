@@ -1,11 +1,6 @@
 <%= generation_message -%>
 
 # https://docs.docker.com/engine/reference/commandline/buildx_bake/#file-definition
-<%
-# Specify any additional tags here, see defaults defined in lib/metadata.rb
-core_tags = []
-tags = docker_tags(core_tags)
-%>
 
 variable "PWD" {default="" }
 
@@ -19,7 +14,7 @@ group "default" {
 # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
 target "<%= image_name %>" {
   target = "<%= image_name %>"
-  tags = <%= tags %>
+  tags = <%= docker_tags %>
   context = "${PWD}/<%= image_name %>/<%= version %>"
   platforms = ["linux/amd64", "linux/arm64"]
   cache-from = [
@@ -28,17 +23,11 @@ target "<%= image_name %>" {
   ]
   cache-to = ["type=registry,ref=ghcr.io/djbender/<%= image_name %>:cache-<%= version %>,mode=max"]
 }
-<%-
-core_dev_tags = [
-  "#{full_image_path}:#{distribution_code_name}-dev"
-]
-dev_tags = docker_dev_tags(core_dev_tags)
--%>
 
 target "<%= image_name %>-dev" {
   target = "<%= image_name %>-dev"
   inherits = ["<%= image_name %>"]
-  tags = <%= dev_tags %>
+  tags = <%= docker_dev_tags %>
   cache-from = [
     "type=registry,ref=ghcr.io/djbender/<%= image_name %>:cache-dev-<%= version %>",
     "type=registry,ref=ghcr.io/djbender/<%= image_name %>:dev-<%= version %>"
