@@ -11,6 +11,7 @@
 #     '3':
 #       sqlite_version: 2 # overrides the 3 from defaults above
 #       additional_tags: foo:latest # Adds additonal tags to docker-bake.hcl
+#       platforms: [linux/amd64] # override global platforms for this version
 
 # Define global defaults here, that apply to all images.
 # Can be overriden by image specific defaults
@@ -21,6 +22,9 @@ globals:
     distribution_code_name: noble
     docker_syntax: docker/dockerfile:1.4  # https://hub.docker.com/r/docker/dockerfile
     ghcr_registry: ghcr.io
+    platforms:
+      - linux/amd64
+      - linux/arm64
 
 ############### Image definitions #################################
 
