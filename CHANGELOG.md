@@ -14,6 +14,7 @@
 - Node 23
 
 ### Changed
+- Node 25: 25.3.0 → 25.6.0
 - dependabot.yml updated for node version changes
 - .rubocop.yml migrated from `require` to `plugins` syntax
 - Use `YAML.safe_load_file` for security in ImageGenerator
