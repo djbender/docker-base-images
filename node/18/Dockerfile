@@ -27,7 +27,7 @@ RUN <<EOT
 
   mkdir -p /usr/share/keyrings
   curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /usr/share/keyrings/nodesource.gpg
-  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" > /etc/apt/sources.list.d/nodesource.list
 
   apt-get update
   echo "Now checking that upstream version matches what we expect before continuing..."
@@ -41,9 +41,7 @@ RUN <<EOT
   apt-get install --yes --no-install-recommends \
     nodejs
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
   corepack enable
-
   # Check that node commands work
   [ "$(command -v node)" = '/usr/bin/node' ]
   [ "$(command -v npm)" = '/usr/bin/npm' ]
