@@ -21,6 +21,7 @@
 - Node 23
 
 ### Changed
+- Centralize cache config: `CacheRef` module builds cache ref strings, used in templates and CI (#251)
 - Centralize registry config: `ghcr.io/djbender` now defined once in `manifest.yml` globals (#250)
 - Centralize `platforms` config in `manifest.yml` globals (previously hardcoded in templates)
 - Node 25: 25.3.0 → 25.6.0

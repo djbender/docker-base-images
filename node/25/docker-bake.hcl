@@ -26,9 +26,7 @@ target "node" {
     "type=registry,ref=ghcr.io/djbender/node:cache-25",
     "type=registry,ref=ghcr.io/djbender/node:25"
   ]
-  cache-to = [
-    "type=registry,ref=ghcr.io/djbender/node:cache-25,mode=max"
-  ]
+  cache-to = ["type=registry,ref=ghcr.io/djbender/node:cache-25,mode=max"]
 }
 
 target "node-dev" {

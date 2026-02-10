@@ -1,6 +1,14 @@
 require_relative '../lib/metadata'
 
 RSpec.describe Metadata do
+  let(:metadata) do
+    described_class.new(
+      'registry' => 'ghcr.io/djbender',
+      'image_name' => 'core',
+      'version' => 'jammy'
+    )
+  end
+
   describe '#initialize' do
     it 'creates accessor methods for each key' do
       metadata = described_class.new('foo' => 'bar', 'baz' => 123)
@@ -78,6 +86,52 @@ RSpec.describe Metadata do
 
       expect(TagGenerator).to have_received(:dev_tags).with('ruby', values.merge('image_name' => 'ruby'))
       expect(result).to eq(['ruby:3.2-dev'])
+    end
+  end
+
+  describe '#cache_from' do
+    it 'returns array with cache ref and image ref' do
+      expect(metadata.cache_from).to eq [
+        'type=registry,ref=ghcr.io/djbender/core:cache-jammy',
+        'type=registry,ref=ghcr.io/djbender/core:jammy'
+      ]
+    end
+  end
+
+  describe '#cache_to' do
+    it 'returns single-element array with mode=max' do
+      expect(metadata.cache_to).to eq [
+        'type=registry,ref=ghcr.io/djbender/core:cache-jammy,mode=max'
+      ]
+    end
+  end
+
+  describe '#cache_from_dev' do
+    it 'returns array with dev cache ref and dev image ref' do
+      expect(metadata.cache_from_dev).to eq [
+        'type=registry,ref=ghcr.io/djbender/core:cache-dev-jammy',
+        'type=registry,ref=ghcr.io/djbender/core:dev-jammy'
+      ]
+    end
+  end
+
+  describe '#cache_to_dev' do
+    it 'returns single-element array with dev mode=max' do
+      expect(metadata.cache_to_dev).to eq [
+        'type=registry,ref=ghcr.io/djbender/core:cache-dev-jammy,mode=max'
+      ]
+    end
+  end
+
+  describe '#hcl_list' do
+    it 'formats single-element array inline' do
+      result = metadata.send(:hcl_list, ['one'])
+      expect(result).to eq '["one"]'
+    end
+
+    it 'formats multi-element array with newlines' do
+      result = metadata.send(:hcl_list, %w[a b])
+      expect(result).to eq "[\n    \"a\",\n    \"b\"\n  ]"
     end
   end
 

@@ -1,4 +1,5 @@
 require_relative 'tag_generator'
+require_relative 'cache_ref'
 
 # This class could be replaced with something like OpenStruct,
 # but having a dedicated class makes it easy to add helper methods to the ERB templates
@@ -32,6 +33,38 @@ class Metadata
 
   def docker_dev_tags
     TagGenerator.dev_tags(image_name, @values)
+  end
+
+  # Cache configuration for primary target
+  def cache_from
+    reg = "#{registry}/#{image_name}"
+    [CacheRef.from(reg, version), "type=registry,ref=#{reg}:#{version}"]
+  end
+
+  def cache_to
+    [CacheRef.to("#{registry}/#{image_name}", version)]
+  end
+
+  # Cache configuration for dev target
+  def cache_from_dev
+    reg = "#{registry}/#{image_name}"
+    [CacheRef.from(reg, "dev-#{version}"), "type=registry,ref=#{reg}:dev-#{version}"]
+  end
+
+  def cache_to_dev
+    [CacheRef.to("#{registry}/#{image_name}", "dev-#{version}")]
+  end
+
+  # Format a Ruby array as an HCL list with proper indentation
+  def hcl_list(items, indent: 2)
+    pad = ' ' * indent
+    inner = ' ' * (indent + 2)
+    if items.size == 1
+      "[#{items.first.inspect}]"
+    else
+      entries = items.map { |i| "#{inner}#{i.inspect}" }.join(",\n")
+      "[\n#{entries}\n#{pad}]"
+    end
   end
 
   def branch_suffix
