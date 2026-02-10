@@ -25,6 +25,7 @@
 - Node 23
 
 ### Changed
+- Add Derek Bender copyright to LICENSE alongside original Bridge copyright
 - Centralize cache config: `CacheRef` module builds cache ref strings, `HclFormatter` handles HCL list formatting for all array values in bake templates (#251)
 - Add `rubocop-rspec`, exclude `bin/` from rubocop
 - Centralize registry config: `ghcr.io/djbender` now defined once in `manifest.yml` globals (#250)
