@@ -123,18 +123,6 @@ RSpec.describe Metadata do
     end
   end
 
-  describe '#hcl_list' do
-    it 'formats single-element array inline' do
-      result = metadata.send(:hcl_list, ['one'])
-      expect(result).to eq '["one"]'
-    end
-
-    it 'formats multi-element array with newlines' do
-      result = metadata.send(:hcl_list, %w[a b])
-      expect(result).to eq "[\n    \"a\",\n    \"b\"\n  ]"
-    end
-  end
-
   describe '#branch_suffix' do
     around do |example|
       original = ENV.fetch('GITHUB_REF_NAME', nil)

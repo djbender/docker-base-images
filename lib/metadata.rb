@@ -1,9 +1,12 @@
 require_relative 'tag_generator'
 require_relative 'cache_ref'
+require_relative 'hcl_formatter'
 
 # This class could be replaced with something like OpenStruct,
 # but having a dedicated class makes it easy to add helper methods to the ERB templates
 class Metadata
+  include HclFormatter
+
   def initialize(values)
     @values = values
     values.each do |key, value|
@@ -53,18 +56,6 @@ class Metadata
 
   def cache_to_dev
     [CacheRef.to("#{registry}/#{image_name}", "dev-#{version}")]
-  end
-
-  # Format a Ruby array as an HCL list with proper indentation
-  def hcl_list(items, indent: 2)
-    pad = ' ' * indent
-    inner = ' ' * (indent + 2)
-    if items.size == 1
-      "[#{items.first.inspect}]"
-    else
-      entries = items.map { |i| "#{inner}#{i.inspect}" }.join(",\n")
-      "[\n#{entries}\n#{pad}]"
-    end
   end
 
   def branch_suffix
