@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+- Update core/README.md: add noble tags, remove stale slim tags
+- Update ruby/README.md: add all current versions/tags (2.4-4.0), fix patch versions and distro suffixes
+
 ### Added
 - RSpec and RuboCop run in CI workflow
 - SimpleCov with branch coverage for RSpec tests
