@@ -1,5 +1,5 @@
 GEM
-  remote: https://rubygems.org/
+  remote: https://beta.gem.coop/cooldown/
   specs:
     activesupport (8.1.2)
       base64
@@ -84,6 +84,9 @@ GEM
     rubocop-rake (0.7.1)
       lint_roller (~> 1.1)
       rubocop (>= 1.72.1)
+    rubocop-rspec (3.9.0)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.81)
     ruby-progressbar (1.13.0)
     securerandom (0.4.1)
     simplecov (0.22.0)
@@ -109,16 +112,17 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  git (~> 4.3)
+  git
   rake
   rspec
   rubocop
   rubocop-performance
   rubocop-rake
+  rubocop-rspec
   simplecov
 
 RUBY VERSION
   ruby 4.0.1
 
 BUNDLED WITH
-  4.0.5
+  4.0.6
