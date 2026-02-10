@@ -1,0 +1,33 @@
+<h1>Development Guide</h1>
+
+<h2>Prerequisites</h2>
+<ul>
+  <li>Ruby (see <code>.ruby-version</code>), via <a href="https://github.com/postmodern/chruby">chruby</a> or <a href="https://github.com/asdf-vm/asdf">asdf</a></li>
+  <li><code>bundle install</code></li>
+  <li>Docker with <a href="https://docs.docker.com/buildx/working-with-buildx/">buildx</a></li>
+</ul>
+
+<h2>Generating Dockerfiles</h2>
+<p>Dockerfiles are generated from ERB templates using manifest values:</p>
+<pre><code>bin/rake generate:all        # Generate all Dockerfiles
+bin/rake generate:core       # Generate core only
+bin/rake generate:ruby       # Generate ruby only
+bin/rake generate:node       # Generate node only</code></pre>
+
+<h2>Building Images</h2>
+<pre><code>bin/rake build:core          # Build core images
+bin/rake build:ruby          # Build ruby images
+bin/rake build:node          # Build node images</code></pre>
+
+<h2>Testing &amp; Linting</h2>
+<pre><code>bin/rspec                    # Run tests
+bin/rubocop                  # Run linter</code></pre>
+
+<h2>Workflow</h2>
+<ol>
+  <li>Edit <code>manifest.yml</code> to add/update versions</li>
+  <li>Edit templates in <code>*/template/</code> if needed</li>
+  <li>Run <code>bin/rake generate:all</code></li>
+  <li>Build and test locally</li>
+  <li>Push to a branch, CI handles multi-arch builds</li>
+</ol>

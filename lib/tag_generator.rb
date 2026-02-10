@@ -1,9 +1,9 @@
-require_relative 'util'
+require_relative 'manifest_loader'
 
 # Centralized tag generation for Docker images
 # Used by both ERB templates and CI matrix generation
 module TagGenerator
-  REGISTRY = Util::REGISTRY
+  REGISTRY = ManifestLoader.registry.freeze
 
   class << self
     # Generate primary (non-dev) tags for an image

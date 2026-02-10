@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= @title ? "#{@title} - Docker Base Images" : 'Docker Base Images' %></title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head>
+<body>
+  <header class="container">
+    <nav>
+      <ul>
+        <li><strong><a href="/">Docker Base Images</a></strong></li>
+      </ul>
+      <ul>
+        <li><a href="/catalog" class="<%= active_class('/catalog') %>">Catalog</a></li>
+        <li><a href="/core" class="<%= active_class('/core') %>">Core</a></li>
+        <li><a href="/ruby" class="<%= active_class('/ruby') %>">Ruby</a></li>
+        <li><a href="/node" class="<%= active_class('/node') %>">Node</a></li>
+        <li><a href="/getting-started" class="<%= active_class('/getting-started') %>">Getting Started</a></li>
+        <li><a href="/architecture" class="<%= active_class('/architecture') %>">Architecture</a></li>
+        <li><a href="/changelog" class="<%= active_class('/changelog') %>">Changelog</a></li>
+        <li><a href="#" id="theme-toggle" role="button" class="outline contrast theme-toggle"></a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <script>
+    (function() {
+      var root = document.documentElement;
+      var toggle = document.getElementById('theme-toggle');
+      var stored = localStorage.getItem('theme');
+      var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+      function apply(t) {
+        root.setAttribute('data-theme', t);
+        toggle.textContent = t === 'dark' ? '\u2600\uFE0F' : '\uD83C\uDF19';
+        localStorage.setItem('theme', t);
+      }
+
+      apply(theme);
+
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        apply(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+      });
+    })();
+  </script>
+
+  <main class="container">
+    <%= yield %>
+  </main>
+
+  <footer class="container">
+    <hr>
+    <p><small>
+      <a href="https://github.com/djbender/docker-base-images">GitHub</a> &middot;
+      Registry: <code class="pull-cmd"><%= registry %></code>
+    </small></p>
+  </footer>
+</body>
+</html>

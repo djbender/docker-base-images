@@ -1,0 +1,15 @@
+<h1>Docker Base Images</h1>
+<p>Multi-architecture Docker base images (amd64/arm64) published to <code class="pull-cmd"><%= registry %></code>.</p>
+
+<% @image_types.each do |image_type| %>
+  <% latest = image_type.latest_version %>
+  <article>
+    <header><h3><a href="/<%= image_type.name %>"><%= image_type.name.capitalize %></a></h3></header>
+    <div class="image-card-row">
+      <p><strong><%= image_type.versions.size %></strong> versions available</p>
+      <% if latest %>
+        <pre><code><%= pull_command(image_type.name, latest.key) %></code></pre>
+      <% end %>
+    </div>
+  </article>
+<% end %>

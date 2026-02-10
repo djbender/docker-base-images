@@ -1,0 +1,57 @@
+<h1>Architecture</h1>
+
+<h2>Generation Pipeline</h2>
+<p><code>manifest.yml</code> is the single source of truth for all image definitions.</p>
+<pre><code>manifest.yml
+  └─▶ lib/image_generator.rb (ERB rendering)
+       ├─▶ core/noble/Dockerfile
+       ├─▶ core/noble/docker-bake.hcl
+       ├─▶ ruby/4.0/Dockerfile
+       └─▶ node/24/Dockerfile</code></pre>
+
+<h2>Image Hierarchy</h2>
+<pre><code>ubuntu:noble / ubuntu:jammy / ubuntu:bionic
+  └─▶ core (base packages, users, locale)
+       ├─▶ core-dev (build-essential, dev headers)
+       ├─▶ ruby (Ruby + Bundler + RubyGems)
+       │    └─▶ ruby-dev
+       └─▶ node (Node.js + npm + Yarn)
+            └─▶ node-dev</code></pre>
+
+<h2>Manifest Structure</h2>
+<pre><code>globals:
+  defaults:           # Apply to all image types
+    registry: ghcr.io/djbender
+    platforms: [linux/amd64, linux/arm64]
+
+core:
+  versions:
+    noble:
+      latest: true    # Gets the :latest tag
+
+ruby:
+  defaults:           # Override globals for ruby
+    base_image: "%{registry}/core"
+  versions:
+    '4.0':
+      ruby_version: 4.0.1
+      latest: true</code></pre>
+
+<h2>Tag Generation</h2>
+<p><code>lib/tag_generator.rb</code> generates tags consistently across templates and CI:</p>
+<ul>
+  <li><strong>Primary:</strong> <code>:version</code>, <code>:version-distro</code>, <code>:major</code>, <code>:latest</code></li>
+  <li><strong>Dev:</strong> <code>:version-dev</code>, <code>:version-dev-distro</code>, <code>:major-dev</code></li>
+</ul>
+
+<h2>CI Flow</h2>
+<pre><code>push to main
+  └─▶ GitHub Actions (build-images.yml)
+       ├─▶ RSpec + RuboCop
+       ├─▶ Build matrix (per image × per platform)
+       │    ├─▶ linux/amd64 (ubuntu-latest)
+       │    └─▶ linux/arm64 (ubuntu-24.04-arm)
+       └─▶ Merge jobs (multi-arch manifests)
+            └─▶ Push to ghcr.io/djbender/*</code></pre>
+
+<p>Feature branches build single-arch only. Multi-arch builds run on push to <code>main</code>.</p>

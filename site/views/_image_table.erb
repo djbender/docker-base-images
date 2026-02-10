@@ -1,0 +1,38 @@
+<table>
+  <thead>
+    <tr>
+      <th>Version</th>
+      <th></th>
+      <th>Base Image</th>
+      <th>Pull Command</th>
+      <th>Tags</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% image_type.versions.each do |version| %>
+      <tr>
+        <td><%= version.key %></td>
+        <td><% if version.attrs['latest'] %><mark>latest</mark><% end %></td>
+        <td><code class="pull-cmd"><%= version.attrs['base_image'] %></code></td>
+        <td><code class="pull-cmd"><%= pull_command(image_type.name, version.key) %></code></td>
+        <td>
+          <details>
+            <summary><%= primary_tags(version).size + dev_tags(version).size %> tags</summary>
+            <strong>Primary:</strong>
+            <ul>
+              <% primary_tags(version).each do |tag| %>
+                <li><code><%= tag %></code></li>
+              <% end %>
+            </ul>
+            <strong>Dev:</strong>
+            <ul>
+              <% dev_tags(version).each do |tag| %>
+                <li><code><%= tag %></code></li>
+              <% end %>
+            </ul>
+          </details>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

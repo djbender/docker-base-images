@@ -1,0 +1,9 @@
+<h1>Image Catalog</h1>
+<p>All available images across all types.</p>
+
+<% @image_types.each do |image_type| %>
+  <section>
+    <h2><a href="/<%= image_type.name %>"><%= image_type.name.capitalize %></a></h2>
+    <%= erb :_image_table, locals: { image_type: image_type } %>
+  </section>
+<% end %>
