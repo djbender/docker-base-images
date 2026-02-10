@@ -19,9 +19,17 @@ group "default" {
 # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
 target "ruby" {
   target = "ruby"
-  tags = ["ghcr.io/djbender/ruby:3.0", "ghcr.io/djbender/ruby:3.0-noble", "ghcr.io/djbender/ruby:3.0.7", "ghcr.io/djbender/ruby:3.0.7-noble"]
+  tags = [
+    "ghcr.io/djbender/ruby:3.0",
+    "ghcr.io/djbender/ruby:3.0-noble",
+    "ghcr.io/djbender/ruby:3.0.7",
+    "ghcr.io/djbender/ruby:3.0.7-noble"
+  ]
   context = "${PWD}/ruby/3.0"
-  platforms = ["linux/amd64", "linux/arm64"]
+  platforms = [
+    "linux/amd64",
+    "linux/arm64"
+  ]
   cache-from = [
     "type=registry,ref=ghcr.io/djbender/ruby:cache-3.0",
     "type=registry,ref=ghcr.io/djbender/ruby:3.0"
@@ -32,7 +40,12 @@ target "ruby" {
 target "ruby-dev" {
   target = "ruby-dev"
   inherits = ["ruby"]
-  tags = ["ghcr.io/djbender/ruby:3.0-dev", "ghcr.io/djbender/ruby:3.0-dev-noble", "ghcr.io/djbender/ruby:3.0.7-dev", "ghcr.io/djbender/ruby:3.0.7-dev-noble"]
+  tags = [
+    "ghcr.io/djbender/ruby:3.0-dev",
+    "ghcr.io/djbender/ruby:3.0-dev-noble",
+    "ghcr.io/djbender/ruby:3.0.7-dev",
+    "ghcr.io/djbender/ruby:3.0.7-dev-noble"
+  ]
   cache-from = [
     "type=registry,ref=ghcr.io/djbender/ruby:cache-dev-3.0",
     "type=registry,ref=ghcr.io/djbender/ruby:dev-3.0"

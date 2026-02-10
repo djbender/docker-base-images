@@ -14,9 +14,9 @@ group "default" {
 # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
 target "<%= image_name %>" {
   target = "<%= image_name %>"
-  tags = <%= docker_tags %>
+  tags = <%= hcl_list(docker_tags) %>
   context = "${PWD}/<%= image_name %>/<%= version %>"
-  platforms = <%= platforms %>
+  platforms = <%= hcl_list(platforms) %>
   cache-from = <%= hcl_list(cache_from) %>
   cache-to = <%= hcl_list(cache_to) %>
 }
@@ -24,7 +24,7 @@ target "<%= image_name %>" {
 target "<%= image_name %>-dev" {
   target = "<%= image_name %>-dev"
   inherits = ["<%= image_name %>"]
-  tags = <%= docker_dev_tags %>
+  tags = <%= hcl_list(docker_dev_tags) %>
   cache-from = <%= hcl_list(cache_from_dev) %>
   cache-to = <%= hcl_list(cache_to_dev) %>
 }
