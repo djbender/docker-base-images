@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Added
+- GitHub Pages documentation site with Sinatra + Parklife static build
+- `lib/manifest_loader.rb` - shared manifest loading independent of Rake
+- `lib/site_manifest.rb` - manifest data layer for the documentation site
+- `deploy-docs.yml` workflow for automatic GitHub Pages deployment
+
 ### Fixed
 - Update core/README.md: add noble tags, remove stale slim tags
 - Update ruby/README.md: add all current versions/tags (2.4-4.0), fix patch versions and distro suffixes

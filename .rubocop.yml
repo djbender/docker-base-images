@@ -10,6 +10,7 @@ AllCops:
   TargetRubyVersion: 3.2
   Exclude:
     - 'bin/**/*'
+    - 'site/**/*'
 
 Style/Documentation:
   Enabled: false
@@ -50,11 +51,6 @@ Metrics/PerceivedComplexity:
 Lint/DuplicateBranch:
   Exclude:
     - 'lib/tag_generator.rb'
-
-# %{registry} placeholder is intentional - used by Kernel#format
-Style/FormatStringToken:
-  Exclude:
-    - 'lib/image_generator.rb'
 
 RSpec/ExampleLength:
   Max: 18

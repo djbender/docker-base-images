@@ -1,3 +1,4 @@
 /.overcommit.yml
 spec/examples.txt
 /coverage/
+/build/

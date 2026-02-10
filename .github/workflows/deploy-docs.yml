@@ -1,0 +1,61 @@
+name: Deploy Docs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - 'manifest.yml'
+      - 'CHANGELOG.md'
+      - 'Parkfile'
+      - 'bin/static-build'
+      - 'site/site_manifest.rb'
+      - 'lib/manifest_loader.rb'
+      - 'lib/tag_generator.rb'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6.0.2
+        with:
+          persist-credentials: false
+
+      - uses: ruby/setup-ruby@v1.288.0
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Build static site
+        run: bin/static-build --base "${{ steps.pages.outputs.base_path }}"
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4

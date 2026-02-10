@@ -1,14 +1,14 @@
 require 'fileutils'
 require 'pathname'
 require 'rake'
-require 'yaml'
+require_relative 'manifest_loader'
 
 # Util class is used by ../rakelib/*.rake files
 class Util
   PROJECT_DIR = Rake.original_dir
   PROJECT_PATHNAME = Pathname.new(PROJECT_DIR)
   BAKE_FILE = 'docker-bake.hcl'.freeze
-  MANIFEST = YAML.load_file(File.join(PROJECT_DIR, 'manifest.yml'), aliases: true)
+  MANIFEST = ManifestLoader.load
 
   # Get global defaults, and delete from yml so they are not translated into a docker image
   GLOBAL_DEFAULTS = MANIFEST.delete('globals')

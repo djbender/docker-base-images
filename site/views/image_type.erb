@@ -1,0 +1,4 @@
+<h1><%= @image_type.name.capitalize %> Images</h1>
+<p>Pull from <code class="pull-cmd"><%= registry %>/<%= @image_type.name %></code></p>
+
+<%= erb :_image_table, locals: { image_type: @image_type } %>

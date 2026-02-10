@@ -1,0 +1,33 @@
+<h1>Getting Started</h1>
+
+<h2>Pulling an Image</h2>
+<pre><code><%= pull_command('core', 'noble') %></code></pre>
+
+<h2>Using in a Dockerfile</h2>
+<pre><code>FROM <%= registry %>/ruby:4.0
+
+WORKDIR /app
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
+COPY . .
+CMD ["ruby", "app.rb"]</code></pre>
+
+<h2>Building Locally</h2>
+<pre><code>docker buildx bake -f ruby/4.0/docker-bake.hcl</code></pre>
+
+<p>To build only for your native architecture (faster, loads image locally):</p>
+<pre><code>docker buildx bake -f ruby/4.0/docker-bake.hcl \
+  --set '*.platform=linux/arm64' \
+  --set '*.cache-from=' \
+  --set '*.cache-to=' \
+  --load</code></pre>
+
+<h2>Build Cache (optional)</h2>
+<p>Log in to ghcr.io for faster builds:</p>
+<pre><code>echo $GHCR_PAT | docker login ghcr.io -u USERNAME --password-stdin</code></pre>
+
+<h2>Dev Variants</h2>
+<p>Each image has a <code>-dev</code> variant with additional build tools:</p>
+<pre><code><%= pull_command('core', 'noble-dev') %>
+<%= pull_command('ruby', '4.0-dev') %>
+<%= pull_command('node', '24-dev') %></code></pre>

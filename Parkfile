@@ -1,0 +1,11 @@
+require 'parklife'
+require_relative 'site/app'
+
+Parklife.application.configure do |config|
+  config.app = Sinatra::Application
+  config.nested_index = false
+end
+
+Parklife.application.routes do
+  root crawl: true
+end
