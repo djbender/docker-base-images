@@ -4,6 +4,7 @@ require 'git'
 # lib/util has shared constants and methods used in rake tasks
 require_relative '../lib/util'
 require_relative '../lib/tag_generator'
+require_relative '../lib/cache_ref'
 
 DEFAULT_BRANCH = 'main'.freeze
 PLATFORMS = %w[linux/amd64 linux/arm64].freeze
@@ -131,11 +132,11 @@ def merge_matrix(&)
 end
 
 def cache_from_ref(target, registry, tag)
-  "#{target}.cache-from=type=registry,ref=#{registry}:cache-#{tag}"
+  "#{target}.cache-from=#{CacheRef.from(registry, tag)}"
 end
 
 def cache_to_ref(target, registry, tag)
-  "#{target}.cache-to=type=registry,ref=#{registry}:cache-#{tag},mode=max"
+  "#{target}.cache-to=#{CacheRef.to(registry, tag)}"
 end
 
 def main_branch?

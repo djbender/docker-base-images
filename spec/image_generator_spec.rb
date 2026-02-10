@@ -37,12 +37,12 @@ RSpec.describe ImageGenerator do
       allow($stdout).to receive(:write)
 
       # Use temp file for .generated.yml tracking
-      ImageGenerator.generated_file = File.join(tmpdir, '.generated.yml')
+      described_class.generated_file = File.join(tmpdir, '.generated.yml')
     end
 
     after do
       FileUtils.rm_rf(tmpdir)
-      ImageGenerator.generated_file = nil
+      described_class.generated_file = nil
     end
 
     # rubocop:disable Style/FormatStringToken
@@ -251,7 +251,7 @@ RSpec.describe ImageGenerator do
       expect { generator.generate }.to output(/Generating test Dockerfiles/).to_stdout
     end
 
-    context 'orphan cleanup' do
+    context 'with orphan cleanup' do
       it 'removes orphaned directories when user confirms' do
         # Create orphan at relative path (code uses relative paths)
         FileUtils.mkdir_p('test/old_version')
@@ -262,8 +262,7 @@ RSpec.describe ImageGenerator do
           { 'test' => ['test/old_version'] }.to_yaml
         )
 
-        allow($stdin).to receive(:tty?).and_return(true)
-        allow($stdin).to receive(:gets).and_return("y\n")
+        allow($stdin).to receive_messages(tty?: true, gets: "y\n")
 
         details = { 'versions' => { '1.0' => {} } }
         generator = described_class.new(
@@ -287,8 +286,7 @@ RSpec.describe ImageGenerator do
           { 'test' => ['test/old_version'] }.to_yaml
         )
 
-        allow($stdin).to receive(:tty?).and_return(true)
-        allow($stdin).to receive(:gets).and_return("n\n")
+        allow($stdin).to receive_messages(tty?: true, gets: "n\n")
 
         details = { 'versions' => { '1.0' => {} } }
         generator = described_class.new(

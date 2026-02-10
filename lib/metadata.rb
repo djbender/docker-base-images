@@ -1,8 +1,12 @@
 require_relative 'tag_generator'
+require_relative 'cache_ref'
+require_relative 'hcl_formatter'
 
 # This class could be replaced with something like OpenStruct,
 # but having a dedicated class makes it easy to add helper methods to the ERB templates
 class Metadata
+  include HclFormatter
+
   def initialize(values)
     @values = values
     values.each do |key, value|
@@ -32,6 +36,26 @@ class Metadata
 
   def docker_dev_tags
     TagGenerator.dev_tags(image_name, @values)
+  end
+
+  # Cache configuration for primary target
+  def cache_from
+    reg = "#{registry}/#{image_name}"
+    [CacheRef.from(reg, version), CacheRef.fallback(reg, version)]
+  end
+
+  def cache_to
+    [CacheRef.to("#{registry}/#{image_name}", version)]
+  end
+
+  # Cache configuration for dev target
+  def cache_from_dev
+    reg = "#{registry}/#{image_name}"
+    [CacheRef.from(reg, "dev-#{version}"), CacheRef.fallback(reg, "dev-#{version}")]
+  end
+
+  def cache_to_dev
+    [CacheRef.to("#{registry}/#{image_name}", "dev-#{version}")]
   end
 
   def branch_suffix

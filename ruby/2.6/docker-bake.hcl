@@ -19,9 +19,17 @@ group "default" {
 # NOTE: the context is required for now due to https://github.com/docker/buildx/issues/1028
 target "ruby" {
   target = "ruby"
-  tags = ["ghcr.io/djbender/ruby:2.6", "ghcr.io/djbender/ruby:2.6-bionic", "ghcr.io/djbender/ruby:2.6.10", "ghcr.io/djbender/ruby:2.6.10-bionic"]
+  tags = [
+    "ghcr.io/djbender/ruby:2.6",
+    "ghcr.io/djbender/ruby:2.6-bionic",
+    "ghcr.io/djbender/ruby:2.6.10",
+    "ghcr.io/djbender/ruby:2.6.10-bionic"
+  ]
   context = "${PWD}/ruby/2.6"
-  platforms = ["linux/amd64", "linux/arm64"]
+  platforms = [
+    "linux/amd64",
+    "linux/arm64"
+  ]
   cache-from = [
     "type=registry,ref=ghcr.io/djbender/ruby:cache-2.6",
     "type=registry,ref=ghcr.io/djbender/ruby:2.6"
@@ -32,7 +40,12 @@ target "ruby" {
 target "ruby-dev" {
   target = "ruby-dev"
   inherits = ["ruby"]
-  tags = ["ghcr.io/djbender/ruby:2.6-dev", "ghcr.io/djbender/ruby:2.6-dev-bionic", "ghcr.io/djbender/ruby:2.6.10-dev", "ghcr.io/djbender/ruby:2.6.10-dev-bionic"]
+  tags = [
+    "ghcr.io/djbender/ruby:2.6-dev",
+    "ghcr.io/djbender/ruby:2.6-dev-bionic",
+    "ghcr.io/djbender/ruby:2.6.10-dev",
+    "ghcr.io/djbender/ruby:2.6.10-dev-bionic"
+  ]
   cache-from = [
     "type=registry,ref=ghcr.io/djbender/ruby:cache-dev-2.6",
     "type=registry,ref=ghcr.io/djbender/ruby:dev-2.6"

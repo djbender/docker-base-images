@@ -21,7 +21,10 @@ target "core" {
   target = "core"
   tags = ["ghcr.io/djbender/core:jammy"]
   context = "${PWD}/core/jammy"
-  platforms = ["linux/amd64", "linux/arm64"]
+  platforms = [
+    "linux/amd64",
+    "linux/arm64"
+  ]
   cache-from = [
     "type=registry,ref=ghcr.io/djbender/core:cache-jammy",
     "type=registry,ref=ghcr.io/djbender/core:jammy"
