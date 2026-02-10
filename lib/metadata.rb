@@ -38,7 +38,7 @@ class Metadata
   # Cache configuration for primary target
   def cache_from
     reg = "#{registry}/#{image_name}"
-    [CacheRef.from(reg, version), "type=registry,ref=#{reg}:#{version}"]
+    [CacheRef.from(reg, version), CacheRef.fallback(reg, version)]
   end
 
   def cache_to
@@ -48,7 +48,7 @@ class Metadata
   # Cache configuration for dev target
   def cache_from_dev
     reg = "#{registry}/#{image_name}"
-    [CacheRef.from(reg, "dev-#{version}"), "type=registry,ref=#{reg}:dev-#{version}"]
+    [CacheRef.from(reg, "dev-#{version}"), CacheRef.fallback(reg, "dev-#{version}")]
   end
 
   def cache_to_dev

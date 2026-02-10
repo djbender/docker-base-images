@@ -7,4 +7,9 @@ module CacheRef
   def self.to(registry, tag)
     "#{from(registry, tag)},mode=max"
   end
+
+  # Fallback cache source using the image tag directly (no cache- prefix)
+  def self.fallback(registry, tag)
+    "type=registry,ref=#{registry}:#{tag}"
+  end
 end

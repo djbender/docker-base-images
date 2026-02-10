@@ -14,6 +14,13 @@ RSpec.describe CacheRef do
     end
   end
 
+  describe '.fallback' do
+    it 'builds ref string without cache- prefix' do
+      result = described_class.fallback('ghcr.io/djbender/core', 'jammy')
+      expect(result).to eq('type=registry,ref=ghcr.io/djbender/core:jammy')
+    end
+  end
+
   describe '.to' do
     it 'builds cache-to ref string with mode=max' do
       result = described_class.to('ghcr.io/djbender/core', 'jammy')
