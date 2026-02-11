@@ -17,16 +17,16 @@
         <td><code class="pull-cmd"><%= pull_command(image_type.name, version.key) %></code></td>
         <td>
           <details>
-            <summary><%= primary_tags(version).size + dev_tags(version).size %> tags</summary>
+            <summary><%= version.primary_tags.size + version.dev_tags.size %> tags</summary>
             <strong>Primary:</strong>
             <ul>
-              <% primary_tags(version).each do |tag| %>
+              <% version.primary_tags.each do |tag| %>
                 <li><code><%= tag %></code></li>
               <% end %>
             </ul>
             <strong>Dev:</strong>
             <ul>
-              <% dev_tags(version).each do |tag| %>
+              <% version.dev_tags.each do |tag| %>
                 <li><code><%= tag %></code></li>
               <% end %>
             </ul>

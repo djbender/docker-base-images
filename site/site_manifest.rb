@@ -27,7 +27,7 @@ module SiteManifest
         attrs = defaults.merge(version_values || {})
         attrs['version'] = version_key.to_s
         attrs = interpolate_registry(attrs)
-        ImageType::Version.new(version_key.to_s, attrs)
+        ImageType::Version.new(version_key.to_s, attrs, name)
       end
     end
 
@@ -36,11 +36,7 @@ module SiteManifest
     end
 
     def manifest
-      @manifest ||= begin
-        m = ManifestLoader.load
-        m.delete('globals')
-        m
-      end
+      @manifest ||= ManifestLoader.load.except('globals')
     end
 
     def globals
@@ -72,11 +68,12 @@ module SiteManifest
 
     # Plain class instead of Struct to avoid overriding Struct#values
     class Version
-      attr_reader :key, :attrs
+      attr_reader :key, :attrs, :image_type_name
 
-      def initialize(key, attrs)
+      def initialize(key, attrs, image_type_name)
         @key = key
         @attrs = attrs
+        @image_type_name = image_type_name
       end
 
       def primary_tags
@@ -85,22 +82,6 @@ module SiteManifest
 
       def dev_tags
         TagGenerator.dev_tags(image_type_name, attrs)
-      end
-
-      private
-
-      def image_type_name
-        attrs['image_name'] || attrs[:image_name] || guess_image_name
-      end
-
-      def guess_image_name
-        if attrs.key?('ruby_version') || attrs.key?(:ruby_version)
-          'ruby'
-        elsif attrs.key?('node_version') || attrs.key?(:node_version)
-          'node'
-        else
-          'core'
-        end
       end
     end
   end
