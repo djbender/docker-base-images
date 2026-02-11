@@ -7,20 +7,8 @@ set :views, File.join(__dir__, 'views')
 set :public_folder, File.join(__dir__, 'public')
 
 helpers do
-  def manifest
-    SiteManifest
-  end
-
   def registry
     SiteManifest.registry
-  end
-
-  def primary_tags(version)
-    version.primary_tags
-  end
-
-  def dev_tags(version)
-    version.dev_tags
   end
 
   def pull_command(image_name, tag = nil)

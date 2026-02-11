@@ -9,9 +9,11 @@ on:
       - 'CHANGELOG.md'
       - 'Parkfile'
       - 'bin/static-build'
-      - 'site/site_manifest.rb'
       - 'lib/manifest_loader.rb'
       - 'lib/tag_generator.rb'
+      - 'Gemfile'
+      - 'Gemfile.lock'
+      - '.ruby-version'
   workflow_dispatch: {}
 
 permissions:

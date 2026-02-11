@@ -8,6 +8,14 @@
 - `lib/site_manifest.rb` - manifest data layer for the documentation site
 - `deploy-docs.yml` workflow for automatic GitHub Pages deployment
 
+### Changed
+- `SiteManifest`: use `.except('globals')` instead of destructive `.delete`
+- `SiteManifest::Version`: accept image type name directly, remove `guess_image_name`
+- Remove unused pass-through helpers from site app
+- `deploy-docs.yml`: fix paths filter (remove redundant entry, add Gemfile/Gemfile.lock/.ruby-version)
+- `bin/static-build`: use `cp -R site/public/.` to avoid glob expansion edge case
+- Add SRI hash to Pico CSS CDN link
+
 ### Fixed
 - Update core/README.md: add noble tags, remove stale slim tags
 - Update ruby/README.md: add all current versions/tags (2.4-4.0), fix patch versions and distro suffixes

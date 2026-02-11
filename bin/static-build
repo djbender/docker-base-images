@@ -2,5 +2,5 @@
 set -eu
 export APP_ENV=production
 bundle exec parklife build "$@"
-[ -d site/public ] && cp -R site/public/* build
+[ -d site/public ] && cp -R site/public/. build/
 find build -type f | sort

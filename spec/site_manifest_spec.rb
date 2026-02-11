@@ -75,8 +75,8 @@ RSpec.describe SiteManifest do
     let(:image_type) { described_class.new('ruby', versions) }
     let(:versions) do
       [
-        SiteManifest::ImageType::Version.new('3.3', { 'version' => '3.3' }),
-        SiteManifest::ImageType::Version.new('4.0', { 'version' => '4.0', 'latest' => true })
+        SiteManifest::ImageType::Version.new('3.3', { 'version' => '3.3' }, 'ruby'),
+        SiteManifest::ImageType::Version.new('4.0', { 'version' => '4.0', 'latest' => true }, 'ruby')
       ]
     end
 
@@ -87,8 +87,8 @@ RSpec.describe SiteManifest do
 
       it 'falls back to last version when none marked latest' do
         no_latest = [
-          SiteManifest::ImageType::Version.new('3.3', { 'version' => '3.3' }),
-          SiteManifest::ImageType::Version.new('3.4', { 'version' => '3.4' })
+          SiteManifest::ImageType::Version.new('3.3', { 'version' => '3.3' }, 'ruby'),
+          SiteManifest::ImageType::Version.new('3.4', { 'version' => '3.4' }, 'ruby')
         ]
         type = described_class.new('ruby', no_latest)
 
@@ -114,7 +114,7 @@ RSpec.describe SiteManifest do
                               'ruby_version' => '3.3.0',
                               'ruby_major' => '3.3',
                               'distribution_code_name' => 'noble'
-                            })
+                            }, 'ruby')
       end
 
       it 'generates primary tags via TagGenerator' do
@@ -133,10 +133,10 @@ RSpec.describe SiteManifest do
                               'node_version' => '22.1.0',
                               'node_major' => '22',
                               'distribution_code_name' => 'noble'
-                            })
+                            }, 'node')
       end
 
-      it 'detects image type as node' do
+      it 'generates primary tags via TagGenerator' do
         expect(version.primary_tags).to include("#{registry}/node:22.1.0")
       end
     end
@@ -146,10 +146,10 @@ RSpec.describe SiteManifest do
         described_class.new('noble', {
                               'version' => 'noble',
                               'distribution_code_name' => 'noble'
-                            })
+                            }, 'core')
       end
 
-      it 'detects image type as core' do
+      it 'generates primary tags via TagGenerator' do
         expect(version.primary_tags).to include("#{registry}/core:noble")
       end
 
