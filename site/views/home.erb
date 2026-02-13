@@ -4,7 +4,7 @@
 <% @image_types.each do |image_type| %>
   <% latest = image_type.latest_version %>
   <article>
-    <header><h3><a href="/<%= image_type.name %>"><%= image_type.name.capitalize %></a></h3></header>
+    <header><h3><a href="<%= url_for("/#{image_type.name}") %>"><%= image_type.name.capitalize %></a></h3></header>
     <div class="image-card-row">
       <p><strong><%= image_type.versions.size %></strong> versions available</p>
       <% if latest %>

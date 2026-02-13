@@ -1,6 +1,16 @@
 #!/usr/bin/env sh
 set -eu
 export APP_ENV=production
+
+# Extract --base value and expose it to the Sinatra app
+prev=""
+for arg in "$@"; do
+  case "$prev" in
+    --base) export BASE_PATH="$arg" ;;
+  esac
+  prev="$arg"
+done
+
 bundle exec parklife build "$@"
 [ -d site/public ] && cp -R site/public/. build/
 find build -type f | sort

@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-02-13
+- Fix docs site links missing GitHub Pages base path prefix (`/docker-base-images`)
+
 ## 2026-02-12
 - `bin/check-versions` — unified version checker for Ruby + Node using Strategy pattern
 - Split `VersionChecker`, `RubyChecker`, `NodeChecker` into separate files under `lib/`

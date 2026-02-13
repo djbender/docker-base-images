@@ -3,7 +3,7 @@
 
 <% @image_types.each do |image_type| %>
   <section>
-    <h2><a href="/<%= image_type.name %>"><%= image_type.name.capitalize %></a></h2>
+    <h2><a href="<%= url_for("/#{image_type.name}") %>"><%= image_type.name.capitalize %></a></h2>
     <%= erb :_image_table, locals: { image_type: image_type } %>
   </section>
 <% end %>

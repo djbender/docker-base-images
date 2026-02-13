@@ -7,6 +7,14 @@ set :views, File.join(__dir__, 'views')
 set :public_folder, File.join(__dir__, 'public')
 
 helpers do
+  def base_path
+    ENV.fetch('BASE_PATH', '')
+  end
+
+  def url_for(path)
+    "#{base_path}#{path}"
+  end
+
   def registry
     SiteManifest.registry
   end
