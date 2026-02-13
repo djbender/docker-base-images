@@ -6,7 +6,8 @@
 # Pass --update to apply changes and regenerate Dockerfiles.
 
 require_relative '../lib/manifest_loader'
-require_relative '../lib/version_checker'
+require_relative '../lib/ruby_checker'
+require_relative '../lib/node_checker'
 
 manifest = ManifestLoader.load
 checkers = [RubyChecker.new, NodeChecker.new]
