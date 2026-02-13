@@ -5,22 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><%= @title ? "#{@title} - Docker Base Images" : 'Docker Base Images' %></title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" integrity="sha384-L1dWfspMTHU/ApYnFiMz2QID/PlP1xCW9visvBdbEkOLkSSWsP6ZJWhPw6apiXxU" crossorigin="anonymous">
-  <link rel="stylesheet" href="/css/custom.css">
+  <link rel="stylesheet" href="<%= url_for('/css/custom.css') %>">
 </head>
 <body>
   <header class="container">
     <nav>
       <ul>
-        <li><strong><a href="/">Docker Base Images</a></strong></li>
+        <li><strong><a href="<%= url_for('/') %>">Docker Base Images</a></strong></li>
       </ul>
       <ul>
-        <li><a href="/catalog" class="<%= active_class('/catalog') %>">Catalog</a></li>
-        <li><a href="/core" class="<%= active_class('/core') %>">Core</a></li>
-        <li><a href="/ruby" class="<%= active_class('/ruby') %>">Ruby</a></li>
-        <li><a href="/node" class="<%= active_class('/node') %>">Node</a></li>
-        <li><a href="/getting-started" class="<%= active_class('/getting-started') %>">Getting Started</a></li>
-        <li><a href="/architecture" class="<%= active_class('/architecture') %>">Architecture</a></li>
-        <li><a href="/changelog" class="<%= active_class('/changelog') %>">Changelog</a></li>
+        <li><a href="<%= url_for('/catalog') %>" class="<%= active_class('/catalog') %>">Catalog</a></li>
+        <li><a href="<%= url_for('/core') %>" class="<%= active_class('/core') %>">Core</a></li>
+        <li><a href="<%= url_for('/ruby') %>" class="<%= active_class('/ruby') %>">Ruby</a></li>
+        <li><a href="<%= url_for('/node') %>" class="<%= active_class('/node') %>">Node</a></li>
+        <li><a href="<%= url_for('/getting-started') %>" class="<%= active_class('/getting-started') %>">Getting Started</a></li>
+        <li><a href="<%= url_for('/architecture') %>" class="<%= active_class('/architecture') %>">Architecture</a></li>
+        <li><a href="<%= url_for('/changelog') %>" class="<%= active_class('/changelog') %>">Changelog</a></li>
         <li><a href="#" id="theme-toggle" role="button" class="outline contrast theme-toggle"></a></li>
       </ul>
     </nav>
