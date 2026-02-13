@@ -1,6 +1,12 @@
 # Changelog
 
+## 2026-02-12
+- `bin/check-versions` — unified version checker for Ruby + Node using Strategy pattern (`lib/version_checker.rb`)
+- `track_files` in SimpleCov config to catch untested lib files
+
 ## 2026-02-10
+
+### Added
 - GitHub Pages documentation site with Sinatra + Parklife static build
 - `lib/manifest_loader.rb` - shared manifest loading independent of Rake
 - `lib/site_manifest.rb` - manifest data layer for the documentation site
