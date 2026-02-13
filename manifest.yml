@@ -74,13 +74,13 @@ node: &NODE
       npm_version: 10.9.4
     '24': &NODE24
       node_major: 24
-      node_version: 24.13.0
-      npm_version: 11.6.2
+      node_version: 24.13.1
+      npm_version: 11.8.0
       latest: true
     '25': &NODE25
       node_major: 25
-      node_version: 25.6.0
-      npm_version: 11.8.0
+      node_version: 25.6.1
+      npm_version: 11.9.0
 
 ruby: &RUBY
   defaults:
@@ -128,8 +128,8 @@ ruby: &RUBY
       ruby_download_sha256: 658acc455b6bda87ac6cc1380e86552b9c1af87055e7a127589c5bf7ed80b035
     '3.2':
       ruby_major: 3.2
-      ruby_version: 3.2.9
-      ruby_download_sha256: cf6699d0084c588e7944d92e1a8edda28b1cc3ee471a1f0aebb4b3d32c9753b2
+      ruby_version: 3.2.10
+      ruby_download_sha256: a64a8a910ac2f28834b2170dedea688f06cbc6431fcd65eb18cc49ddbf3826ae
     '3.3':
       ruby_major: 3.3
       ruby_version: 3.3.10

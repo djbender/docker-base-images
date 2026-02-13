@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Checks Ruby and Node versions in manifest.yml against upstream releases.
+# Exit 0 if up-to-date, exit 1 if updates available.
+# Pass --update to apply changes and regenerate Dockerfiles.
+
+require_relative '../lib/manifest_loader'
+require_relative '../lib/ruby_checker'
+require_relative '../lib/node_checker'
+
+manifest = ManifestLoader.load
+checkers = [RubyChecker.new, NodeChecker.new]
+all_updates = {}
+
+checkers.each do |checker|
+  updates = checker.check(manifest)
+  next if updates.empty?
+
+  all_updates[checker] = updates
+  puts "#{checker.manifest_key.capitalize} updates available:"
+  updates.each { |u| puts "  #{u.key}: #{u.current} -> #{u.latest}" }
+  puts
+end
+
+if all_updates.empty?
+  puts 'All versions up to date.'
+  exit 0
+end
+
+exit 1 unless ARGV.include?('--update')
+
+content = File.read(ManifestLoader::MANIFEST_PATH)
+generate_targets = []
+
+all_updates.each do |checker, updates|
+  checker.apply!(content, updates)
+  generate_targets << checker.manifest_key
+end
+
+File.write(ManifestLoader::MANIFEST_PATH, content)
+puts "Updated #{ManifestLoader::MANIFEST_PATH}"
+
+generate_targets.each do |target|
+  system('bin/rake', "generate:#{target}") or abort "rake generate:#{target} failed"
+  puts "Regenerated #{target} Dockerfiles."
+end
