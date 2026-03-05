@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-03-05
+- Remove stale dependabot entries for retired node versions (8, 10, 12, 14)
+
 ## 2026-02-13
 - Fix docs site links missing GitHub Pages base path prefix (`/docker-base-images`)
 

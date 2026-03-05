@@ -52,46 +52,6 @@ updates:
       - notification-only
 
   - package-ecosystem: docker
-    directory: node/8
-    schedule:
-      interval: daily
-    labels:
-      - dependencies
-      - do-not-merge
-      - docker
-      - notification-only
-
-  - package-ecosystem: docker
-    directory: node/10
-    schedule:
-      interval: daily
-    labels:
-      - dependencies
-      - do-not-merge
-      - docker
-      - notification-only
-
-  - package-ecosystem: docker
-    directory: node/12
-    schedule:
-      interval: daily
-    labels:
-      - dependencies
-      - do-not-merge
-      - docker
-      - notification-only
-
-  - package-ecosystem: docker
-    directory: node/14
-    schedule:
-      interval: daily
-    labels:
-      - dependencies
-      - do-not-merge
-      - docker
-      - notification-only
-
-  - package-ecosystem: docker
     directory: node/16
     schedule:
       interval: daily
