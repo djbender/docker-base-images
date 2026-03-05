@@ -1,7 +1,7 @@
 require 'open-uri'
 
 class VersionChecker
-  Update = Struct.new(:key, :current, :latest, :replacements, keyword_init: true)
+  Update = Struct.new(:key, :current, :latest, :replacements)
 
   def manifest_key = raise(NotImplementedError)
   def fetch_upstream = raise(NotImplementedError)
