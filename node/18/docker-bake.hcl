@@ -47,8 +47,8 @@ target "node-dev" {
     "ghcr.io/djbender/node:18.20.8-dev-noble"
   ]
   cache-from = [
-    "type=registry,ref=ghcr.io/djbender/node:cache-18-dev",
+    "type=registry,ref=ghcr.io/djbender/node:cache-dev-18",
     "type=registry,ref=ghcr.io/djbender/node:18-dev"
   ]
-  cache-to = ["type=registry,ref=ghcr.io/djbender/node:cache-18-dev,mode=max"]
+  cache-to = ["type=registry,ref=ghcr.io/djbender/node:cache-dev-18,mode=max"]
 }

@@ -47,8 +47,8 @@ target "ruby-dev" {
     "ghcr.io/djbender/ruby:3.4.8-dev-noble"
   ]
   cache-from = [
-    "type=registry,ref=ghcr.io/djbender/ruby:cache-3.4-dev",
+    "type=registry,ref=ghcr.io/djbender/ruby:cache-dev-3.4",
     "type=registry,ref=ghcr.io/djbender/ruby:3.4-dev"
   ]
-  cache-to = ["type=registry,ref=ghcr.io/djbender/ruby:cache-3.4-dev,mode=max"]
+  cache-to = ["type=registry,ref=ghcr.io/djbender/ruby:cache-dev-3.4,mode=max"]
 }
