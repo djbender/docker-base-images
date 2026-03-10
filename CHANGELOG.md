@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-03-10
+- Fix dev cache tag ordering: `dev-<version>` → `<version>-dev` to match actual pushed tags
+- Disable `cache-to` in local build tasks to avoid 403 errors pushing to GHCR
+
 ## 2026-03-05
 - Remove stale dependabot entries for retired node versions (8, 10, 12, 14)
 

@@ -37,8 +37,8 @@ target "core-dev" {
   inherits = ["core"]
   tags = ["ghcr.io/djbender/core:bionic-dev"]
   cache-from = [
-    "type=registry,ref=ghcr.io/djbender/core:cache-dev-bionic",
-    "type=registry,ref=ghcr.io/djbender/core:dev-bionic"
+    "type=registry,ref=ghcr.io/djbender/core:cache-bionic-dev",
+    "type=registry,ref=ghcr.io/djbender/core:bionic-dev"
   ]
-  cache-to = ["type=registry,ref=ghcr.io/djbender/core:cache-dev-bionic,mode=max"]
+  cache-to = ["type=registry,ref=ghcr.io/djbender/core:cache-bionic-dev,mode=max"]
 }
