@@ -1,7 +1,7 @@
 # Changelog
 
 ## 2026-03-10
-- Fix dev cache tag ordering: `dev-<version>` → `<version>-dev` to match actual pushed tags
+- Fix dev cache fallback ref: `dev-<version>` → `<version>-dev` to match actual image tags
 - Disable `cache-to` in local build tasks to avoid 403 errors pushing to GHCR
 
 ## 2026-03-05

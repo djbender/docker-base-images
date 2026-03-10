@@ -37,8 +37,8 @@ target "core-dev" {
   inherits = ["core"]
   tags = ["ghcr.io/djbender/core:jammy-dev"]
   cache-from = [
-    "type=registry,ref=ghcr.io/djbender/core:cache-jammy-dev",
+    "type=registry,ref=ghcr.io/djbender/core:cache-dev-jammy",
     "type=registry,ref=ghcr.io/djbender/core:jammy-dev"
   ]
-  cache-to = ["type=registry,ref=ghcr.io/djbender/core:cache-jammy-dev,mode=max"]
+  cache-to = ["type=registry,ref=ghcr.io/djbender/core:cache-dev-jammy,mode=max"]
 }
