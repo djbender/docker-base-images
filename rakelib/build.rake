@@ -6,52 +6,28 @@ namespace :build do
   task :core do
     core_filter = proc { |image_name| image_name == 'core' }
 
-    Build.matrix(&core_filter).each do |bake_file|
-      puts "Building #{bake_file}..."
-      system(
-        *Build.command(bake_file),
-        exception: true
-      )
-    end
+    Build.matrix(&core_filter).each { |bake_file| Build.run(bake_file) }
   end
 
   desc 'Build common images'
   task :common do
     core_filter = proc { |image_name| image_name != 'core' }
 
-    Build.matrix(&core_filter).each do |bake_file|
-      puts "Building #{bake_file}..."
-      system(
-        *Build.command(bake_file),
-        exception: true
-      )
-    end
+    Build.matrix(&core_filter).each { |bake_file| Build.run(bake_file) }
   end
 
   desc 'Build ruby images'
   task :ruby do
     core_filter = proc { |image_name| image_name == 'ruby' }
 
-    Build.matrix(&core_filter).each do |bake_file|
-      puts "Building #{bake_file}..."
-      system(
-        *Build.command(bake_file),
-        exception: true
-      )
-    end
+    Build.matrix(&core_filter).each { |bake_file| Build.run(bake_file) }
   end
 
   desc 'Build node images'
   task :node do
     core_filter = proc { |image_name| image_name == 'node' }
 
-    Build.matrix(&core_filter).each do |bake_file|
-      puts "Building #{bake_file}..."
-      system(
-        *Build.command(bake_file),
-        exception: true
-      )
-    end
+    Build.matrix(&core_filter).each { |bake_file| Build.run(bake_file) }
   end
 
   desc 'Build all images'
@@ -61,6 +37,12 @@ end
 module Build
   def self.arch
     ENV.fetch('ARCH') { RUBY_PLATFORM.include?('arm') ? 'arm64' : 'amd64' }
+  end
+
+  def self.run(bake_file)
+    cmd = command(bake_file)
+    puts "$ #{cmd.join(' ')}"
+    system(*cmd, exception: true)
   end
 
   def self.command(bake_file)
