@@ -8,6 +8,7 @@
 # https://docs.docker.com/engine/reference/commandline/buildx_bake/#file-definition
 
 variable "PWD" {default="" }
+variable "ARCH" {default="" }
 
 group "default" {
   targets = [
@@ -26,10 +27,9 @@ target "core" {
     "linux/arm64"
   ]
   cache-from = [
-    "type=registry,ref=ghcr.io/djbender/core:cache-bionic",
+    "type=registry,ref=ghcr.io/djbender/core:cache-bionic-${ARCH}",
     "type=registry,ref=ghcr.io/djbender/core:bionic"
   ]
-  cache-to = ["type=registry,ref=ghcr.io/djbender/core:cache-bionic,mode=max"]
 }
 
 target "core-dev" {
@@ -37,8 +37,7 @@ target "core-dev" {
   inherits = ["core"]
   tags = ["ghcr.io/djbender/core:bionic-dev"]
   cache-from = [
-    "type=registry,ref=ghcr.io/djbender/core:cache-dev-bionic",
+    "type=registry,ref=ghcr.io/djbender/core:cache-dev-bionic-${ARCH}",
     "type=registry,ref=ghcr.io/djbender/core:bionic-dev"
   ]
-  cache-to = ["type=registry,ref=ghcr.io/djbender/core:cache-dev-bionic,mode=max"]
 }
