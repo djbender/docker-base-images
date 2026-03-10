@@ -1,9 +1,11 @@
 # Changelog
 
 ## 2026-03-10
+- Fix dev cache fallback ref: `dev-<version>` → `<version>-dev` to match actual image tags
 - Local builds now pull CI's per-arch `mode=max` cache via `ARCH` HCL variable
 - Remove `cache-to` from bake files (CI overrides via `--set`, local builds don't push)
 - Dynamic arch detection in `build.rake` (overridable via `ARCH=amd64`)
+- Echo full docker command before each build task runs
 
 ## 2026-03-05
 - Remove stale dependabot entries for retired node versions (8, 10, 12, 14)
