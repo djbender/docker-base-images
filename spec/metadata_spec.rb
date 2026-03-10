@@ -90,35 +90,19 @@ RSpec.describe Metadata do
   end
 
   describe '#cache_from' do
-    it 'returns array with cache ref and image ref' do
+    it 'returns per-arch cache ref with image tag fallback' do
       expect(metadata.cache_from).to eq [
-        'type=registry,ref=ghcr.io/djbender/core:cache-jammy',
+        'type=registry,ref=ghcr.io/djbender/core:cache-jammy-${ARCH}',
         'type=registry,ref=ghcr.io/djbender/core:jammy'
       ]
     end
   end
 
-  describe '#cache_to' do
-    it 'returns single-element array with mode=max' do
-      expect(metadata.cache_to).to eq [
-        'type=registry,ref=ghcr.io/djbender/core:cache-jammy,mode=max'
-      ]
-    end
-  end
-
   describe '#cache_from_dev' do
-    it 'returns array with dev cache ref and dev image ref' do
+    it 'returns per-arch dev cache ref with image tag fallback' do
       expect(metadata.cache_from_dev).to eq [
-        'type=registry,ref=ghcr.io/djbender/core:cache-dev-jammy',
+        'type=registry,ref=ghcr.io/djbender/core:cache-dev-jammy-${ARCH}',
         'type=registry,ref=ghcr.io/djbender/core:jammy-dev'
-      ]
-    end
-  end
-
-  describe '#cache_to_dev' do
-    it 'returns single-element array with dev mode=max' do
-      expect(metadata.cache_to_dev).to eq [
-        'type=registry,ref=ghcr.io/djbender/core:cache-dev-jammy,mode=max'
       ]
     end
   end

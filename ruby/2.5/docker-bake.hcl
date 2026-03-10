@@ -8,6 +8,7 @@
 # https://docs.docker.com/engine/reference/commandline/buildx_bake/#file-definition
 
 variable "PWD" {default="" }
+variable "ARCH" {default="" }
 
 group "default" {
   targets = [
@@ -31,10 +32,9 @@ target "ruby" {
     "linux/arm64"
   ]
   cache-from = [
-    "type=registry,ref=ghcr.io/djbender/ruby:cache-2.5",
+    "type=registry,ref=ghcr.io/djbender/ruby:cache-2.5-${ARCH}",
     "type=registry,ref=ghcr.io/djbender/ruby:2.5"
   ]
-  cache-to = ["type=registry,ref=ghcr.io/djbender/ruby:cache-2.5,mode=max"]
 }
 
 target "ruby-dev" {
@@ -47,8 +47,7 @@ target "ruby-dev" {
     "ghcr.io/djbender/ruby:2.5.9-dev-bionic"
   ]
   cache-from = [
-    "type=registry,ref=ghcr.io/djbender/ruby:cache-dev-2.5",
+    "type=registry,ref=ghcr.io/djbender/ruby:cache-dev-2.5-${ARCH}",
     "type=registry,ref=ghcr.io/djbender/ruby:2.5-dev"
   ]
-  cache-to = ["type=registry,ref=ghcr.io/djbender/ruby:cache-dev-2.5,mode=max"]
 }

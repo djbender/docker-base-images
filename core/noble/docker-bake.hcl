@@ -8,6 +8,7 @@
 # https://docs.docker.com/engine/reference/commandline/buildx_bake/#file-definition
 
 variable "PWD" {default="" }
+variable "ARCH" {default="" }
 
 group "default" {
   targets = [
@@ -29,10 +30,9 @@ target "core" {
     "linux/arm64"
   ]
   cache-from = [
-    "type=registry,ref=ghcr.io/djbender/core:cache-noble",
+    "type=registry,ref=ghcr.io/djbender/core:cache-noble-${ARCH}",
     "type=registry,ref=ghcr.io/djbender/core:noble"
   ]
-  cache-to = ["type=registry,ref=ghcr.io/djbender/core:cache-noble,mode=max"]
 }
 
 target "core-dev" {
@@ -43,8 +43,7 @@ target "core-dev" {
     "ghcr.io/djbender/core:noble-dev"
   ]
   cache-from = [
-    "type=registry,ref=ghcr.io/djbender/core:cache-dev-noble",
+    "type=registry,ref=ghcr.io/djbender/core:cache-dev-noble-${ARCH}",
     "type=registry,ref=ghcr.io/djbender/core:noble-dev"
   ]
-  cache-to = ["type=registry,ref=ghcr.io/djbender/core:cache-dev-noble,mode=max"]
 }

@@ -59,8 +59,13 @@ namespace :build do
 end
 
 module Build
+  def self.arch
+    ENV.fetch('ARCH') { RUBY_PLATFORM.include?('arm') ? 'arm64' : 'amd64' }
+  end
+
   def self.command(bake_file)
-    %W[docker buildx bake --file #{bake_file} --set *.platform=linux/arm64 --set *.cache-to= --load]
+    ENV['ARCH'] = arch
+    %W[docker buildx bake --file #{bake_file} --set *.platform=linux/#{arch} --load]
   end
 
   def self.matrix(&)
