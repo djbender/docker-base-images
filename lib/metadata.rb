@@ -51,11 +51,11 @@ class Metadata
   # Cache configuration for dev target
   def cache_from_dev
     reg = "#{registry}/#{image_name}"
-    [CacheRef.from(reg, "dev-#{version}"), CacheRef.fallback(reg, "dev-#{version}")]
+    [CacheRef.from(reg, "#{version}-dev"), CacheRef.fallback(reg, "#{version}-dev")]
   end
 
   def cache_to_dev
-    [CacheRef.to("#{registry}/#{image_name}", "dev-#{version}")]
+    [CacheRef.to("#{registry}/#{image_name}", "#{version}-dev")]
   end
 
   def branch_suffix

@@ -9,7 +9,7 @@ namespace :build do
     Build.matrix(&core_filter).each do |bake_file|
       puts "Building #{bake_file}..."
       system(
-        "docker buildx bake --file #{bake_file} --set *.platform=linux/arm64 --load",
+        *Build.command(bake_file),
         exception: true
       )
     end
@@ -22,7 +22,7 @@ namespace :build do
     Build.matrix(&core_filter).each do |bake_file|
       puts "Building #{bake_file}..."
       system(
-        "docker buildx bake --file #{bake_file} --set *.platform=linux/arm64 --load",
+        *Build.command(bake_file),
         exception: true
       )
     end
@@ -35,7 +35,7 @@ namespace :build do
     Build.matrix(&core_filter).each do |bake_file|
       puts "Building #{bake_file}..."
       system(
-        "docker buildx bake --file #{bake_file} --set *.platform=linux/arm64 --load",
+        *Build.command(bake_file),
         exception: true
       )
     end
@@ -48,7 +48,7 @@ namespace :build do
     Build.matrix(&core_filter).each do |bake_file|
       puts "Building #{bake_file}..."
       system(
-        "docker buildx bake --file #{bake_file} --set *.platform=linux/arm64 --load",
+        *Build.command(bake_file),
         exception: true
       )
     end
@@ -59,6 +59,10 @@ namespace :build do
 end
 
 module Build
+  def self.command(bake_file)
+    %W[docker buildx bake --file #{bake_file} --set *.platform=linux/arm64 --set *.cache-to= --load]
+  end
+
   def self.matrix(&)
     Util::MANIFEST.select(&).flat_map do |image_name, details|
       details.fetch('versions').keys.flat_map do |version|

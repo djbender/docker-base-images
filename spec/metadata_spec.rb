@@ -109,8 +109,8 @@ RSpec.describe Metadata do
   describe '#cache_from_dev' do
     it 'returns array with dev cache ref and dev image ref' do
       expect(metadata.cache_from_dev).to eq [
-        'type=registry,ref=ghcr.io/djbender/core:cache-dev-jammy',
-        'type=registry,ref=ghcr.io/djbender/core:dev-jammy'
+        'type=registry,ref=ghcr.io/djbender/core:cache-jammy-dev',
+        'type=registry,ref=ghcr.io/djbender/core:jammy-dev'
       ]
     end
   end
@@ -118,7 +118,7 @@ RSpec.describe Metadata do
   describe '#cache_to_dev' do
     it 'returns single-element array with dev mode=max' do
       expect(metadata.cache_to_dev).to eq [
-        'type=registry,ref=ghcr.io/djbender/core:cache-dev-jammy,mode=max'
+        'type=registry,ref=ghcr.io/djbender/core:cache-jammy-dev,mode=max'
       ]
     end
   end
