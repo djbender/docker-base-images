@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-03-25
+- Bump Node 20 to 20.20.2, Node 22 to 22.22.2, Node 24 to 24.14.1, Node 25 to 25.8.2
+
 ## 2026-03-10
 - Fix dev cache fallback ref: `dev-<version>` → `<version>-dev` to match actual image tags
 - Local builds now pull CI's per-arch `mode=max` cache via `ARCH` HCL variable
