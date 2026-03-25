@@ -66,21 +66,21 @@ node: &NODE
       npm_version: 10.8.2
     '20': &NODE20
       node_major: 20
-      node_version: 20.20.0
+      node_version: 20.20.2
       npm_version: 10.8.2
     '22': &NODE22
       node_major: 22
-      node_version: 22.22.0
-      npm_version: 10.9.4
+      node_version: 22.22.2
+      npm_version: 10.9.7
     '24': &NODE24
       node_major: 24
-      node_version: 24.13.1
-      npm_version: 11.8.0
+      node_version: 24.14.1
+      npm_version: 11.11.0
       latest: true
     '25': &NODE25
       node_major: 25
-      node_version: 25.6.1
-      npm_version: 11.9.0
+      node_version: 25.8.2
+      npm_version: 11.11.1
 
 ruby: &RUBY
   defaults:
