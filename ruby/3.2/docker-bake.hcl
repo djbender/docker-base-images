@@ -23,8 +23,8 @@ target "ruby" {
   tags = [
     "ghcr.io/djbender/ruby:3.2",
     "ghcr.io/djbender/ruby:3.2-noble",
-    "ghcr.io/djbender/ruby:3.2.10",
-    "ghcr.io/djbender/ruby:3.2.10-noble"
+    "ghcr.io/djbender/ruby:3.2.11",
+    "ghcr.io/djbender/ruby:3.2.11-noble"
   ]
   context = "${PWD}/ruby/3.2"
   platforms = [
@@ -43,8 +43,8 @@ target "ruby-dev" {
   tags = [
     "ghcr.io/djbender/ruby:3.2-dev",
     "ghcr.io/djbender/ruby:3.2-dev-noble",
-    "ghcr.io/djbender/ruby:3.2.10-dev",
-    "ghcr.io/djbender/ruby:3.2.10-dev-noble"
+    "ghcr.io/djbender/ruby:3.2.11-dev",
+    "ghcr.io/djbender/ruby:3.2.11-dev-noble"
   ]
   cache-from = [
     "type=registry,ref=ghcr.io/djbender/ruby:cache-dev-3.2-${ARCH}",

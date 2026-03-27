@@ -128,18 +128,18 @@ ruby: &RUBY
       ruby_download_sha256: 658acc455b6bda87ac6cc1380e86552b9c1af87055e7a127589c5bf7ed80b035
     '3.2':
       ruby_major: 3.2
-      ruby_version: 3.2.10
-      ruby_download_sha256: a64a8a910ac2f28834b2170dedea688f06cbc6431fcd65eb18cc49ddbf3826ae
+      ruby_version: 3.2.11
+      ruby_download_sha256: c13aec0c206725d5d356acbae6e5fd8bffd92dc325aec14fd5dd7795d4b763d2
     '3.3':
       ruby_major: 3.3
-      ruby_version: 3.3.10
-      ruby_download_sha256: 3a06c3a709672a4ddae4e511d7e82f74799b8b3f550c8cf2d6f32089003cb84c
+      ruby_version: 3.3.11
+      ruby_download_sha256: 9116bb2e313203bd78cd3e8dc09284d34b2645f725877623a7185bf3807c8ca3
     '3.4':
       ruby_major: 3.4
-      ruby_version: 3.4.8
-      ruby_download_sha256: 53a8ec71111449cbbd42224d8d27c493fa6ded228636731051c48604d4255d68
+      ruby_version: 3.4.9
+      ruby_download_sha256: 4231c54072601a171faed1699f105985e9971c94cd382b78feb4eb44eec2dd1a
     '4.0':
       ruby_major: 4.0
-      ruby_version: 4.0.1
-      ruby_download_sha256: 0531fe57dfdb56bf591620d2450642ea0e0964f3512a6ebee7dc9305de69395f
+      ruby_version: 4.0.2
+      ruby_download_sha256: 4618db85bb9ec04d8152d0099db488694a3d3c4f52106625e4ad547f1318db87
       latest: true # apply the latest tag

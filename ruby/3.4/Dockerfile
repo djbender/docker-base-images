@@ -49,9 +49,9 @@ EOT
 ENV BUNDLER_VERSION 2.5.14
 ENV LANG en_US.utf-8
 ENV RUBYGEMS_VERSION 3.5.14
-ENV RUBY_DOWNLOAD_SHA256 53a8ec71111449cbbd42224d8d27c493fa6ded228636731051c48604d4255d68
+ENV RUBY_DOWNLOAD_SHA256 4231c54072601a171faed1699f105985e9971c94cd382b78feb4eb44eec2dd1a
 ENV RUBY_MAJOR 3.4
-ENV RUBY_VERSION 3.4.8
+ENV RUBY_VERSION 3.4.9
 
 # NOTE: some of ruby's build scripts are written in ruby so we need to install ruby
 # in order to compile ruby. We use apt-mark to uninstall packages we don't need.
@@ -82,7 +82,14 @@ RUN <<EOT
     xz-utils
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
   curl --remote-name --location https://cache.ruby-lang.org/pub/ruby/${RUBY_MAJOR%-rc}/ruby-$RUBY_VERSION.tar.xz
-  echo "$RUBY_DOWNLOAD_SHA256 ruby-$RUBY_VERSION.tar.xz" | sha256sum --check --strict
+  actual_sha256=$(sha256sum ruby-$RUBY_VERSION.tar.xz | awk '{print $1}')
+  if [ "$actual_sha256" != "$RUBY_DOWNLOAD_SHA256" ]; then
+    set +x
+    echo "SHA256 mismatch for ruby-$RUBY_VERSION.tar.xz"
+    echo "  expected: $RUBY_DOWNLOAD_SHA256"
+    echo "  actual:   $actual_sha256"
+    exit 1
+  fi
   mkdir -p /usr/src/ruby
   tar -xJf ruby-$RUBY_VERSION.tar.xz -C /usr/src/ruby --strip-components=1
   rm ruby-$RUBY_VERSION.tar.xz
