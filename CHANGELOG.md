@@ -6,6 +6,7 @@
 - Bump rubocop 1.85.1 → 1.86.0
 - Fix cleanup-packages workflow: use humantime `cut-off` format and replace removed `tag-regex` with `image-tags` globs
 - Fix cleanup-packages `account` from `djbender` to `user` (personal account literal required by v3), enable dry-run, remove debug curl
+- Replace `snok/container-retention-policy` with `dataaxiom/ghcr-cleanup-action` for multi-arch-aware cleanup including untagged orphans
 
 ## 2026-03-25
 - Bump Node 20 to 20.20.2, Node 22 to 22.22.2, Node 24 to 24.14.1, Node 25 to 25.8.2

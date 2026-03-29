@@ -11,18 +11,16 @@ permissions:
 jobs:
   cleanup:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        package: [core, ruby, node]
+    concurrency:
+      group: cleanup-packages
     steps:
-      - uses: snok/container-retention-policy@v3.0.1
+      - uses: dataaxiom/ghcr-cleanup-action@v1
         with:
-          account: user
-          token: ${{ secrets.GITHUB_TOKEN }}
-          image-names: ${{ matrix.package }}
-          cut-off: 1w
-          # Delete intermediate arch-specific build tags (e.g. jammy-1234567890-amd64)
-          image-tags: "*-amd64 *-arm64"
-          tag-selection: tagged
-          keep-n-most-recent: 0
+          packages: core,ruby,node
+          delete-tags: '*-amd64,*-arm64'
+          delete-untagged: true
+          older-than: 1 week
+          delete-ghost-images: true
+          delete-partial-images: true
+          delete-orphaned-images: true
           dry-run: true
