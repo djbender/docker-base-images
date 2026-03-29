@@ -19,7 +19,7 @@ jobs:
           packages: core,ruby,node
           delete-tags: '*-amd64,*-arm64'
           delete-untagged: true
-          older-than: 1 week
+          older-than: 4 weeks
           delete-ghost-images: true
           delete-partial-images: true
           delete-orphaned-images: true
