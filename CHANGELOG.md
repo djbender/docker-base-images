@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-03-29
+- Parallelize cleanup-packages via matrix (one job per package) to avoid 6h+ sequential runs
+- Exclude `cache-*` tags from cleanup to preserve build cache
+
 ## 2026-03-28
 - Pin `snok/container-retention-policy` to v3.0.1 (v3 tag doesn't exist, failing weekly since 2026-03-01)
 - Rewrite README with image version table and clearer build/dev instructions
