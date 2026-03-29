@@ -11,12 +11,15 @@ permissions:
 jobs:
   cleanup:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: [core, ruby, node]
     concurrency:
-      group: cleanup-packages
+      group: cleanup-${{ matrix.package }}
     steps:
       - uses: dataaxiom/ghcr-cleanup-action@v1
         with:
-          packages: core,ruby,node
+          package: ${{ matrix.package }}
           delete-tags: '*-amd64,*-arm64'
           exclude-tags: 'cache-*'
           delete-untagged: true
@@ -24,4 +27,3 @@ jobs:
           delete-ghost-images: true
           delete-partial-images: true
           delete-orphaned-images: true
-          log-level: debug
