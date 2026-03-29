@@ -18,8 +18,10 @@ jobs:
         with:
           packages: core,ruby,node
           delete-tags: '*-amd64,*-arm64'
+          exclude-tags: 'cache-*'
           delete-untagged: true
           older-than: 4 weeks
           delete-ghost-images: true
           delete-partial-images: true
           delete-orphaned-images: true
+          log-level: debug
