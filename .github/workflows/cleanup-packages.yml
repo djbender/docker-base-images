@@ -15,7 +15,7 @@ jobs:
       matrix:
         package: [core, ruby, node]
     steps:
-      - uses: snok/container-retention-policy@v3
+      - uses: snok/container-retention-policy@v3.0.1
         with:
           account: djbender
           token: ${{ secrets.GITHUB_TOKEN }}
