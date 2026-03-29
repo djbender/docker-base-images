@@ -23,4 +23,3 @@ jobs:
           delete-ghost-images: true
           delete-partial-images: true
           delete-orphaned-images: true
-          dry-run: true
