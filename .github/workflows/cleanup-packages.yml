@@ -20,7 +20,8 @@ jobs:
           account: djbender
           token: ${{ secrets.GITHUB_TOKEN }}
           image-names: ${{ matrix.package }}
-          cut-off: 1 week ago UTC
-          # Delete tags matching run_id pattern (digits only between version and arch)
-          tag-regex: '.*-\d{9,}-(?:amd64|arm64)$'
+          cut-off: 1w
+          # Delete intermediate arch-specific build tags (e.g. jammy-1234567890-amd64)
+          image-tags: "*-amd64 *-arm64"
+          tag-selection: tagged
           keep-n-most-recent: 0

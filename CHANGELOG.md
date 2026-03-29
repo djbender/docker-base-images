@@ -4,6 +4,7 @@
 - Pin `snok/container-retention-policy` to v3.0.1 (v3 tag doesn't exist, failing weekly since 2026-03-01)
 - Rewrite README with image version table and clearer build/dev instructions
 - Bump rubocop 1.85.1 → 1.86.0
+- Fix cleanup-packages workflow: use humantime `cut-off` format and replace removed `tag-regex` with `image-tags` globs
 
 ## 2026-03-25
 - Bump Node 20 to 20.20.2, Node 22 to 22.22.2, Node 24 to 24.14.1, Node 25 to 25.8.2
