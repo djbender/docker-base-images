@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-04-21
+- Reverse version table row order on image pages so the latest version appears first
+
 ## 2026-04-20
 - Bump Node 25 to 25.9.0 (npm 11.12.1) to match nodesource upstream
 

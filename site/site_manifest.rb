@@ -59,11 +59,23 @@ module SiteManifest
 
     def initialize(name, versions)
       @name = name
-      @versions = versions
+      @versions = sort_versions(versions)
     end
 
     def latest_version
-      versions.find { |v| v.attrs['latest'] } || versions.last
+      versions.find { |v| v.attrs['latest'] } || versions.first
+    end
+
+    private
+
+    def sort_versions(versions)
+      versions.sort_by { |v| sort_key(v.key) }.reverse
+    end
+
+    def sort_key(key)
+      return key unless Gem::Version.correct?(key)
+
+      Gem::Version.new(key)
     end
 
     # Plain class instead of Struct to avoid overriding Struct#values

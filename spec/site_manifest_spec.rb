@@ -80,12 +80,37 @@ RSpec.describe SiteManifest do
       ]
     end
 
+    describe '#versions' do
+      it 'sorts numeric versions in descending order regardless of input order' do
+        shuffled = [
+          SiteManifest::ImageType::Version.new('2.7', { 'version' => '2.7' }, 'ruby'),
+          SiteManifest::ImageType::Version.new('4.0', { 'version' => '4.0' }, 'ruby'),
+          SiteManifest::ImageType::Version.new('3.3', { 'version' => '3.3' }, 'ruby'),
+          SiteManifest::ImageType::Version.new('3.10', { 'version' => '3.10' }, 'ruby')
+        ]
+        type = described_class.new('ruby', shuffled)
+
+        expect(type.versions.map(&:key)).to eq(%w[4.0 3.10 3.3 2.7])
+      end
+
+      it 'sorts non-numeric versions in descending alphabetical order' do
+        shuffled = [
+          SiteManifest::ImageType::Version.new('bionic', { 'version' => 'bionic' }, 'core'),
+          SiteManifest::ImageType::Version.new('noble', { 'version' => 'noble' }, 'core'),
+          SiteManifest::ImageType::Version.new('jammy', { 'version' => 'jammy' }, 'core')
+        ]
+        type = described_class.new('core', shuffled)
+
+        expect(type.versions.map(&:key)).to eq(%w[noble jammy bionic])
+      end
+    end
+
     describe '#latest_version' do
       it 'returns the version marked latest' do
         expect(image_type.latest_version.key).to eq('4.0')
       end
 
-      it 'falls back to last version when none marked latest' do
+      it 'falls back to highest version when none marked latest' do
         no_latest = [
           SiteManifest::ImageType::Version.new('3.3', { 'version' => '3.3' }, 'ruby'),
           SiteManifest::ImageType::Version.new('3.4', { 'version' => '3.4' }, 'ruby')
