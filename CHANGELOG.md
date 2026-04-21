@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2026-04-20
+- Add GitHub link to site main nav
 - Sort image version tables descending (independent of manifest.yml order) so the latest version appears first
 - Bump Node 25 to 25.9.0 (npm 11.12.1) to match nodesource upstream
 
