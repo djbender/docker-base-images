@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-04-20
+- Bump Node 25 to 25.9.0 (npm 11.12.1) to match nodesource upstream
+
 ## 2026-03-29
 - Parallelize cleanup-packages via matrix (one job per package) to avoid 6h+ sequential runs
 - Exclude `cache-*` tags from cleanup to preserve build cache
