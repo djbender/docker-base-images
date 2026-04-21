@@ -30,8 +30,9 @@ usermod -L docker
 
 update-ca-certificates
 # See the Locals heading at https://hub.docker.com/_/ubuntu
-# Alias created as some languages (such as ruby) require the extra local
-localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+# glibc 2.42 dropped /usr/share/locale/locale.alias (Debian #1095101); upstream
+# locale-gen no longer passes -A in localedef calls either. Matches that behavior.
+localedef -i en_US -c -f UTF-8 en_US.UTF-8
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
 [ $(locale -a | grep 'en_US.utf8') == 'en_US.utf8' ]
 EOT

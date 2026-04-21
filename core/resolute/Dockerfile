@@ -8,7 +8,7 @@
 # task `rake generate:core`
 
 ########## core image ##########################
-FROM ubuntu:bionic as core
+FROM ubuntu:resolute as core
 LABEL com.opencontainers.image.authors="djbender"
 LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-images
 ENV DEBIAN_FRONTEND=noninteractive
@@ -19,6 +19,7 @@ RUN <<EOT
 set -exu
 apt-get update
 apt-get install --yes --no-install-recommends \
+  adduser \
   ca-certificates \
   locales
 

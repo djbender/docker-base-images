@@ -31,6 +31,9 @@ globals:
 
 core:
   versions:
+    resolute:
+      base_image: ubuntu:resolute
+      distribution_code_name: resolute
     noble:
       # NOTE: never tag non-LTS releases as latest, its better to tag the
       # specific LTS release below as latest.

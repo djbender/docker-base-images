@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-04-23
+- Promote resolute (Ubuntu 26.04) to default `core:latest`; ruby 3.1+ and node 18+ rebased from noble → resolute via the globals default
+- Pin ruby 2.7 and 3.0 explicitly to noble (focal-apt openssl 1.1.1 workaround incompatible with resolute)
+
 ## 2026-04-20
 - Add GitHub link to site main nav
 - Sort image version tables descending (independent of manifest.yml order) so the latest version appears first

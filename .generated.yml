@@ -10,6 +10,7 @@ core:
 - core/bionic
 - core/jammy
 - core/noble
+- core/resolute
 ruby:
 - ruby/2.4
 - ruby/2.5
