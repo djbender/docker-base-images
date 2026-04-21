@@ -4,13 +4,13 @@
 <p><code>manifest.yml</code> is the single source of truth for all image definitions.</p>
 <pre><code>manifest.yml
   └─▶ lib/image_generator.rb (ERB rendering)
-       ├─▶ core/noble/Dockerfile
-       ├─▶ core/noble/docker-bake.hcl
+       ├─▶ core/resolute/Dockerfile
+       ├─▶ core/resolute/docker-bake.hcl
        ├─▶ ruby/4.0/Dockerfile
        └─▶ node/24/Dockerfile</code></pre>
 
 <h2>Image Hierarchy</h2>
-<pre><code>ubuntu:noble / ubuntu:resolute / ubuntu:jammy / ubuntu:bionic
+<pre><code>ubuntu:resolute / ubuntu:noble / ubuntu:jammy / ubuntu:bionic
   └─▶ core (base packages, users, locale)
        ├─▶ core-dev (build-essential, dev headers)
        ├─▶ ruby (Ruby + Bundler + RubyGems)
@@ -26,7 +26,7 @@
 
 core:
   versions:
-    noble:
+    resolute:
       latest: true    # Gets the :latest tag
 
 ruby:

@@ -19,8 +19,8 @@
 globals:
   defaults:
     additional_tags: []
-    base_image: ubuntu:noble
-    distribution_code_name: noble
+    base_image: ubuntu:resolute
+    distribution_code_name: resolute
     docker_syntax: docker/dockerfile:1.4  # https://hub.docker.com/r/docker/dockerfile
     platforms:
       - linux/amd64
@@ -32,12 +32,12 @@ globals:
 core:
   versions:
     resolute:
-      base_image: ubuntu:resolute
-      distribution_code_name: resolute
-    noble:
       # NOTE: never tag non-LTS releases as latest, its better to tag the
       # specific LTS release below as latest.
       latest: true
+      base_image: ubuntu:resolute
+      distribution_code_name: resolute
+    noble:
       base_image: ubuntu:noble
       distribution_code_name: noble
     jammy:
@@ -116,12 +116,18 @@ ruby: &RUBY
       bundler_version: 2.4.22
       rubygems_version: 3.4.22
     '2.7':
+      # Ruby <=3.0 needs openssl 1.1.1 via focal apt sources (see ruby/template/Dockerfile.erb).
+      # Pin to noble (glibc 2.39) rather than inherit the resolute default.
+      base_image: "%{registry}/core:noble"
+      distribution_code_name: noble
       ruby_major: 2.7
       ruby_version: 2.7.8
       ruby_download_sha256: f22f662da504d49ce2080e446e4bea7008cee11d5ec4858fc69000d0e5b1d7fb
       bundler_version: 2.4.22
       rubygems_version: 3.4.22
     '3.0':
+      base_image: "%{registry}/core:noble"
+      distribution_code_name: noble
       ruby_major: 3.0
       ruby_version: 3.0.7
       ruby_download_sha256: 1748338373c4fad80129921080d904aca326e41bd9589b498aa5ee09fd575bab

@@ -8,10 +8,10 @@ development and testing and include development libraries for easy building
 of production assets.
 
 Available tags:
-- [`resolute`](ghcr.io/djbender/core:resolute)
-- [`resolute-dev`](ghcr.io/djbender/core:resolute-dev)
-- [`noble`, `latest`](ghcr.io/djbender/core:noble)
-- [`noble-dev`, `dev`](ghcr.io/djbender/core:noble-dev)
+- [`resolute`, `latest`](ghcr.io/djbender/core:resolute)
+- [`resolute-dev`, `dev`](ghcr.io/djbender/core:resolute-dev)
+- [`noble`](ghcr.io/djbender/core:noble)
+- [`noble-dev`](ghcr.io/djbender/core:noble-dev)
 - [`jammy`](ghcr.io/djbender/core:jammy)
 - [`jammy-dev`](ghcr.io/djbender/core:jammy-dev)
 - [`bionic`](ghcr.io/djbender/core:bionic)

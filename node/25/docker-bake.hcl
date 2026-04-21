@@ -22,9 +22,9 @@ target "node" {
   target = "node"
   tags = [
     "ghcr.io/djbender/node:25",
-    "ghcr.io/djbender/node:25-noble",
+    "ghcr.io/djbender/node:25-resolute",
     "ghcr.io/djbender/node:25.9.0",
-    "ghcr.io/djbender/node:25.9.0-noble"
+    "ghcr.io/djbender/node:25.9.0-resolute"
   ]
   context = "${PWD}/node/25"
   platforms = [
@@ -42,9 +42,9 @@ target "node-dev" {
   inherits = ["node"]
   tags = [
     "ghcr.io/djbender/node:25-dev",
-    "ghcr.io/djbender/node:25-dev-noble",
+    "ghcr.io/djbender/node:25-dev-resolute",
     "ghcr.io/djbender/node:25.9.0-dev",
-    "ghcr.io/djbender/node:25.9.0-dev-noble"
+    "ghcr.io/djbender/node:25.9.0-dev-resolute"
   ]
   cache-from = [
     "type=registry,ref=ghcr.io/djbender/node:cache-dev-25-${ARCH}",
