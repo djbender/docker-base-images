@@ -7,7 +7,7 @@ Multi-architecture (amd64/arm64) Docker base images published to `ghcr.io/djbend
 
 | Image | Versions |
 |-------|----------|
-| [Core](core/) | `noble` (latest), `jammy`, `bionic` — includes `-dev` variants |
+| [Core](core/) | `resolute` (latest), `noble`, `jammy`, `bionic` — includes `-dev` variants |
 | [Ruby](ruby/) | `2.4`, `2.5`, `2.6`, `2.7`, `3.0`, `3.1`, `3.2`, `3.3`, `3.4`, `4.0` (latest) |
 | [Node](node/) | `16`, `18`, `20`, `22`, `24` (latest), `25` |
 

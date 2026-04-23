@@ -1,7 +1,7 @@
 <h1>Getting Started</h1>
 
 <h2>Pulling an Image</h2>
-<pre><code><%= pull_command('core', 'noble') %></code></pre>
+<pre><code><%= pull_command('core', 'resolute') %></code></pre>
 
 <h2>Using in a Dockerfile</h2>
 <pre><code>FROM <%= registry %>/ruby:4.0
@@ -28,6 +28,6 @@ CMD ["ruby", "app.rb"]</code></pre>
 
 <h2>Dev Variants</h2>
 <p>Each image has a <code>-dev</code> variant with additional build tools:</p>
-<pre><code><%= pull_command('core', 'noble-dev') %>
+<pre><code><%= pull_command('core', 'resolute-dev') %>
 <%= pull_command('ruby', '4.0-dev') %>
 <%= pull_command('node', '24-dev') %></code></pre>
