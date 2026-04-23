@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2026-04-23
+- Switch Gemfile source from `beta.gem.coop/cooldown` to `gem.coop` so Dependabot can resolve security fixes (cooldown compact_index was lagging behind published releases, hiding rack 3.2.6 and blocking 13 open rack vulnerability PRs)
 - Pin nodesource origin via apt preferences so node 18/20 aren't shadowed by resolute's native nodejs 22.22.1
 - Pin ruby 3.1 to noble (fails to compile under resolute's gcc 15/16 due to K&R-style declarations in upstream `enc/jis/props.kwd`)
 - Promote resolute (Ubuntu 26.04) to default `core:latest`; ruby 3.1+ and node 18+ rebased from noble → resolute via the globals default

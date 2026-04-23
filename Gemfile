@@ -1,4 +1,4 @@
-source 'https://beta.gem.coop/cooldown'
+source 'https://gem.coop'
 
 ruby file: '.ruby-version'
 
