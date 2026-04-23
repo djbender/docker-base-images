@@ -132,6 +132,9 @@ ruby: &RUBY
       ruby_version: 3.0.7
       ruby_download_sha256: 1748338373c4fad80129921080d904aca326e41bd9589b498aa5ee09fd575bab
     '3.1':
+      # K&R-style declarations in enc/jis/props.kwd fail to compile under resolute's gcc 15/16. Pin to noble.
+      base_image: "%{registry}/core:noble"
+      distribution_code_name: noble
       ruby_major: 3.1
       ruby_version: 3.1.7
       ruby_download_sha256: 658acc455b6bda87ac6cc1380e86552b9c1af87055e7a127589c5bf7ed80b035
