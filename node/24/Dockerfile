@@ -29,6 +29,13 @@ RUN <<EOT
   curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /usr/share/keyrings/nodesource.gpg
   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_24.x nodistro main" > /etc/apt/sources.list.d/nodesource.list
 
+  # Force nodesource to win over Ubuntu's native nodejs package regardless of version ordering.
+  cat > /etc/apt/preferences.d/nodesource <<'PREF'
+Package: nodejs
+Pin: origin deb.nodesource.com
+Pin-Priority: 1001
+PREF
+
   apt-get update
   echo "Now checking that upstream version matches what we expect before continuing..."
   REPO_VERSION=$(apt-cache policy nodejs | grep Candidate | awk '{print $2}' | cut -d'+' -f1 | cut -d'-' -f1)
