@@ -31,7 +31,7 @@ GEM
       rchardet (~> 1.9)
     i18n (1.14.8)
       concurrent-ruby (~> 1.0)
-    json (2.19.3)
+    json (2.19.5)
     kramdown (2.5.2)
       rexml (>= 3.4.4)
     kramdown-parser-gfm (1.1.0)
@@ -59,7 +59,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.19.3-x86_64-linux-gnu)
       racc (~> 1.4)
-    parallel (2.0.1)
+    parallel (2.1.0)
     parklife (0.8.1)
       nokogiri
       rack-test
@@ -104,7 +104,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.6)
-    rubocop (1.86.1)
+    rubocop (1.86.2)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
