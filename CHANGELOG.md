@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2026-05-14
+- Bump Node 22 to 22.22.3 (npm 10.9.8)
 - Bump Node 24 to 24.15.0 (npm 11.12.1)
 
 ## 2026-04-23
