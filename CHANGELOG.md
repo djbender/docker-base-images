@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-05-14
+- Bump Node 24 to 24.15.0 (npm 11.12.1)
+
 ## 2026-04-23
 - Add `core/resolute` to `.github/dependabot.yml` so upstream Ubuntu 26.04 base-image changes are surfaced (was missed when resolute landed)
 - Switch Gemfile source from `beta.gem.coop/cooldown` to `gem.coop` so Dependabot can resolve security fixes (cooldown compact_index was lagging behind published releases, hiding rack 3.2.6 and blocking 13 open rack vulnerability PRs)
