@@ -73,8 +73,8 @@ node: &NODE
       npm_version: 10.8.2
     '22': &NODE22
       node_major: 22
-      node_version: 22.22.3
-      npm_version: 10.9.8
+      node_version: 22.22.2
+      npm_version: 10.9.7
     '24': &NODE24
       node_major: 24
       node_version: 24.15.0
