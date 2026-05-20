@@ -60,7 +60,7 @@ GEM
     nokogiri (1.19.3-x86_64-linux-gnu)
       racc (~> 1.4)
     parallel (2.1.0)
-    parklife (0.8.1)
+    parklife (0.9.0)
       nokogiri
       rack-test
       thor
