@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2026-05-26
+- Bump Ruby 4.0 to 4.0.4
 - Bump Ruby 4.0 to 4.0.3
 
 ## 2026-05-14
