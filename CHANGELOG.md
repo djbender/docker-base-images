@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-05-26
+- Bump Ruby 4.0 to 4.0.3
+
 ## 2026-05-14
 - Bump Node 24 to 24.15.0 (npm 11.12.1)
 
