@@ -23,8 +23,8 @@ target "ruby" {
   tags = [
     "ghcr.io/djbender/ruby:4.0",
     "ghcr.io/djbender/ruby:4.0-resolute",
-    "ghcr.io/djbender/ruby:4.0.4",
-    "ghcr.io/djbender/ruby:4.0.4-resolute",
+    "ghcr.io/djbender/ruby:4.0.5",
+    "ghcr.io/djbender/ruby:4.0.5-resolute",
     "ghcr.io/djbender/ruby:latest"
   ]
   context = "${PWD}/ruby/4.0"
@@ -44,8 +44,8 @@ target "ruby-dev" {
   tags = [
     "ghcr.io/djbender/ruby:4.0-dev",
     "ghcr.io/djbender/ruby:4.0-dev-resolute",
-    "ghcr.io/djbender/ruby:4.0.4-dev",
-    "ghcr.io/djbender/ruby:4.0.4-dev-resolute",
+    "ghcr.io/djbender/ruby:4.0.5-dev",
+    "ghcr.io/djbender/ruby:4.0.5-dev-resolute",
     "ghcr.io/djbender/ruby:dev"
   ]
   cache-from = [
