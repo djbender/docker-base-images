@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.3
         with:
           persist-credentials: false
 
@@ -39,7 +39,7 @@ jobs:
       common_merge_matrix: ${{ steps.set-matrix.outputs.common_merge_matrix }}
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.3
         with:
           persist-credentials: false
 
@@ -83,7 +83,7 @@ jobs:
       - name: set PWD environment variable
         run: echo "PWD=$(pwd)" >> $GITHUB_ENV
 
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.3
         with:
           persist-credentials: false
 
@@ -175,7 +175,7 @@ jobs:
       - name: set PWD environment variable
         run: echo "PWD=$(pwd)" >> $GITHUB_ENV
 
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.3
         with:
           persist-credentials: false
 
