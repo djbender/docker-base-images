@@ -1,6 +1,8 @@
 # Changelog
 
 ## 2026-06-22
+- Generate `.github/dependabot.yml` docker entries from `manifest.yml` via new `rake generate:dependabot` task and `.github/template/dependabot.yml.erb`, so they can never drift from the image versions we build
+- Add CI step verifying generated files are up to date (`rake generate:all` + `git diff --exit-code`)
 - Bump Node 22 to 22.23.0 (npm 10.9.8)
 - Bump Node 24 to 24.17.0 (npm 11.13.0)
 - Replace Node 25 with Node 26 (26.3.1, npm 11.16.0)

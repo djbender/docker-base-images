@@ -1,0 +1,36 @@
+<%= generation_message -%>
+version: 2
+
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: daily
+    labels:
+      - dependencies
+      - github_actions
+
+  - package-ecosystem: bundler
+    directory: /
+    schedule:
+      interval: daily
+    labels:
+      - dependencies
+      - ruby
+
+  # These are not meant to be automatically accepted
+  # because they're templated files, however this will
+  # give us a way to be automatically notified when there
+  # are upstream changes to roll into our own templates.
+<% docker_directories.each_with_index do |dir, i| -%>
+<%= "\n" unless i.zero? -%>
+  - package-ecosystem: docker
+    directory: <%= dir %>
+    schedule:
+      interval: daily
+    labels:
+      - dependencies
+      - do-not-merge
+      - docker
+      - notification-only
+<% end -%>
