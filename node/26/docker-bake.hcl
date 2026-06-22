@@ -21,19 +21,19 @@ group "default" {
 target "node" {
   target = "node"
   tags = [
-    "ghcr.io/djbender/node:25",
-    "ghcr.io/djbender/node:25-resolute",
-    "ghcr.io/djbender/node:25.9.0",
-    "ghcr.io/djbender/node:25.9.0-resolute"
+    "ghcr.io/djbender/node:26",
+    "ghcr.io/djbender/node:26-resolute",
+    "ghcr.io/djbender/node:26.3.1",
+    "ghcr.io/djbender/node:26.3.1-resolute"
   ]
-  context = "${PWD}/node/25"
+  context = "${PWD}/node/26"
   platforms = [
     "linux/amd64",
     "linux/arm64"
   ]
   cache-from = [
-    "type=registry,ref=ghcr.io/djbender/node:cache-25-${ARCH}",
-    "type=registry,ref=ghcr.io/djbender/node:25"
+    "type=registry,ref=ghcr.io/djbender/node:cache-26-${ARCH}",
+    "type=registry,ref=ghcr.io/djbender/node:26"
   ]
 }
 
@@ -41,13 +41,13 @@ target "node-dev" {
   target = "node-dev"
   inherits = ["node"]
   tags = [
-    "ghcr.io/djbender/node:25-dev",
-    "ghcr.io/djbender/node:25-dev-resolute",
-    "ghcr.io/djbender/node:25.9.0-dev",
-    "ghcr.io/djbender/node:25.9.0-dev-resolute"
+    "ghcr.io/djbender/node:26-dev",
+    "ghcr.io/djbender/node:26-dev-resolute",
+    "ghcr.io/djbender/node:26.3.1-dev",
+    "ghcr.io/djbender/node:26.3.1-dev-resolute"
   ]
   cache-from = [
-    "type=registry,ref=ghcr.io/djbender/node:cache-dev-25-${ARCH}",
-    "type=registry,ref=ghcr.io/djbender/node:25-dev"
+    "type=registry,ref=ghcr.io/djbender/node:cache-dev-26-${ARCH}",
+    "type=registry,ref=ghcr.io/djbender/node:26-dev"
   ]
 }
