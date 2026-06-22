@@ -112,7 +112,7 @@ updates:
       - notification-only
 
   - package-ecosystem: docker
-    directory: node/25
+    directory: node/26
     schedule:
       interval: daily
     labels:
