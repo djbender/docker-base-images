@@ -1,0 +1,33 @@
+usage: opensource
+integration: rspec
+includes:
+  - lib
+requires:
+  - cache_ref
+  - dependabot_generator
+  - generation_message
+  - hcl_formatter
+  - image_generator
+  - manifest_loader
+  - metadata
+  - node_checker
+  - ruby_checker
+  - tag_generator
+  - template
+  - util
+  - version_checker
+matcher:
+  subjects:
+    - CacheRef*
+    - DependabotGenerator*
+    - GenerationMessage*
+    - HclFormatter*
+    - ImageGenerator*
+    - ManifestLoader*
+    - Metadata*
+    - NodeChecker*
+    - RubyChecker*
+    - TagGenerator*
+    - Template*
+    - Util*
+    - VersionChecker*
