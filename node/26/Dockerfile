@@ -9,9 +9,9 @@ LABEL org.opencontainers.image.source=https://github.com/djbender/docker-base-im
 USER root
 WORKDIR /usr/src/app
 
-ENV NODE_MAJOR=25
-ENV NODE_VERSION=25.9.0
-ENV NPM_VERSION=11.12.1
+ENV NODE_MAJOR=26
+ENV NODE_VERSION=26.3.1
+ENV NPM_VERSION=11.16.0
 ENV YARN_VERSION=1.22.22
 
 RUN <<EOT
@@ -27,7 +27,7 @@ RUN <<EOT
 
   mkdir -p /usr/share/keyrings
   curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /usr/share/keyrings/nodesource.gpg
-  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_25.x nodistro main" > /etc/apt/sources.list.d/nodesource.list
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_26.x nodistro main" > /etc/apt/sources.list.d/nodesource.list
 
   # Force nodesource to win over Ubuntu's native nodejs package regardless of version ordering.
   cat > /etc/apt/preferences.d/nodesource <<'PREF'
