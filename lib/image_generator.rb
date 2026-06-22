@@ -50,7 +50,7 @@ class ImageGenerator
   end
 
   def interpolate_registry(values)
-    values.transform_values.with_index do |v, _|
+    values.transform_values do |v|
       next v unless v.is_a?(String)
 
       format(v, registry: Util::REGISTRY)

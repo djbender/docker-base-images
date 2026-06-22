@@ -103,7 +103,7 @@ RSpec.describe ImageGenerator do
       )
 
       expect { generator.generate }.to raise_error(
-        KeyError, /Unknown placeholder.*test.*bad_field.*unknown_placeholder/
+        KeyError, /Unknown placeholder in test manifest key 'bad_field':.*unknown_placeholder/
       )
     end
     # rubocop:enable Style/FormatStringToken
@@ -144,9 +144,10 @@ RSpec.describe ImageGenerator do
       expect(dockerfile).to include('FROM ubuntu:22.04')
     end
 
-    it 'saves generated directories to .generated.yml' do
+    it 'saves generated directories to .generated.yml sorted' do
+      # Supply versions out of order to prove the output is sorted
       details = {
-        'versions' => { '1.0' => {}, '2.0' => {} }
+        'versions' => { '2.0' => {}, '1.0' => {} }
       }
 
       generator = described_class.new(
@@ -158,7 +159,60 @@ RSpec.describe ImageGenerator do
       expect { generator.generate }.to output(/Generating test Dockerfiles/).to_stdout
 
       generated = YAML.load_file(File.join(tmpdir, '.generated.yml'))
-      expect(generated['test']).to contain_exactly('test/1.0', 'test/2.0')
+      expect(generated['test']).to eq(['test/1.0', 'test/2.0'])
+    end
+
+    it 'exposes the rendered generation_message to templates' do
+      File.write(File.join(template_dir, 'gen.txt.erb'), '<%= generation_message %>')
+
+      details = {
+        'template_files' => ['gen.txt.erb'],
+        'versions' => { '1.0' => {} }
+      }
+
+      generator = described_class.new(
+        image_name: 'test',
+        details: details,
+        task_name: 'generate:test'
+      )
+
+      expect { generator.generate }.to output(/Generating test Dockerfiles/).to_stdout
+
+      rendered = File.read(File.join(tmpdir, 'test', '1.0', 'gen.txt'))
+      expect(rendered).to include('NOTICE: This is a generated file')
+      expect(rendered).to include('rake generate:test')
+    end
+
+    it 'exposes output_dir to templates' do
+      File.write(File.join(template_dir, 'dir.txt.erb'), 'dir=<%= output_dir %>')
+
+      details = {
+        'template_files' => ['dir.txt.erb'],
+        'versions' => { '1.0' => {} }
+      }
+
+      generator = described_class.new(
+        image_name: 'test',
+        details: details,
+        task_name: 'generate:test'
+      )
+
+      expect { generator.generate }.to output(/Generating test Dockerfiles/).to_stdout
+
+      output_dir = File.join(tmpdir, 'test', '1.0')
+      expect(File.read(File.join(output_dir, 'dir.txt'))).to eq("dir=#{output_dir}")
+    end
+
+    it 'prints per-version progress' do
+      details = { 'versions' => { '1.0' => {} } }
+
+      generator = described_class.new(
+        image_name: 'test',
+        details: details,
+        task_name: 'generate:test'
+      )
+
+      expect { generator.generate }.to output(/- 1\.0\.\.\. Done!/).to_stdout
     end
 
     it 'uses custom template_files from details' do
@@ -200,8 +254,12 @@ RSpec.describe ImageGenerator do
       expect(File.exist?(File.join(tmpdir, 'test', '1.0', 'Dockerfile'))).to be true
     end
 
-    it 'skips non-string values during registry interpolation' do
+    it 'passes non-string values through interpolation unchanged' do
+      # Template echoes a non-string value so we can assert it survives intact
+      File.write(File.join(template_dir, 'num.txt.erb'), 'n=<%= numeric_value %>')
+
       details = {
+        'template_files' => ['num.txt.erb'],
         'versions' => {
           '1.0' => {
             'numeric_value' => 123,
@@ -217,11 +275,11 @@ RSpec.describe ImageGenerator do
         task_name: 'generate:test'
       )
 
-      # Should not raise - non-strings are passed through unchanged
       expect { generator.generate }.to output(/Generating test Dockerfiles/).to_stdout
+      expect(File.read(File.join(tmpdir, 'test', '1.0', 'num.txt'))).to eq('n=123')
     end
 
-    it 'does not duplicate Dockerfile.erb when already in template_files' do
+    it 'does not duplicate default templates already in template_files' do
       details = {
         'template_files' => ['Dockerfile.erb', 'docker-bake.hcl.erb'],
         'versions' => { '1.0' => {} }
@@ -233,8 +291,8 @@ RSpec.describe ImageGenerator do
         task_name: 'generate:test'
       )
 
-      # Should generate without error (no duplicate template processing)
-      expect { generator.generate }.to output(/Generating test Dockerfiles/).to_stdout
+      expect(generator.send(:template_filenames))
+        .to eq(['Dockerfile.erb', 'docker-bake.hcl.erb'])
     end
 
     it 'handles empty .generated.yml file' do
@@ -252,10 +310,15 @@ RSpec.describe ImageGenerator do
     end
 
     context 'with orphan cleanup' do
+      # Orphan paths are relative to the working directory, so run each example in
+      # a throwaway cwd: the repo is never polluted and examples cannot leak state
+      # into one another (which previously made mutation results non-deterministic).
+      around do |example|
+        Dir.mktmpdir { |cwd| Dir.chdir(cwd) { example.run } }
+      end
+
       it 'removes orphaned directories when user confirms' do
-        # Create orphan at relative path (code uses relative paths)
         FileUtils.mkdir_p('test/old_version')
-        File.write('test/old_version/Dockerfile', 'old')
 
         File.write(
           File.join(tmpdir, '.generated.yml'),
@@ -265,17 +328,61 @@ RSpec.describe ImageGenerator do
         allow($stdin).to receive_messages(tty?: true, gets: "y\n")
 
         details = { 'versions' => { '1.0' => {} } }
+        generator = described_class.new(image_name: 'test', details:, task_name: 'generate:test')
+
+        expect { generator.generate }.to output(
+          %r{orphaned.*old_version.*Remove these directories\? \[y/N\].*Removing}m
+        ).to_stdout
+
+        expect(File).not_to exist('test/old_version')
+      end
+
+      it 'does not announce orphan cleanup when there are no orphans' do
+        details = { 'versions' => { '1.0' => {} } }
         generator = described_class.new(
           image_name: 'test',
           details: details,
           task_name: 'generate:test'
         )
 
-        expect { generator.generate }.to output(/orphaned.*old_version.*Removing/m).to_stdout
+        expect { generator.generate }.not_to output(/orphaned directories/i).to_stdout
+      end
 
-        expect(File.exist?('test/old_version')).to be false
-      ensure
-        FileUtils.rm_rf('test/old_version')
+      it 'does not treat current version directories as orphans' do
+        FileUtils.mkdir_p('test/1.0')
+        FileUtils.mkdir_p('test/old_version')
+
+        File.write(
+          File.join(tmpdir, '.generated.yml'),
+          { 'test' => ['test/1.0', 'test/old_version'] }.to_yaml
+        )
+
+        allow($stdin).to receive(:tty?).and_return(false)
+
+        details = { 'versions' => { '1.0' => {} } }
+        generator = described_class.new(image_name: 'test', details:, task_name: 'generate:test')
+
+        # Only the orphan is removed; the current version dir is left alone
+        expect { generator.generate }.to output(%r{Removing: test/old_version}).to_stdout
+        expect(File).to exist('test/1.0')
+        expect(File).not_to exist('test/old_version')
+      end
+
+      it 'treats an uppercase Y confirmation as yes' do
+        FileUtils.mkdir_p('test/old_version')
+
+        File.write(
+          File.join(tmpdir, '.generated.yml'),
+          { 'test' => ['test/old_version'] }.to_yaml
+        )
+
+        allow($stdin).to receive_messages(tty?: true, gets: "Y\n")
+
+        details = { 'versions' => { '1.0' => {} } }
+        generator = described_class.new(image_name: 'test', details:, task_name: 'generate:test')
+
+        expect { generator.generate }.to output(%r{Removing: test/old_version}).to_stdout
+        expect(File).not_to exist('test/old_version')
       end
 
       it 'keeps orphaned directories when user declines' do
@@ -289,17 +396,11 @@ RSpec.describe ImageGenerator do
         allow($stdin).to receive_messages(tty?: true, gets: "n\n")
 
         details = { 'versions' => { '1.0' => {} } }
-        generator = described_class.new(
-          image_name: 'test',
-          details: details,
-          task_name: 'generate:test'
-        )
+        generator = described_class.new(image_name: 'test', details:, task_name: 'generate:test')
 
         expect { generator.generate }.to output(/orphaned/i).to_stdout
 
-        expect(File.exist?('test/old_version')).to be true
-      ensure
-        FileUtils.rm_rf('test/old_version')
+        expect(File).to exist('test/old_version')
       end
 
       it 'auto-removes orphans in non-TTY mode' do
@@ -313,17 +414,11 @@ RSpec.describe ImageGenerator do
         allow($stdin).to receive(:tty?).and_return(false)
 
         details = { 'versions' => { '1.0' => {} } }
-        generator = described_class.new(
-          image_name: 'test',
-          details: details,
-          task_name: 'generate:test'
-        )
+        generator = described_class.new(image_name: 'test', details:, task_name: 'generate:test')
 
         expect { generator.generate }.to output(/orphaned.*Removing/m).to_stdout
 
-        expect(File.exist?('test/old_version')).to be false
-      ensure
-        FileUtils.rm_rf('test/old_version')
+        expect(File).not_to exist('test/old_version')
       end
 
       it 'skips removal for non-existent orphan directories' do
