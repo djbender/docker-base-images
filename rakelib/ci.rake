@@ -117,7 +117,8 @@ def merge_matrix(&)
           .fetch('defaults', {})
           .merge(defaults)
           .merge(version_values)
-          .merge('version' => version, 'image_name' => image_name)
+          .merge('version' => version, 'image_name' => image_name,
+                 'github_sha' => ENV.fetch('GITHUB_SHA', nil))
 
         {
           version: version,

@@ -1,11 +1,12 @@
 # Changelog
 
 ## 2026-06-22
-- Generate `.github/dependabot.yml` docker entries from `manifest.yml` via new `rake generate:dependabot` task and `.github/template/dependabot.yml.erb`, so they can never drift from the image versions we build
-- Add CI step verifying generated files are up to date (`rake generate:all` + `git diff --exit-code`)
 - Bump Node 22 to 22.23.0 (npm 10.9.8)
 - Bump Node 24 to 24.17.0 (npm 11.13.0)
 - Replace Node 25 with Node 26 (26.3.1, npm 11.16.0)
+- Generate `.github/dependabot.yml` docker entries from `manifest.yml` via new `rake generate:dependabot` task and `.github/template/dependabot.yml.erb`, so they can never drift from the image versions we build
+- Add CI step verifying generated files are up to date (`rake generate:all` + `git diff --exit-code`)
+- Make `TagGenerator` read the commit SHA from an explicit `github_sha` value instead of `ENV['GITHUB_SHA']`, so template generation is deterministic regardless of environment (the SHA tag is now injected only by the CI merge matrix in `rakelib/ci.rake`, where published images are tagged)
 
 ## 2026-05-26
 - Bump Ruby 4.0 to 4.0.5

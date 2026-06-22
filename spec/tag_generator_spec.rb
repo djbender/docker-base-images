@@ -1,13 +1,8 @@
 require_relative '../lib/tag_generator'
+require_relative '../lib/util'
 
 RSpec.describe TagGenerator do
   let(:registry) { Util::REGISTRY }
-
-  around do |example|
-    original_sha = ENV.fetch('GITHUB_SHA', nil)
-    example.run
-    ENV['GITHUB_SHA'] = original_sha
-  end
 
   describe '.primary_tags' do
     context 'with core image' do
@@ -17,20 +12,27 @@ RSpec.describe TagGenerator do
         expect(tags).to include("#{registry}/core:jammy")
       end
 
-      it 'includes SHA tag when GITHUB_SHA set' do
-        ENV['GITHUB_SHA'] = 'abc123'
-
-        tags = described_class.primary_tags('core', 'version' => 'jammy')
+      it 'includes SHA tag when github_sha value present' do
+        tags = described_class.primary_tags('core', 'version' => 'jammy', 'github_sha' => 'abc123')
 
         expect(tags).to include("#{registry}/core:abc123")
       end
 
-      it 'excludes SHA tag when GITHUB_SHA not set' do
-        ENV.delete('GITHUB_SHA')
-
+      it 'excludes SHA tag when github_sha value absent' do
         tags = described_class.primary_tags('core', 'version' => 'jammy')
 
         expect(tags.none? { |t| t.match?(/:[a-f0-9]{40}$/) }).to be true
+      end
+
+      it 'does not read GITHUB_SHA from the environment' do
+        original = ENV.fetch('GITHUB_SHA', nil)
+        ENV['GITHUB_SHA'] = 'deadbeef'
+
+        tags = described_class.primary_tags('core', 'version' => 'jammy')
+
+        expect(tags).not_to include("#{registry}/core:deadbeef")
+      ensure
+        ENV['GITHUB_SHA'] = original
       end
 
       it 'includes latest tag when latest: true' do
@@ -64,8 +66,6 @@ RSpec.describe TagGenerator do
       end
 
       it 'skips version tag when flavor is dev' do
-        ENV.delete('GITHUB_SHA')
-
         tags = described_class.primary_tags('core', 'version' => 'jammy', 'flavor' => 'dev')
 
         expect(tags).not_to include("#{registry}/core:jammy")
@@ -138,8 +138,6 @@ RSpec.describe TagGenerator do
 
     context 'with unknown image' do
       it 'returns only default tags' do
-        ENV.delete('GITHUB_SHA')
-
         tags = described_class.primary_tags('unknown', 'version' => '1.0')
 
         expect(tags).to eq(["#{registry}/unknown:1.0"])
@@ -147,11 +145,10 @@ RSpec.describe TagGenerator do
     end
 
     it 'returns sorted unique tags' do
-      ENV['GITHUB_SHA'] = 'abc123'
-
       tags = described_class.primary_tags(
         'core',
         'version' => 'jammy',
+        'github_sha' => 'abc123',
         'additional_tags' => ["#{registry}/core:jammy"] # duplicate
       )
 
@@ -173,10 +170,13 @@ RSpec.describe TagGenerator do
         expect(tags).to include("#{registry}/core:jammy-dev")
       end
 
-      it 'includes SHA tag when GITHUB_SHA set' do
-        ENV['GITHUB_SHA'] = 'def456'
-
-        tags = described_class.dev_tags('core', 'version' => 'jammy', 'distribution_code_name' => 'jammy')
+      it 'includes SHA tag when github_sha value present' do
+        tags = described_class.dev_tags(
+          'core',
+          'version' => 'jammy',
+          'distribution_code_name' => 'jammy',
+          'github_sha' => 'def456'
+        )
 
         expect(tags).to include("#{registry}/core:def456")
       end
@@ -251,17 +251,13 @@ RSpec.describe TagGenerator do
 
     context 'with unknown image' do
       it 'returns only default dev tags' do
-        ENV.delete('GITHUB_SHA')
-
         tags = described_class.dev_tags('unknown', 'version' => '1.0')
 
         expect(tags).to eq([])
       end
 
-      it 'includes SHA when set' do
-        ENV['GITHUB_SHA'] = 'xyz789'
-
-        tags = described_class.dev_tags('unknown', 'version' => '1.0')
+      it 'includes SHA when github_sha value present' do
+        tags = described_class.dev_tags('unknown', 'version' => '1.0', 'github_sha' => 'xyz789')
 
         expect(tags).to eq(["#{registry}/unknown:xyz789"])
       end
