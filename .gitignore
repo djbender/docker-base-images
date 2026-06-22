@@ -2,3 +2,4 @@
 spec/examples.txt
 /coverage/
 /build/
+/.mutant/

@@ -1,6 +1,10 @@
 # Changelog
 
 ## 2026-06-22
+- Add mutation testing via `mutant`/`mutant-rspec` (config in `config/mutant.yml`, `usage: opensource`); run with `bin/mutant run`
+- Harden `ImageGenerator` specs to kill surviving mutants (orphan-cleanup prompt/guards/subtraction, uppercase-`Y` confirmation, sorted `.generated.yml`, non-string interpolation pass-through, `generation_message`/`output_dir` rendering) — mutation coverage 95.70% → 98.87% (remaining survivors are equivalent mutants)
+- Isolate `ImageGenerator` orphan-cleanup specs in a throwaway working directory so they no longer create `test/` dirs in the repo root; this also removes cross-example state leakage that made mutation results non-deterministic
+- Drop unused `.with_index` from `ImageGenerator#interpolate_registry` (dead enumeration index)
 - Bump Node 22 to 22.23.0 (npm 10.9.8)
 - Bump Node 24 to 24.17.0 (npm 11.13.0)
 - Replace Node 25 with Node 26 (26.3.1, npm 11.16.0)

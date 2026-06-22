@@ -7,6 +7,11 @@ gem 'rake'
 gem 'git', require: false
 gem 'rspec', require: false
 gem 'rubocop', require: false
+
+group :test do
+  gem 'mutant', require: false
+  gem 'mutant-rspec', require: false
+end
 gem 'rubocop-performance', require: false
 gem 'rubocop-rake', require: false
 gem 'rubocop-rspec', require: false
