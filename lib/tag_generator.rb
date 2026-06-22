@@ -52,8 +52,8 @@ module TagGenerator
         tags << "#{base}:#{flavor_tag}"
       end
 
-      # SHA tag for traceability
-      tags << "#{base}:#{github_sha}" if github_sha
+      # SHA tag for traceability (CI passes github_sha; generation omits it)
+      tags << "#{base}:#{values[:github_sha]}" if values[:github_sha]
 
       # Latest/rolling tags
       tags << "#{base}:latest" if values[:latest]
@@ -68,7 +68,7 @@ module TagGenerator
     def default_dev_tags(base, values)
       tags = []
 
-      tags << "#{base}:#{github_sha}" if github_sha
+      tags << "#{base}:#{values[:github_sha]}" if values[:github_sha]
       tags << "#{base}:dev" if values[:latest]
 
       # Additional dev tags from manifest
@@ -131,10 +131,6 @@ module TagGenerator
         "#{base}:#{major}-dev-#{dist}",
         "#{base}:#{major}-dev"
       ]
-    end
-
-    def github_sha
-      ENV.fetch('GITHUB_SHA', nil)
     end
   end
 end

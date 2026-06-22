@@ -30,6 +30,11 @@ jobs:
       - name: Run RuboCop
         run: bundle exec rubocop lib/ spec/ rakelib/
 
+      - name: Verify generated files are up to date
+        run: |
+          bundle exec rake generate:all
+          git diff --exit-code
+
   set-matrix:
     runs-on: ubuntu-latest
     outputs:
