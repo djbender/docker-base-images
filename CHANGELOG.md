@@ -1,8 +1,12 @@
 # Changelog
 
+## 2026-06-23
+- Bump Ruby 4.0.2 → 4.0.5
+
 ## 2026-06-22
 - Add mutation testing via `mutant`/`mutant-rspec` (config in `config/mutant.yml`, `usage: opensource`); run with `bin/mutant run`
 - Harden `ImageGenerator` specs to kill surviving mutants (orphan-cleanup prompt/guards/subtraction, uppercase-`Y` confirmation, sorted `.generated.yml`, non-string interpolation pass-through, `generation_message`/`output_dir` rendering) — mutation coverage 95.70% → 98.87% (remaining survivors are equivalent mutants)
+- Harden `VersionChecker` specs: add stub subclass tests for `#check`, abstract-method contracts for `#manifest_key`/`#fetch_upstream`/`#compare`, error-message precision for `#apply!`; guard `#check` against nil versions — mutation coverage 47% → 100%
 - Isolate `ImageGenerator` orphan-cleanup specs in a throwaway working directory so they no longer create `test/` dirs in the repo root; this also removes cross-example state leakage that made mutation results non-deterministic
 - Drop unused `.with_index` from `ImageGenerator#interpolate_registry` (dead enumeration index)
 - Bump Node 22 to 22.23.0 (npm 10.9.8)
