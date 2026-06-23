@@ -7,7 +7,7 @@ class VersionChecker
   def fetch_upstream = raise(NotImplementedError)
 
   def check(manifest)
-    versions = manifest.dig(manifest_key, 'versions')
+    versions = manifest.dig(manifest_key, 'versions') || {}
     upstream = fetch_upstream
 
     versions.each_with_object([]) do |(key, config), updates|
