@@ -14,7 +14,7 @@ class RubyChecker < VersionChecker
 
       version = line[/\Aruby-(\d+\.\d+\.\d+)/, 1]
       sha256 = line.split("\t")[3].strip
-      major_minor = version.split('.')[0..1].join('.')
+      major_minor = version.split('.').first(2).join('.')
 
       if !latest[major_minor] || Gem::Version.new(version) > Gem::Version.new(latest[major_minor][:version])
         latest[major_minor] = { version: version, sha256: sha256 }
@@ -27,8 +27,8 @@ class RubyChecker < VersionChecker
   private
 
   def compare(key, config, upstream)
-    current = config['ruby_version']
-    current_sha = config['ruby_download_sha256']
+    current = config.fetch('ruby_version')
+    current_sha = config.fetch('ruby_download_sha256')
     up = upstream[key]
     return unless up
     return if up[:version] == current
