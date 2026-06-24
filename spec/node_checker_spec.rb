@@ -34,6 +34,32 @@ RSpec.describe NodeChecker do
     end
   end
 
+  describe '#fetch_upstream' do
+    it 'fetches the index from NODE_INDEX_URL' do
+      checker.fetch_upstream
+      expect(URI).to have_received(:parse).with(NodeChecker::NODE_INDEX_URL)
+    end
+
+    it 'returns latest version and npm keyed by major' do
+      result = checker.fetch_upstream
+      expect(result['22']).to eq({ version: '22.5.0', npm: '10.9.0' })
+      expect(result['20']).to eq({ version: '20.18.0', npm: '10.8.2' })
+    end
+
+    context 'when releases are in ascending version order' do
+      let(:node_releases) do
+        [
+          { 'version' => 'v22.4.0', 'npm' => '10.8.0' },
+          { 'version' => 'v22.5.0', 'npm' => '10.9.0' }
+        ].to_json
+      end
+
+      it 'still selects the greatest version per major' do
+        expect(checker.fetch_upstream['22']).to eq({ version: '22.5.0', npm: '10.9.0' })
+      end
+    end
+  end
+
   describe '#check' do
     it 'returns updates for outdated versions' do
       updates = checker.check(manifest)
@@ -49,6 +75,11 @@ RSpec.describe NodeChecker do
       manifest['node']['versions']['22']['npm_version'] = '10.9.0'
 
       expect(checker.check(manifest)).to be_empty
+    end
+
+    it 'raises KeyError when node_version is missing from a version config' do
+      manifest['node']['versions']['22'].delete('node_version')
+      expect { checker.check(manifest) }.to raise_error(KeyError)
     end
 
     it 'skips versions not found upstream' do
@@ -68,6 +99,27 @@ RSpec.describe NodeChecker do
       expect(pattern).to match("node_version: 22.4.0\n      npm_version: 10.8.0")
       expect(replacement).to include('node_version: 22.5.0')
       expect(replacement).to include('npm_version: 10.9.0')
+    end
+
+    context 'when npm_version contains a regex metacharacter' do
+      let(:node_releases) do
+        [
+          { 'version' => 'v22.4.0', 'npm' => '10.8.0+build' },
+          { 'version' => 'v22.5.0', 'npm' => '10.9.0' }
+        ].to_json
+      end
+      let(:manifest) do
+        { 'node' => { 'versions' => {
+          '22' => { 'node_version' => '22.4.0', 'npm_version' => '10.8.0+build' }
+        } } }
+      end
+
+      it 'escapes the npm version in the replacement pattern so apply! succeeds' do
+        content = +"    node_version: 22.4.0\n    npm_version: 10.8.0+build"
+        updates = checker.check(manifest)
+        checker.apply!(content, updates)
+        expect(content).to include('node_version: 22.5.0')
+      end
     end
 
     it 'does not collide when multiple versions share npm_version' do
