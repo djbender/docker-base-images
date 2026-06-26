@@ -42,7 +42,7 @@ RSpec.describe DependabotGenerator do
     end
 
     it 'prints generating message to stdout' do
-      expect { generator.generate }.to output(/Generating \.github\/dependabot\.yml/).to_stdout
+      expect { generator.generate }.to output(%r{Generating \.github/dependabot\.yml}).to_stdout
     end
 
     it 'prints Done! to stdout' do
