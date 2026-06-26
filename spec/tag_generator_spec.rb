@@ -119,6 +119,14 @@ RSpec.describe TagGenerator do
 
         expect(tags).to include("#{registry}/ruby:3.3-noble")
       end
+
+      it 'generates distinct major tag when major differs from full version' do
+        values = ruby_values.merge('ruby_version' => '3.3.0', 'ruby_major' => '3', 'version' => '3.3.0')
+        tags = described_class.primary_tags('ruby', values)
+
+        expect(tags).to include("#{registry}/ruby:3")
+        expect(tags).to include("#{registry}/ruby:3-noble")
+      end
     end
 
     context 'with node image' do

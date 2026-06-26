@@ -21,6 +21,20 @@ RSpec.describe Template do
       expect(template.path).to eq(path)
       expect(template.erb).to be_a(ERB)
     end
+
+    it 'reads file content into ERB, not the path string' do
+      path = create_template('<%= 42 %>')
+      result = described_class.new(path).render({}).to_string
+
+      expect(result).to eq('42')
+    end
+
+    it 'applies trim mode so -%> strips trailing newlines' do
+      path = create_template("<% if true -%>\ntrimmed\n<% end -%>\n")
+      result = described_class.new(path).render({}).to_string
+
+      expect(result).to eq("trimmed\n")
+    end
   end
 
   describe '#filename' do
@@ -40,6 +54,13 @@ RSpec.describe Template do
       renderer = template.render({ 'foo' => 'bar' })
 
       expect(renderer).to be_a(Template::TemplateRenderer)
+    end
+
+    it 'produces a renderer that renders template content with the given values' do
+      path = create_template('<%= name %>')
+      result = described_class.new(path).render({ 'name' => 'world' }).to_string
+
+      expect(result).to eq('world')
     end
   end
 

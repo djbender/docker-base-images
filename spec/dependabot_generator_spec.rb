@@ -4,6 +4,22 @@ require_relative '../lib/util'
 RSpec.describe DependabotGenerator do
   subject(:generator) { described_class.new(task_name: 'generate:dependabot') }
 
+  describe '#initialize' do
+    it 'accepts no-arg construction' do
+      expect { described_class.new }.not_to raise_error
+    end
+
+    it 'stores task_name' do
+      gen = described_class.new(task_name: 'generate:deps')
+      expect(gen.task_name).to eq('generate:deps')
+    end
+
+    it 'stores nil task_name by default' do
+      gen = described_class.new
+      expect(gen.task_name).to be_nil
+    end
+  end
+
   describe '#generate' do
     before { allow(File).to receive(:write) }
 
@@ -14,6 +30,23 @@ RSpec.describe DependabotGenerator do
         a_string_ending_with('.github/dependabot.yml'),
         a_string_including('package-ecosystem: docker')
       )
+    end
+
+    it 'writes to an absolute path under PROJECT_DIR' do
+      generator.generate
+
+      expect(File).to have_received(:write).with(
+        File.join(Util::PROJECT_DIR, '.github', 'dependabot.yml'),
+        anything
+      )
+    end
+
+    it 'prints generating message to stdout' do
+      expect { generator.generate }.to output(/Generating \.github\/dependabot\.yml/).to_stdout
+    end
+
+    it 'prints Done! to stdout' do
+      expect { generator.generate }.to output(/Done!/).to_stdout
     end
   end
 
@@ -38,6 +71,10 @@ RSpec.describe DependabotGenerator do
 
     it 'includes the generation notice' do
       expect(output).to include('NOTICE: This is a generated file')
+    end
+
+    it 'includes the task name in the generation notice' do
+      expect(output).to include('rake generate:dependabot')
     end
 
     it 'emits a docker stanza for every directory' do
