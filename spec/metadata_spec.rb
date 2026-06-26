@@ -22,6 +22,13 @@ RSpec.describe Metadata do
 
       expect(metadata.instance_variable_get(:@version)).to eq('1.0')
     end
+
+    it 'stores the full values hash for delegation' do
+      values = { 'image_name' => 'ruby', 'version' => '3.2' }
+      metadata = described_class.new(values)
+
+      expect(metadata.instance_variable_get(:@values)).to eq(values)
+    end
   end
 
   describe '#get_binding' do

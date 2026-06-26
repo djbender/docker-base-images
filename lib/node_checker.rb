@@ -27,8 +27,8 @@ class NodeChecker < VersionChecker
   private
 
   def compare(key, config, upstream)
-    current = config['node_version']
-    current_npm = config['npm_version']
+    current = config.fetch('node_version')
+    current_npm = config.fetch('npm_version')
     up = upstream[key]
     return unless up
     return if up[:version] == current

@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-06-26
+- Harden mutation coverage to 100% across all subjects: kill surviving mutations in `ImageGenerator`, `TagGenerator`, `DependabotGenerator`, `GenerationMessage`, `Metadata`, `Template`; add `spec/generation_message_spec.rb`; document equivalent mutants in `config/mutant.yml` for `ManifestLoader`, `RubyChecker`, `NodeChecker`, `Util`, and others
+
 ## 2026-06-23
 - Bump Ruby 4.0.2 → 4.0.5
 

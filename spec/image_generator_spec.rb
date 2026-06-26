@@ -440,6 +440,27 @@ RSpec.describe ImageGenerator do
         expect { generator.generate }.to output(/orphaned/i).to_stdout
         expect { generator.generate }.not_to output(/Removing/i).to_stdout
       end
+
+      it 'continues removing subsequent orphans after skipping a non-directory entry' do
+        FileUtils.mkdir_p('test/real_dir')
+        # 'test/not_a_dir' is a file, not a directory
+        FileUtils.mkdir_p('test')
+        File.write('test/not_a_dir', '')
+
+        File.write(
+          File.join(tmpdir, '.generated.yml'),
+          { 'test' => ['test/not_a_dir', 'test/real_dir'] }.to_yaml
+        )
+
+        allow($stdin).to receive(:tty?).and_return(false)
+
+        details = { 'versions' => { '1.0' => {} } }
+        generator = described_class.new(image_name: 'test', details:, task_name: 'generate:test')
+
+        expect { generator.generate }.to output(%r{Removing: test/real_dir}).to_stdout
+        expect(File).not_to exist('test/real_dir')
+        expect(File).to exist('test/not_a_dir')
+      end
     end
   end
 

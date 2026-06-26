@@ -63,6 +63,13 @@ RSpec.describe TagGenerator do
         tags = described_class.primary_tags('core', 'version' => 'jammy', 'flavor' => 'slim')
 
         expect(tags).to include("#{registry}/core:jammy-slim")
+        expect(tags).to include("#{registry}/core:jammy")
+      end
+
+      it 'ignores empty flavor string' do
+        tags = described_class.primary_tags('core', 'version' => 'jammy', 'flavor' => '')
+
+        expect(tags).to eq(["#{registry}/core:jammy"])
       end
 
       it 'skips version tag when flavor is dev' do
@@ -75,9 +82,7 @@ RSpec.describe TagGenerator do
       it 'handles version already containing flavor' do
         tags = described_class.primary_tags('core', 'version' => 'jammy-slim', 'flavor' => 'slim')
 
-        expect(tags).to include("#{registry}/core:jammy-slim")
-        # Should not duplicate to jammy-slim-slim
-        expect(tags).not_to include("#{registry}/core:jammy-slim-slim")
+        expect(tags).to eq(["#{registry}/core:jammy-slim"])
       end
     end
 
@@ -113,6 +118,14 @@ RSpec.describe TagGenerator do
         tags = described_class.primary_tags('ruby', ruby_values)
 
         expect(tags).to include("#{registry}/ruby:3.3-noble")
+      end
+
+      it 'generates distinct major tag when major differs from full version' do
+        values = ruby_values.merge('ruby_version' => '3.3.0', 'ruby_major' => '3', 'version' => '3.3.0')
+        tags = described_class.primary_tags('ruby', values)
+
+        expect(tags).to include("#{registry}/ruby:3")
+        expect(tags).to include("#{registry}/ruby:3-noble")
       end
     end
 
@@ -271,6 +284,28 @@ RSpec.describe TagGenerator do
       )
 
       expect(tags).to eq(tags.uniq.sort)
+    end
+
+    it 'sorts multiple dev tags alphabetically' do
+      tags = described_class.dev_tags(
+        'core',
+        'version' => 'jammy',
+        'distribution_code_name' => 'jammy',
+        'github_sha' => 'zzz'
+      )
+
+      expect(tags).to eq(["#{registry}/core:jammy-dev", "#{registry}/core:zzz"])
+    end
+
+    it 'deduplicates when additional_dev_tags repeats a generated tag' do
+      tags = described_class.dev_tags(
+        'core',
+        'version' => 'jammy',
+        'distribution_code_name' => 'jammy',
+        'additional_dev_tags' => ["#{registry}/core:jammy-dev"]
+      )
+
+      expect(tags).to eq(["#{registry}/core:jammy-dev"])
     end
   end
 end

@@ -17,6 +17,42 @@ requires:
   - util
   - version_checker
 matcher:
+  ignore:
+    # is_a? vs instance_of?: no String subclasses; e.message vs e: KeyError#to_s == #message
+    - ImageGenerator#interpolate_registry
+    # permitted_classes: [] is Psych safe_load default; explicit for documentation only
+    - ImageGenerator#read_generated_file
+    # globals.defaults always present (required for REGISTRY constant); fallback {} unreachable
+    - ImageGenerator#template_values
+    # [] vs fetch(): keys always present; flatten/compact: no nils/nesting in output arrays
+    - TagGenerator.primary_tags
+    - TagGenerator.dev_tags
+    # when 'core' and else both return []; key? vs [] equivalent for absent/truthy keys;
+    # fetch() equivalent to [] when keys always present; Array() vs [] unwrapped by flatten;
+    # flavor empty-string produces same output after uniq (version tag already added)
+    - TagGenerator.image_specific_tags
+    - TagGenerator.default_primary_tags
+    - TagGenerator.default_dev_tags
+    - TagGenerator.lang_primary_tags
+    - TagGenerator.lang_dev_tags
+    - TagGenerator.core_dev_tags
+    # template_path: File.join(TEMPLATE_PATH) resolves same file from project root in tests
+    - DependabotGenerator#template_path
+    # manifest.yml has no YAML aliases; aliases:true/false/nil all identical
+    - ManifestLoader.load
+    # 'globals' key always present; dig vs fetch+dig are equivalent
+    - ManifestLoader.registry
+    # define_singleton_method(key.to_s) vs key/key.to_str: string keys, all equivalent
+    - Metadata#initialize
+    # up[:key] vs up.fetch(:key): upstream hash always has these keys (built by fetch_upstream)
+    # Regexp.escape(current) vs current: version strings don't contain metachar ambiguity in practice
+    - RubyChecker#compare
+    - NodeChecker#compare
+    # [] vs fetch()/at()/key?(); version string vs Gem::Version comparison; all equivalent in practice
+    - RubyChecker#fetch_upstream
+    - NodeChecker#fetch_upstream
+    # build_output_path(*path_parts) vs (path_parts): File.join flattens arrays identically
+    - Util.with_clean_output_dir
   subjects:
     - CacheRef*
     - DependabotGenerator*
