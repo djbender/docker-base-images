@@ -23,8 +23,8 @@ target "node" {
   tags = [
     "ghcr.io/djbender/node:22",
     "ghcr.io/djbender/node:22-resolute",
-    "ghcr.io/djbender/node:22.23.0",
-    "ghcr.io/djbender/node:22.23.0-resolute"
+    "ghcr.io/djbender/node:22.23.1",
+    "ghcr.io/djbender/node:22.23.1-resolute"
   ]
   context = "${PWD}/node/22"
   platforms = [
@@ -43,8 +43,8 @@ target "node-dev" {
   tags = [
     "ghcr.io/djbender/node:22-dev",
     "ghcr.io/djbender/node:22-dev-resolute",
-    "ghcr.io/djbender/node:22.23.0-dev",
-    "ghcr.io/djbender/node:22.23.0-dev-resolute"
+    "ghcr.io/djbender/node:22.23.1-dev",
+    "ghcr.io/djbender/node:22.23.1-dev-resolute"
   ]
   cache-from = [
     "type=registry,ref=ghcr.io/djbender/node:cache-dev-22-${ARCH}",

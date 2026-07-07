@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-07-07
+- Bump Node 22.23.0 → 22.23.1, Node 24.17.0 → 24.18.0 (npm 11.13.0 → 11.16.0) to match current NodeSource upstream and unblock the `ci` required check, which was failing the version-match guard in the Dockerfile build step for both versions
+
 ## 2026-06-26
 - Harden mutation coverage to 100% across all subjects: kill surviving mutations in `ImageGenerator`, `TagGenerator`, `DependabotGenerator`, `GenerationMessage`, `Metadata`, `Template`; add `spec/generation_message_spec.rb`; document equivalent mutants in `config/mutant.yml` for `ManifestLoader`, `RubyChecker`, `NodeChecker`, `Util`, and others
 
