@@ -23,8 +23,8 @@ target "node" {
   tags = [
     "ghcr.io/djbender/node:24",
     "ghcr.io/djbender/node:24-resolute",
-    "ghcr.io/djbender/node:24.17.0",
-    "ghcr.io/djbender/node:24.17.0-resolute",
+    "ghcr.io/djbender/node:24.18.0",
+    "ghcr.io/djbender/node:24.18.0-resolute",
     "ghcr.io/djbender/node:latest"
   ]
   context = "${PWD}/node/24"
@@ -44,8 +44,8 @@ target "node-dev" {
   tags = [
     "ghcr.io/djbender/node:24-dev",
     "ghcr.io/djbender/node:24-dev-resolute",
-    "ghcr.io/djbender/node:24.17.0-dev",
-    "ghcr.io/djbender/node:24.17.0-dev-resolute",
+    "ghcr.io/djbender/node:24.18.0-dev",
+    "ghcr.io/djbender/node:24.18.0-dev-resolute",
     "ghcr.io/djbender/node:dev"
   ]
   cache-from = [
