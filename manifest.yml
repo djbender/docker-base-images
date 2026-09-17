@@ -77,13 +77,13 @@ node: &NODE
       npm_version: 10.9.8
     '24': &NODE24
       node_major: 24
-      node_version: 24.19.0
-      npm_version: 11.17.0
+      node_version: 24.21.0
+      npm_version: 11.19.0
       latest: true
     '26': &NODE25
       node_major: 26
-      node_version: 26.7.0
-      npm_version: 11.19.0
+      node_version: 26.9.0
+      npm_version: 11.19.1
 
 ruby: &RUBY
   defaults:
