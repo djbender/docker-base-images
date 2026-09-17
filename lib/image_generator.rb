@@ -56,7 +56,7 @@ class ImageGenerator
       format(v, registry: Util::REGISTRY)
     rescue KeyError => e
       key = values.key(v)
-      # rubocop:disable-next-line Style/FormatStringToken
+      # rubocop:disable-next Style/FormatStringToken
       raise KeyError,
             "Unknown placeholder in #{image_name} manifest key '#{key}': #{e.message}. Only %{registry} is supported."
     end
