@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-09-17
+- Bump Node 24.19.0 → 24.21.0 (npm 11.17.0 → 11.19.0), Node 26.7.0 → 26.9.0 (npm 11.19.0 → 11.19.1) to match current NodeSource upstream and unblock the `ci` required check, which was failing the version-match guard in the Dockerfile build step for both versions
+
 ## 2026-07-07
 - Bump Node 22.23.0 → 22.23.1, Node 24.17.0 → 24.18.0 (npm 11.13.0 → 11.16.0) to match current NodeSource upstream and unblock the `ci` required check, which was failing the version-match guard in the Dockerfile build step for both versions
 
