@@ -73,8 +73,8 @@ node: &NODE
       npm_version: 10.8.2
     '22': &NODE22
       node_major: 22
-      node_version: 22.23.2
-      npm_version: 10.9.8
+      node_version: 22.23.3
+      npm_version: 10.9.9
     '24': &NODE24
       node_major: 24
       node_version: 24.21.0
@@ -82,8 +82,8 @@ node: &NODE
       latest: true
     '26': &NODE25
       node_major: 26
-      node_version: 26.9.0
-      npm_version: 11.19.1
+      node_version: 26.11.1
+      npm_version: 11.20.0
 
 ruby: &RUBY
   defaults:
