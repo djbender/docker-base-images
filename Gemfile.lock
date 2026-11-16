@@ -51,7 +51,7 @@ GEM
       prism (~> 1.5)
     mustermann (3.0.4)
       ruby2_keywords (~> 0.0.1)
-    mutant (0.17.0)
+    mutant (0.17.1)
       diff-lcs (>= 1.6, < 3)
       irb (~> 1.15)
       parser (~> 3.3.10)
@@ -59,8 +59,8 @@ GEM
       securerandom (>= 0.3)
       sorbet-runtime (~> 0.6.0)
       unparser (>= 0.8.2, < 0.10)
-    mutant-rspec (0.17.0)
-      mutant (= 0.17.0)
+    mutant-rspec (0.17.1)
+      mutant (= 0.17.1)
       rspec-core (>= 3.8.0, < 5.0.0)
     nio4r (2.7.5)
     nokogiri (1.19.4)
@@ -81,12 +81,12 @@ GEM
       nokogiri
       rack-test
       thor
-    parser (3.3.12.0)
+    parser (3.3.13.0)
       ast (~> 2.4.1)
       racc
     pp (0.6.4)
       prettyprint
-    prettyprint (0.2.0)
+    prettyprint (0.2.1)
     prism (1.9.0)
     process_executer (4.1.1)
       track_open_instances (~> 0.1)
@@ -113,12 +113,12 @@ GEM
       prism (>= 1.6.0)
       tsort
     rchardet (1.10.2)
-    rdoc (8.0.0)
+    rdoc (8.1.0)
       erb
       prism (>= 1.6.0)
       rbs (>= 4.0.0)
       tsort
-    regexp_parser (2.12.0)
+    regexp_parser (2.13.1)
     reline (0.7.0)
       io-console (~> 0.5)
     rexml (3.4.4)
@@ -171,7 +171,7 @@ GEM
       rack-protection (= 4.2.1)
       rack-session (>= 2.0.0, < 3)
       tilt (~> 2.0)
-    sorbet-runtime (0.6.13506)
+    sorbet-runtime (0.6.13594)
     thor (1.5.0)
     tilt (2.7.0)
     track_open_instances (0.1.15)
