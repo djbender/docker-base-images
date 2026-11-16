@@ -73,16 +73,16 @@ node: &NODE
       npm_version: 10.8.2
     '22': &NODE22
       node_major: 22
-      node_version: 22.23.3
+      node_version: 22.23.5
       npm_version: 10.9.9
     '24': &NODE24
       node_major: 24
-      node_version: 24.21.0
-      npm_version: 11.19.0
+      node_version: 24.22.3
+      npm_version: 11.19.1
       latest: true
     '26': &NODE25
       node_major: 26
-      node_version: 26.11.1
+      node_version: 26.13.1
       npm_version: 11.20.0
 
 ruby: &RUBY
@@ -144,14 +144,14 @@ ruby: &RUBY
       ruby_download_sha256: c13aec0c206725d5d356acbae6e5fd8bffd92dc325aec14fd5dd7795d4b763d2
     '3.3':
       ruby_major: 3.3
-      ruby_version: 3.3.11
-      ruby_download_sha256: 9116bb2e313203bd78cd3e8dc09284d34b2645f725877623a7185bf3807c8ca3
+      ruby_version: 3.3.13
+      ruby_download_sha256: 6bd764359992373a96556b45fb7dfe6b6170da34a0a2fd0b7e1be7932fea982b
     '3.4':
       ruby_major: 3.4
-      ruby_version: 3.4.9
-      ruby_download_sha256: 4231c54072601a171faed1699f105985e9971c94cd382b78feb4eb44eec2dd1a
+      ruby_version: 3.4.12
+      ruby_download_sha256: db6c147940d7ad0b706823d42c8e6713c36dec70a1f83f635f1d3a7f0599ec90
     '4.0':
       ruby_major: 4.0
-      ruby_version: 4.0.5
-      ruby_download_sha256: 5dc5521ea54c726e6cc10b1b5a0f4004b27b482e61c04c99aed79315e30895e5
+      ruby_version: 4.0.9
+      ruby_download_sha256: a8057adb39f51ad6dc3106237504c93dd792bb515837b4fe7817ae21ed7e51f4
       latest: true # apply the latest tag
