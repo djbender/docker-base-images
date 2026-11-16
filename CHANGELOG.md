@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2026-11-15
+- Bump Ruby 4.0.5 → 4.0.9 (including `.ruby-version` and `Gemfile.lock`)
 - Bump Node 22.23.3 → 22.23.5 (npm 10.9.9), Node 24.21.0 → 24.22.3 (npm 11.19.0 → 11.19.1), Node 26.11.1 → 26.13.1 (npm 11.20.0) to match current NodeSource upstream and unblock the `ci` required check, which was failing the version-match guard in the Dockerfile build step for all three versions
 
 ## 2026-10-10
