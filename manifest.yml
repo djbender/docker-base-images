@@ -144,12 +144,12 @@ ruby: &RUBY
       ruby_download_sha256: c13aec0c206725d5d356acbae6e5fd8bffd92dc325aec14fd5dd7795d4b763d2
     '3.3':
       ruby_major: 3.3
-      ruby_version: 3.3.11
-      ruby_download_sha256: 9116bb2e313203bd78cd3e8dc09284d34b2645f725877623a7185bf3807c8ca3
+      ruby_version: 3.3.13
+      ruby_download_sha256: 6bd764359992373a96556b45fb7dfe6b6170da34a0a2fd0b7e1be7932fea982b
     '3.4':
       ruby_major: 3.4
-      ruby_version: 3.4.9
-      ruby_download_sha256: 4231c54072601a171faed1699f105985e9971c94cd382b78feb4eb44eec2dd1a
+      ruby_version: 3.4.12
+      ruby_download_sha256: db6c147940d7ad0b706823d42c8e6713c36dec70a1f83f635f1d3a7f0599ec90
     '4.0':
       ruby_major: 4.0
       ruby_version: 4.0.9
