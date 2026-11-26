@@ -6,6 +6,7 @@ require_relative '../lib/util'
 require_relative '../lib/tag_generator'
 require_relative '../lib/cache_ref'
 require_relative '../lib/build_scope'
+require_relative '../lib/merge_entry'
 
 DEFAULT_BRANCH = 'main'.freeze
 PLATFORMS = %w[linux/amd64 linux/arm64].freeze
@@ -107,23 +108,21 @@ def matrix(&)
 end
 
 # Generates merge matrix entries (one per version, no platform expansion)
-# Used by merge jobs to create multi-arch manifests
-# Includes all tags from TagGenerator for manifest creation
+# Used by merge jobs to create multi-arch manifests. On main, with a commit SHA,
+# unchanged versions are listed too, so they get that commit's SHA tags.
 def merge_matrix(&)
   scope = build_scope
+  sha = ENV.fetch('GITHUB_SHA', nil)
+  retag = sha && main_branch?
 
   {
     include: Util::MANIFEST.select(&).flat_map do |image_name, details|
-      details.fetch('versions').keys.select { |v| scope.include?("#{image_name}/#{v}") }.map do |version|
-        values = Util.version_values(image_name, version).merge('github_sha' => ENV.fetch('GITHUB_SHA', nil))
-
-        {
-          version: version,
-          primary_target: image_name,
-          registry: Util::REGISTRY,
-          primary_tags: TagGenerator.primary_tags(image_name, values).join(' '),
-          dev_tags: TagGenerator.dev_tags(image_name, values).join(' ')
-        }
+      details.fetch('versions').keys.filter_map do |version|
+        if scope.include?("#{image_name}/#{version}")
+          MergeEntry::Built.new(image_name, version, sha:).to_h
+        elsif retag
+          MergeEntry::Retagged.new(image_name, version, sha:, base: ENV.fetch('CHANGE_BASE')).to_h
+        end
       end
     end
   }

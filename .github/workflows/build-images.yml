@@ -62,6 +62,8 @@ jobs:
       common_matrix: ${{ steps.set-matrix.outputs.common_matrix }}
       core_merge_matrix: ${{ steps.set-matrix.outputs.core_merge_matrix }}
       common_merge_matrix: ${{ steps.set-matrix.outputs.common_merge_matrix }}
+      merge_core: ${{ steps.set-matrix.outputs.merge_core }}
+      merge_common: ${{ steps.set-matrix.outputs.merge_common }}
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7.0.1
@@ -110,10 +112,12 @@ jobs:
           core_merge_matrix=$(bundle exec rake ci:set-matrix:core-merge)
           echo "$core_merge_matrix" | jq .
           echo "core_merge_matrix=$core_merge_matrix" >> $GITHUB_OUTPUT
+          echo "merge_core=$(echo "$core_merge_matrix" | jq '.include | length > 0')" >> "$GITHUB_OUTPUT"
 
           common_merge_matrix=$(bundle exec rake ci:set-matrix:common-merge)
           echo "$common_merge_matrix" | jq .
           echo "common_merge_matrix=$common_merge_matrix" >> $GITHUB_OUTPUT
+          echo "merge_common=$(echo "$common_merge_matrix" | jq '.include | length > 0')" >> "$GITHUB_OUTPUT"
 
   build-core-images:
     runs-on: ${{ matrix.runner }}
@@ -178,16 +182,23 @@ jobs:
     needs:
       - set-matrix
       - build-core-images
-    if: ${{ !cancelled() && github.ref == 'refs/heads/main' && needs.build-core-images.result == 'success' }}
+    # Runs after a skipped build too: unchanged images still get SHA tags
+    if: ${{ !cancelled() && github.ref == 'refs/heads/main' && needs.set-matrix.result == 'success' && needs.set-matrix.outputs.merge_core == 'true' && contains(fromJSON('["success","skipped"]'), needs.build-core-images.result) }}
     permissions:
       packages: write
       contents: read
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.set-matrix.outputs.core_merge_matrix) }}
-    env:
-      IMAGE_BASE: ${{ matrix.registry }}/${{ matrix.primary_target }}:${{ matrix.version }}
+    # Keeps overlapping runs of one commit from both writing a SHA tag
+    concurrency:
+      group: merge-${{ github.sha }}-${{ matrix.primary_target }}-${{ matrix.version }}
+    timeout-minutes: 10
     steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v4.8.0
         with:
@@ -196,16 +207,14 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create multi-arch manifests
-        run: |
-          create_manifest() {
-            local tag=$1 suffix=$2
-            echo "Creating manifest for $tag"
-            docker buildx imagetools create -t "$tag" \
-              "${IMAGE_BASE}${suffix}-${{ github.run_id }}-amd64" \
-              "${IMAGE_BASE}${suffix}-${{ github.run_id }}-arm64"
-          }
-          for tag in ${{ matrix.primary_tags }}; do create_manifest "$tag" ""; done
-          for tag in ${{ matrix.dev_tags }}; do create_manifest "$tag" "-dev"; done
+        env:
+          IMAGE_BASE: ${{ matrix.registry }}/${{ matrix.primary_target }}:${{ matrix.version }}
+          PRIMARY_TAGS: ${{ matrix.primary_tags }}
+          DEV_TAGS: ${{ matrix.dev_tags }}
+          # Set only for unchanged images, which are re-tagged
+          PRIMARY_SOURCES: ${{ matrix.primary_sources }}
+          DEV_SOURCES: ${{ matrix.dev_sources }}
+        run: .github/scripts/merge-manifests.sh
 
   build-common-images:
     runs-on: ${{ matrix.runner }}
@@ -271,17 +280,25 @@ jobs:
     runs-on: ubuntu-slim
     needs:
       - set-matrix
+      - build-core-images
       - build-common-images
-    if: ${{ !cancelled() && github.ref == 'refs/heads/main' && needs.build-common-images.result == 'success' }}
+    # Runs after a skipped build too: unchanged images still get SHA tags
+    if: ${{ !cancelled() && github.ref == 'refs/heads/main' && needs.set-matrix.result == 'success' && needs.set-matrix.outputs.merge_common == 'true' && contains(fromJSON('["success","skipped"]'), needs.build-core-images.result) && contains(fromJSON('["success","skipped"]'), needs.build-common-images.result) }}
     permissions:
       packages: write
       contents: read
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.set-matrix.outputs.common_merge_matrix) }}
-    env:
-      IMAGE_BASE: ${{ matrix.registry }}/${{ matrix.primary_target }}:${{ matrix.version }}
+    # Keeps overlapping runs of one commit from both writing a SHA tag
+    concurrency:
+      group: merge-${{ github.sha }}-${{ matrix.primary_target }}-${{ matrix.version }}
+    timeout-minutes: 10
     steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v4.8.0
         with:
@@ -290,16 +307,14 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create multi-arch manifests
-        run: |
-          create_manifest() {
-            local tag=$1 suffix=$2
-            echo "Creating manifest for $tag"
-            docker buildx imagetools create -t "$tag" \
-              "${IMAGE_BASE}${suffix}-${{ github.run_id }}-amd64" \
-              "${IMAGE_BASE}${suffix}-${{ github.run_id }}-arm64"
-          }
-          for tag in ${{ matrix.primary_tags }}; do create_manifest "$tag" ""; done
-          for tag in ${{ matrix.dev_tags }}; do create_manifest "$tag" "-dev"; done
+        env:
+          IMAGE_BASE: ${{ matrix.registry }}/${{ matrix.primary_target }}:${{ matrix.version }}
+          PRIMARY_TAGS: ${{ matrix.primary_tags }}
+          DEV_TAGS: ${{ matrix.dev_tags }}
+          # Set only for unchanged images, which are re-tagged
+          PRIMARY_SOURCES: ${{ matrix.primary_sources }}
+          DEV_SOURCES: ${{ matrix.dev_sources }}
+        run: .github/scripts/merge-manifests.sh
 
   ci:
     runs-on: ubuntu-slim

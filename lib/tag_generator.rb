@@ -1,4 +1,5 @@
 require_relative 'manifest_loader'
+require_relative 'sha_tags'
 
 # Centralized tag generation for Docker images
 # Used by both ERB templates and CI matrix generation
@@ -32,6 +33,8 @@ module TagGenerator
       tags.flatten.compact.uniq.sort
     end
 
+    include ShaTags
+
     private
 
     def symbolize_keys(hash)
@@ -52,8 +55,12 @@ module TagGenerator
         tags << "#{base}:#{flavor_tag}"
       end
 
-      # SHA tag for traceability (CI passes github_sha; generation omits it)
-      tags << "#{base}:#{values[:github_sha]}" if values[:github_sha]
+      # SHA tags for traceability (CI passes github_sha; generation omits it).
+      # Only the latest version, regular variant, gets the bare SHA.
+      if values[:github_sha]
+        tags << sha_tag(base, version, values[:github_sha])
+        tags << "#{base}:#{values[:github_sha]}" if values[:latest]
+      end
 
       # Latest/rolling tags
       tags << "#{base}:latest" if values[:latest]
@@ -68,7 +75,7 @@ module TagGenerator
     def default_dev_tags(base, values)
       tags = []
 
-      tags << "#{base}:#{values[:github_sha]}" if values[:github_sha]
+      tags << sha_tag(base, "#{values[:version]}-dev", values[:github_sha]) if values[:github_sha]
       tags << "#{base}:dev" if values[:latest]
 
       # Additional dev tags from manifest

@@ -47,6 +47,7 @@ RSpec.describe ChangeClassifier do
     %w[
       .github/workflows/build-images.yml .github/workflows/actions.lock
       lib/tag_generator.rb rakelib/ci.rake Rakefile change_rules.yml
+      .github/scripts/merge-manifests.sh
     ].each do |path|
       it "builds everything for build input #{path}" do
         expect(classifier.classify(path)).to eq([:all])
@@ -67,7 +68,7 @@ RSpec.describe ChangeClassifier do
   end
 
   describe '#explicit?' do
-    %w[node/22/Dockerfile lib/util.rb README.md].each do |path|
+    %w[node/22/Dockerfile lib/util.rb README.md .github/scripts/merge-manifests.sh].each do |path|
       it "is true when a rule names #{path}" do
         expect(classifier.explicit?(path)).to be(true)
       end
