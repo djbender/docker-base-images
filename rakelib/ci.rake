@@ -5,6 +5,7 @@ require 'git'
 require_relative '../lib/util'
 require_relative '../lib/tag_generator'
 require_relative '../lib/cache_ref'
+require_relative '../lib/build_scope'
 
 DEFAULT_BRANCH = 'main'.freeze
 PLATFORMS = %w[linux/amd64 linux/arm64].freeze
@@ -55,9 +56,11 @@ end
 def matrix(&)
   branch_suffix = current_branch == DEFAULT_BRANCH ? '' : "-#{current_branch.gsub(/[^a-zA-Z0-9\-_]/, '-')}"
 
+  scope = build_scope
+
   {
     include: Util::MANIFEST.select(&).flat_map do |image_name, details|
-      details.fetch('versions').keys.flat_map do |version|
+      details.fetch('versions').keys.select { |v| scope.include?("#{image_name}/#{v}") }.flat_map do |version|
         # Generate entry for each platform (native builds on both archs)
         PLATFORMS.map do |platform|
           arch_suffix = platform == 'linux/arm64' ? 'arm64' : 'amd64'
@@ -107,18 +110,12 @@ end
 # Used by merge jobs to create multi-arch manifests
 # Includes all tags from TagGenerator for manifest creation
 def merge_matrix(&)
+  scope = build_scope
+
   {
     include: Util::MANIFEST.select(&).flat_map do |image_name, details|
-      defaults = details.fetch('defaults', {})
-
-      details.fetch('versions').keys.map do |version|
-        version_values = details.fetch('versions').fetch(version) || {}
-        values = Util::GLOBAL_DEFAULTS
-          .fetch('defaults', {})
-          .merge(defaults)
-          .merge(version_values)
-          .merge('version' => version, 'image_name' => image_name,
-                 'github_sha' => ENV.fetch('GITHUB_SHA', nil))
+      details.fetch('versions').keys.select { |v| scope.include?("#{image_name}/#{v}") }.map do |version|
+        values = Util.version_values(image_name, version).merge('github_sha' => ENV.fetch('GITHUB_SHA', nil))
 
         {
           version: version,
@@ -130,6 +127,16 @@ def merge_matrix(&)
       end
     end
   }
+end
+
+def build_scope
+  BuildScope.for(
+    event: ENV.fetch('GITHUB_EVENT_NAME', nil),
+    base: ENV.fetch('CHANGE_BASE', nil),
+    classifier: ChangeClassifier.new(image_dirs: Util.image_dirs),
+    graph: ImageGraph.new,
+    diff: BuildScope::GitDiff.new(root: Util::PROJECT_DIR)
+  )
 end
 
 def cache_from_ref(target, registry, tag)

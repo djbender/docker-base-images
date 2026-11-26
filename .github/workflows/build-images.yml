@@ -5,10 +5,18 @@ on:
     branches:
       - main
   pull_request:
+  # Weekly full build: safety net for anything change detection might skip
+  schedule:
+    - cron: '0 6 * * 1'
   workflow_dispatch: {}
 
 permissions:
   contents: read
+
+# New pushes cancel superseded PR runs; main runs go one at a time
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   test:
@@ -44,7 +52,12 @@ jobs:
 
   set-matrix:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
     outputs:
+      build_core: ${{ steps.set-matrix.outputs.build_core }}
+      build_common: ${{ steps.set-matrix.outputs.build_common }}
       core_matrix: ${{ steps.set-matrix.outputs.core_matrix }}
       common_matrix: ${{ steps.set-matrix.outputs.common_matrix }}
       core_merge_matrix: ${{ steps.set-matrix.outputs.core_merge_matrix }}
@@ -54,23 +67,45 @@ jobs:
       - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 0 # the change base must be available to diff against
 
       - uses: ruby/setup-ruby@v1.343.0
         with:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      # PRs compare against their base; main compares against its last successful
+      # run, so changes from a failed or cancelled run are built next time.
+      # An empty result builds everything.
+      - name: Find change base
+        id: base
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if [[ -n "$PR_BASE" ]]; then
+            sha=$PR_BASE
+          else
+            sha=$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/build-images.yml/runs?branch=main&status=success&per_page=20" \
+              --jq '[.workflow_runs[] | select(.event != "pull_request")][0].head_sha // empty') || sha=""
+          fi
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+
       - name: Set matrix output
         id: set-matrix
+        env:
+          CHANGE_BASE: ${{ steps.base.outputs.sha }}
         run: |
           echo ${{ github.ref }}
           core_matrix=$(bundle exec rake ci:set-matrix:core)
           echo "$core_matrix" | jq .
           echo "core_matrix=$core_matrix" >> $GITHUB_OUTPUT
+          echo "build_core=$(echo "$core_matrix" | jq '.include | length > 0')" >> "$GITHUB_OUTPUT"
 
           common_matrix=$(bundle exec rake ci:set-matrix:common)
           echo "$common_matrix" | jq .
           echo "common_matrix=$common_matrix" >> $GITHUB_OUTPUT
+          echo "build_common=$(echo "$common_matrix" | jq '.include | length > 0')" >> "$GITHUB_OUTPUT"
 
           core_merge_matrix=$(bundle exec rake ci:set-matrix:core-merge)
           echo "$core_merge_matrix" | jq .
@@ -84,6 +119,7 @@ jobs:
     runs-on: ${{ matrix.runner }}
     needs:
       - set-matrix
+    if: needs.set-matrix.outputs.build_core == 'true'
     permissions:
       packages: write
       contents: read
@@ -142,7 +178,7 @@ jobs:
     needs:
       - set-matrix
       - build-core-images
-    if: github.ref == 'refs/heads/main'
+    if: ${{ !cancelled() && github.ref == 'refs/heads/main' && needs.build-core-images.result == 'success' }}
     permissions:
       packages: write
       contents: read
@@ -176,6 +212,8 @@ jobs:
     needs:
       - set-matrix
       - build-core-images
+    # core is skipped when unchanged; that must not skip this job
+    if: ${{ !cancelled() && needs.set-matrix.outputs.build_common == 'true' && contains(fromJSON('["success","skipped"]'), needs.build-core-images.result) }}
     permissions:
       packages: write
       contents: read
@@ -234,7 +272,7 @@ jobs:
     needs:
       - set-matrix
       - build-common-images
-    if: github.ref == 'refs/heads/main'
+    if: ${{ !cancelled() && github.ref == 'refs/heads/main' && needs.build-common-images.result == 'success' }}
     permissions:
       packages: write
       contents: read
@@ -267,6 +305,7 @@ jobs:
     runs-on: ubuntu-slim
     needs:
       - test
+      - set-matrix
       - build-core-images
       - build-common-images
       - merge-core-manifests
@@ -275,7 +314,7 @@ jobs:
     steps:
       - name: Check all jobs passed
         run: |
-          results="${{ needs.test.result }} ${{ needs.build-core-images.result }} ${{ needs.build-common-images.result }}"
+          results="${{ needs.test.result }} ${{ needs.set-matrix.result }} ${{ needs.build-core-images.result }} ${{ needs.build-common-images.result }}"
           if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             results="$results ${{ needs.merge-core-manifests.result }} ${{ needs.merge-common-manifests.result }}"
           fi

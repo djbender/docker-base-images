@@ -3,11 +3,14 @@ integration: rspec
 includes:
   - lib
 requires:
+  - build_scope
   - cache_ref
+  - change_classifier
   - dependabot_generator
   - generation_message
   - hcl_formatter
   - image_generator
+  - image_graph
   - manifest_loader
   - metadata
   - node_checker
@@ -54,11 +57,14 @@ matcher:
     # build_output_path(*path_parts) vs (path_parts): File.join flattens arrays identically
     - Util.with_clean_output_dir
   subjects:
+    - BuildScope*
     - CacheRef*
+    - ChangeClassifier*
     - DependabotGenerator*
     - GenerationMessage*
     - HclFormatter*
     - ImageGenerator*
+    - ImageGraph*
     - ManifestLoader*
     - Metadata*
     - NodeChecker*
