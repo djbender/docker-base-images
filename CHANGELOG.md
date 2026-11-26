@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-26
+- Pin all GitHub Actions to full semver tags
+- Add GitHub Actions workflow lockfile (`actions.lock`) and verify it in CI
+- Bump local development Ruby 4.0.9 → 4.0.10 (`.ruby-version`, `Gemfile.lock`); image versions in `manifest.yml` are unchanged
+
 ## 2026-11-15
 - Bump Ruby 3.3.11 → 3.3.13, 3.4.9 → 3.4.12, 4.0.5 → 4.0.9 (including `.ruby-version` and `Gemfile.lock` for 4.0.9)
 - Bump Node 22.23.3 → 22.23.5 (npm 10.9.9), Node 24.21.0 → 24.22.3 (npm 11.19.0 → 11.19.1), Node 26.11.1 → 26.13.1 (npm 11.20.0) to match current NodeSource upstream and unblock the `ci` required check, which was failing the version-match guard in the Dockerfile build step for all three versions
