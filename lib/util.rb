@@ -14,6 +14,24 @@ class Util
   GLOBAL_DEFAULTS = MANIFEST.delete('globals')
   REGISTRY = GLOBAL_DEFAULTS.fetch('defaults').fetch('registry').freeze
 
+  # Every generated image directory, e.g. "node/22"
+  def self.image_dirs
+    MANIFEST.flat_map do |image_name, details|
+      details.fetch('versions').keys.map { |version| "#{image_name}/#{version}" }
+    end
+  end
+
+  # Manifest values for one image version: globals < image defaults < version
+  def self.version_values(image_name, version, manifest: MANIFEST)
+    details = manifest.fetch(image_name)
+
+    GLOBAL_DEFAULTS
+      .fetch('defaults', {})
+      .merge(details.fetch('defaults', {}))
+      .merge(details.fetch('versions').fetch(version) || {})
+      .merge('version' => version, 'image_name' => image_name)
+  end
+
   # Used by Util#with_clean_output_dir to build out paths
   # example:
   #  input of ['ruby', '3.1'] would return <project_dir>/ruby/3.1

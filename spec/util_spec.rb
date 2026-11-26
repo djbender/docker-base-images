@@ -27,6 +27,43 @@ RSpec.describe Util do
     end
   end
 
+  describe '.image_dirs' do
+    it 'lists a directory for every image version in the manifest' do
+      expect(described_class.image_dirs).to include('core/noble', 'node/22', 'ruby/3.1')
+      expect(described_class.image_dirs).to all(satisfy { |dir| File.exist?("#{dir}/Dockerfile") })
+    end
+  end
+
+  describe '.version_values' do
+    let(:manifest) do
+      {
+        'ruby' => {
+          'defaults' => { 'base_image' => 'image-default', 'bundler_version' => '2' },
+          'versions' => { '3.1' => { 'base_image' => 'version-value' }, '4.0' => nil }
+        }
+      }
+    end
+
+    it 'layers version values over image defaults over global defaults' do
+      values = described_class.version_values('ruby', '3.1', manifest: manifest)
+
+      expect(values).to include('base_image' => 'version-value', 'bundler_version' => '2',
+                                'registry' => 'ghcr.io/djbender', 'version' => '3.1', 'image_name' => 'ruby')
+    end
+
+    it 'allows a version with no values of its own' do
+      values = described_class.version_values('ruby', '4.0', manifest: manifest)
+
+      expect(values).to include('base_image' => 'image-default', 'version' => '4.0')
+    end
+
+    it 'allows an image with no defaults' do
+      values = described_class.version_values('core', 'x', manifest: { 'core' => { 'versions' => { 'x' => nil } } })
+
+      expect(values).to include('base_image' => 'ubuntu:resolute', 'image_name' => 'core')
+    end
+  end
+
   describe '.build_output_path' do
     it 'joins parts with PROJECT_DIR' do
       result = described_class.build_output_path('ruby', '3.1')
