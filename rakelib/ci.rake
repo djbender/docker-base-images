@@ -133,7 +133,7 @@ def build_scope
   BuildScope.for(
     event: ENV.fetch('GITHUB_EVENT_NAME', nil),
     base: ENV.fetch('CHANGE_BASE', nil),
-    classifier: ChangeClassifier.new(image_dirs: Util.image_dirs),
+    classifier: ChangeClassifier.load(image_dirs: Util.image_dirs),
     graph: ImageGraph.new,
     diff: BuildScope::GitDiff.new(root: Util::PROJECT_DIR)
   )

@@ -1,0 +1,39 @@
+# Which changed files CI has to rebuild images for.
+#
+# Files inside an image directory (node/22/...) rebuild that image and the images
+# built FROM it, with no entry needed here. For everything else:
+#   build_all - rebuilds every image. Checked first, so it beats ignore.
+#   ignore    - rebuilds nothing.
+#   neither   - rebuilds every image, and the specs fail until it is listed.
+#
+# Globs: "*" stays within a directory, "**/" spans directories, "{a,b}" is either.
+
+build_all:
+  - .github/workflows/build-images.yml
+  - .github/workflows/actions.lock
+  - "{lib,rakelib}/**/*"
+  - Rakefile
+  - change_rules.yml
+
+# Only list files that cannot change what any image contains.
+ignore:
+  - "**/*.md"
+  - LICENSE
+  - "{site,spec,bin,config}/**/*"
+  # Templates and the manifest: CI fails unless the generated image dirs match them
+  - "*/template/**/*"
+  - manifest.yml
+  - .generated.yml
+  - ruby/examples/**/* # not built by CI
+  - .github/dependabot.yml
+  - .github/template/**/*
+  - .github/workflows/{cleanup-packages,deploy-docs}.yml
+  - .gitignore
+  - .rspec
+  - .rubocop.yml
+  - .overcommit.sample.yml
+  - .ruby-version
+  - Parkfile
+  # A broken gem bump fails set-matrix itself, which fails CI
+  - Gemfile
+  - Gemfile.lock

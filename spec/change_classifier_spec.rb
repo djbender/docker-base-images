@@ -1,9 +1,31 @@
 require 'open3'
+require 'tempfile'
 require_relative '../lib/change_classifier'
 require_relative '../lib/util'
 
 RSpec.describe ChangeClassifier do
-  subject(:classifier) { described_class.new(image_dirs: %w[node/2 node/22 core/noble]) }
+  subject(:classifier) { described_class.load(image_dirs: %w[node/2 node/22 core/noble]) }
+
+  describe '.load' do
+    let(:file) { Tempfile.new(['rules', '.yml']) }
+
+    after { file.unlink }
+
+    def load_rules(yaml)
+      File.write(file.path, yaml)
+      described_class.load(image_dirs: [], path: file.path)
+    end
+
+    it 'applies the rules in the given file, build_all first' do
+      loaded = load_rules("build_all: ['a/keep']\nignore: ['a/*']\n")
+
+      expect(%w[a/keep a/other b].map { |path| loaded.classify(path) }).to eq([[:all], [:ignore], [:all]])
+    end
+
+    it 'fails loudly when a list is missing' do
+      expect { load_rules("ignore: []\n") }.to raise_error(KeyError, /build_all/)
+    end
+  end
 
   describe '#classify' do
     it 'attributes a file inside an image directory to that image' do
@@ -24,11 +46,15 @@ RSpec.describe ChangeClassifier do
 
     %w[
       .github/workflows/build-images.yml .github/workflows/actions.lock
-      lib/tag_generator.rb rakelib/ci.rake Rakefile
+      lib/tag_generator.rb rakelib/ci.rake Rakefile change_rules.yml
     ].each do |path|
       it "builds everything for build input #{path}" do
         expect(classifier.classify(path)).to eq([:all])
       end
+    end
+
+    it 'names the rules file itself, so no ignore pattern can silently cover it' do
+      expect(classifier.explicit?('change_rules.yml')).to be(true)
     end
 
     it 'lets build inputs win over ignore rules' do
@@ -66,7 +92,7 @@ RSpec.describe ChangeClassifier do
 
   # Fails when someone adds a file without deciding what it should rebuild.
   describe 'rules against the tracked files' do
-    subject(:classifier) { described_class.new(image_dirs: Util.image_dirs) }
+    subject(:classifier) { described_class.load(image_dirs: Util.image_dirs) }
 
     let(:tracked) { Open3.capture2('git', 'ls-files', chdir: File.expand_path('..', __dir__)).first.split("\n") }
 

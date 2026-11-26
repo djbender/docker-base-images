@@ -1,55 +1,36 @@
+require 'yaml'
+
 # Sorts a changed file into: rebuild one image, rebuild nothing, or rebuild all.
-# Anything no rule knows about rebuilds everything, so list drift only costs CI time.
+# The rules live in change_rules.yml. Anything they do not mention rebuilds
+# everything, so drift in them only costs CI time.
 class ChangeClassifier
-  # Files that cannot change what any image contains. Templates and the manifest
-  # are safe here because CI fails unless the generated image dirs match them.
-  IGNORE_GLOBS = %w[
-    **/*.md
-    LICENSE
-    {site,spec,bin,config}/**/*
-    */template/**/*
-    manifest.yml
-    .generated.yml
-    ruby/examples/**/*
-    .github/dependabot.yml
-    .github/template/**/*
-    .github/workflows/{cleanup-packages,deploy-docs}.yml
-    .gitignore
-    .rspec
-    .rubocop.yml
-    .overcommit.sample.yml
-    .ruby-version
-    Parkfile
-    Gemfile
-    Gemfile.lock
-  ].freeze
-
-  # Files that decide how every image is built. Checked before IGNORE_GLOBS.
-  BUILD_ALL_GLOBS = %w[
-    .github/workflows/build-images.yml
-    .github/workflows/actions.lock
-    {lib,rakelib}/**/*
-    Rakefile
-  ].freeze
-
+  RULES_FILE = File.expand_path('../change_rules.yml', __dir__).freeze
   FNMATCH_FLAGS = File::FNM_PATHNAME | File::FNM_EXTGLOB
 
-  def initialize(image_dirs:)
+  def self.load(image_dirs:, path: RULES_FILE)
+    rules = YAML.safe_load_file(path)
+
+    new(image_dirs: image_dirs, build_all: rules.fetch('build_all'), ignore: rules.fetch('ignore'))
+  end
+
+  def initialize(image_dirs:, build_all:, ignore:)
     @image_dirs = image_dirs
+    @build_all = build_all
+    @ignore = ignore
   end
 
   def classify(path)
     dir = image_dir_for(path)
     return [:image, dir] if dir
-    return [:all] if match?(BUILD_ALL_GLOBS, path)
-    return [:ignore] if match?(IGNORE_GLOBS, path)
+    return [:all] if match?(@build_all, path)
+    return [:ignore] if match?(@ignore, path)
 
     [:all]
   end
 
   # False when classify only answered :all because nothing matched
   def explicit?(path)
-    !image_dir_for(path).nil? || match?(BUILD_ALL_GLOBS + IGNORE_GLOBS, path)
+    !image_dir_for(path).nil? || match?(@build_all + @ignore, path)
   end
 
   private

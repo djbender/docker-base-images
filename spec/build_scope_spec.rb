@@ -11,7 +11,7 @@ RSpec.describe BuildScope do
 
   def scope_for(changed: ['node/22/Dockerfile'], event: 'pull_request', base: 'a' * 40, graph: ImageGraph.new)
     described_class.for(event: event, base: base, graph: graph,
-                        classifier: ChangeClassifier.new(image_dirs: Util.image_dirs),
+                        classifier: ChangeClassifier.load(image_dirs: Util.image_dirs),
                         diff: ->(_base) { changed })
   end
 
