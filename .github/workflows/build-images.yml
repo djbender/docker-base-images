@@ -13,9 +13,9 @@ on:
 permissions:
   contents: read
 
-# New pushes cancel superseded PR runs; main runs go one at a time
+# New pushes cancel superseded PR runs; other runs are never cancelled or queued
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:

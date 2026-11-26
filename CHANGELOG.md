@@ -5,7 +5,7 @@
 - CI builds only changed images and the images built `FROM` them; changes that cannot affect an image build nothing, and anything unrecognized builds everything
 - The files that rebuild everything or nothing are listed in `change_rules.yml`
 - PRs compare against their base commit, `main` against its last successful run; add a weekly full build (Mondays 06:00 UTC)
-- Cancel superseded PR runs, run `main` builds one at a time, and fail the `ci` check when `set-matrix` fails
+- Cancel superseded PR runs, and fail the `ci` check when `set-matrix` fails
 - Pin all GitHub Actions to full semver tags
 - Add GitHub Actions workflow lockfile (`actions.lock`) and verify it in CI
 - Bump local development Ruby 4.0.9 → 4.0.10 (`.ruby-version`, `Gemfile.lock`); image versions in `manifest.yml` are unchanged
