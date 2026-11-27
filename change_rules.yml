@@ -12,6 +12,7 @@ build_all:
   - .github/workflows/build-images.yml
   - .github/workflows/actions.lock
   - "{lib,rakelib}/**/*"
+  - .github/scripts/**/*
   - Rakefile
   - change_rules.yml
 

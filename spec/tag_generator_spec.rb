@@ -12,10 +12,16 @@ RSpec.describe TagGenerator do
         expect(tags).to include("#{registry}/core:jammy")
       end
 
-      it 'includes SHA tag when github_sha value present' do
+      it 'includes a version SHA tag when github_sha value present' do
         tags = described_class.primary_tags('core', 'version' => 'jammy', 'github_sha' => 'abc123')
 
-        expect(tags).to include("#{registry}/core:abc123")
+        expect(tags).to contain_exactly("#{registry}/core:jammy", "#{registry}/core:jammy-abc123")
+      end
+
+      it 'includes the bare SHA tag only for the latest version' do
+        tags = described_class.primary_tags('core', 'version' => 'jammy', 'github_sha' => 'abc123', 'latest' => true)
+
+        expect(tags).to include("#{registry}/core:abc123", "#{registry}/core:jammy-abc123")
       end
 
       it 'excludes SHA tag when github_sha value absent' do
@@ -175,6 +181,20 @@ RSpec.describe TagGenerator do
     end
   end
 
+  describe 're-tag sources' do
+    let(:values) { { 'version' => 'jammy', 'distribution_code_name' => 'jammy', 'latest' => true } }
+
+    it 'prefers the base SHA tag over the published version tag' do
+      expect(described_class.primary_source_tags('core', values, 'base1'))
+        .to eq(["#{registry}/core:jammy-base1", "#{registry}/core:jammy"])
+    end
+
+    it 'does the same for the dev variant' do
+      expect(described_class.dev_source_tags('core', values, 'base1'))
+        .to eq(["#{registry}/core:jammy-dev-base1", "#{registry}/core:jammy-dev"])
+    end
+  end
+
   describe '.dev_tags' do
     context 'with core image' do
       it 'generates distribution-dev tag' do
@@ -183,15 +203,16 @@ RSpec.describe TagGenerator do
         expect(tags).to include("#{registry}/core:jammy-dev")
       end
 
-      it 'includes SHA tag when github_sha value present' do
+      it 'includes only the version dev SHA tag, even for the latest version' do
         tags = described_class.dev_tags(
           'core',
           'version' => 'jammy',
           'distribution_code_name' => 'jammy',
-          'github_sha' => 'def456'
+          'github_sha' => 'def456',
+          'latest' => true
         )
 
-        expect(tags).to include("#{registry}/core:def456")
+        expect(tags.grep(/def456/)).to eq(["#{registry}/core:jammy-dev-def456"])
       end
 
       it 'includes dev tag when latest: true' do
@@ -272,7 +293,7 @@ RSpec.describe TagGenerator do
       it 'includes SHA when github_sha value present' do
         tags = described_class.dev_tags('unknown', 'version' => '1.0', 'github_sha' => 'xyz789')
 
-        expect(tags).to eq(["#{registry}/unknown:xyz789"])
+        expect(tags).to eq(["#{registry}/unknown:1.0-dev-xyz789"])
       end
     end
 
@@ -294,7 +315,7 @@ RSpec.describe TagGenerator do
         'github_sha' => 'zzz'
       )
 
-      expect(tags).to eq(["#{registry}/core:jammy-dev", "#{registry}/core:zzz"])
+      expect(tags).to eq(["#{registry}/core:jammy-dev", "#{registry}/core:jammy-dev-zzz"])
     end
 
     it 'deduplicates when additional_dev_tags repeats a generated tag' do

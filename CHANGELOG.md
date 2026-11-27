@@ -1,6 +1,9 @@
 # Changelog
 
 ## 2026-11-26
+- Fix commit SHA image tags: every version now gets `<version>-<sha>` and `<version>-dev-<sha>`, and `<image>:<sha>` is written only by the latest version's regular variant (previously all versions overwrote it)
+- Re-tag unchanged images on `main` without rebuilding, so every successful run tags every image
+- SHA tags are written once: re-runs and rebuilds of a commit leave them unchanged
 - Measure method coverage and `rakelib/ci.rake` in SimpleCov, and replace its deprecated `add_filter`/`track_files` settings
 - CI builds only changed images and the images built `FROM` them; changes that cannot affect an image build nothing, and anything unrecognized builds everything
 - The files that rebuild everything or nothing are listed in `change_rules.yml`

@@ -5,7 +5,9 @@ require 'stringio'
 Rake.application.rake_require('ci', [File.expand_path('../rakelib', __dir__)])
 
 RSpec.describe 'rake ci:set-matrix' do # rubocop:disable RSpec/DescribeClass
-  let(:env) { { 'GITHUB_REF' => 'refs/heads/main', 'GITHUB_EVENT_NAME' => nil, 'CHANGE_BASE' => nil } }
+  let(:env) do
+    { 'GITHUB_REF' => 'refs/heads/main', 'GITHUB_EVENT_NAME' => nil, 'CHANGE_BASE' => nil, 'GITHUB_SHA' => nil }
+  end
   let(:changed) { [] }
 
   around do |example|
@@ -79,8 +81,52 @@ RSpec.describe 'rake ci:set-matrix' do # rubocop:disable RSpec/DescribeClass
     end
   end
 
+  context 'with a partial build on main' do
+    let(:base) { 'a' * 40 }
+    let(:sha) { 'b' * 40 }
+    let(:env) { super().merge('GITHUB_EVENT_NAME' => 'push', 'CHANGE_BASE' => base, 'GITHUB_SHA' => sha) }
+    let(:changed) { ['node/22/Dockerfile'] }
+    let(:registry) { Util::REGISTRY }
+
+    def entry(version)
+      run('common-merge').find { |e| e['primary_target'] == 'node' && e['version'] == version }
+    end
+
+    it 'lists every version for merging' do
+      expect(images('common-merge')).to match_array(Util.image_dirs.grep_v(%r{^core/}))
+      expect(images('core-merge')).to match_array(Util.image_dirs.grep(%r{^core/}))
+    end
+
+    it 'gives a built image all its tags and no re-tag sources' do
+      expect(entry('22')['primary_tags'].split).to include("#{registry}/node:22", "#{registry}/node:22-#{sha}")
+      expect(entry('22')).not_to include('primary_sources', 'dev_sources')
+    end
+
+    it 'gives an unchanged image only its SHA tags' do
+      expect(entry('24')['primary_tags'].split)
+        .to contain_exactly("#{registry}/node:#{sha}", "#{registry}/node:24-#{sha}")
+      expect(entry('24')['dev_tags']).to eq("#{registry}/node:24-dev-#{sha}")
+    end
+
+    it 'lists the re-tag sources of an unchanged image in order of preference' do
+      expect(entry('24')['primary_sources']).to eq("#{registry}/node:24-#{base} #{registry}/node:24")
+      expect(entry('24')['dev_sources']).to eq("#{registry}/node:24-dev-#{base} #{registry}/node:24-dev")
+    end
+
+    context 'without a commit SHA' do
+      let(:sha) { nil }
+
+      it 'lists only built images' do
+        expect(images('common-merge')).to eq(['node/22'])
+      end
+    end
+  end
+
   context 'with a pull request' do
-    let(:env) { super().merge('GITHUB_EVENT_NAME' => 'pull_request', 'CHANGE_BASE' => 'a' * 40) }
+    let(:env) do
+      super().merge('GITHUB_REF' => 'refs/pull/1/merge', 'GITHUB_EVENT_NAME' => 'pull_request',
+                    'CHANGE_BASE' => 'a' * 40, 'GITHUB_SHA' => 'b' * 40)
+    end
     let(:changed) { ['node/22/Dockerfile'] }
 
     it 'builds only the changed image' do
