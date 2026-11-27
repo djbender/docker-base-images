@@ -51,9 +51,9 @@ ruby:
   └─▶ GitHub Actions (build-images.yml)
        ├─▶ RSpec + RuboCop
        ├─▶ Build matrix (per image × per platform)
-       │    ├─▶ linux/amd64 (ubuntu-latest)
+       │    ├─▶ linux/amd64 (ubuntu-24.04)
        │    └─▶ linux/arm64 (ubuntu-24.04-arm)
        └─▶ Merge jobs (multi-arch manifests)
             └─▶ Push to ghcr.io/djbender/*</code></pre>
 
-<p>Feature branches build single-arch only. Multi-arch builds run on push to <code>main</code>.</p>
+<p>Pull requests build both architectures but push nothing. Images and multi-arch manifests are published only from <code>main</code>.</p>
