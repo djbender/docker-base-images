@@ -1,6 +1,8 @@
 # Changelog
 
 ## 2026-11-26
+- Document the commit SHA tags on the architecture page
+- Correct the architecture page: pull requests build both architectures, and only `main` publishes
 - Fix commit SHA image tags: every version now gets `<version>-<sha>` and `<version>-dev-<sha>`, and `<image>:<sha>` is written only by the latest version's regular variant (previously all versions overwrote it)
 - Re-tag unchanged images on `main` without rebuilding, so every successful run tags every image
 - SHA tags are written once: re-runs and rebuilds of a commit leave them unchanged
