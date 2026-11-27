@@ -27,7 +27,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: ruby/setup-ruby@v1.343.0
+      - uses: ruby/setup-ruby@v1.344.0
         with:
           ruby-version: .ruby-version
           bundler-cache: true
@@ -71,7 +71,7 @@ jobs:
           persist-credentials: false
           fetch-depth: 0 # the change base must be available to diff against
 
-      - uses: ruby/setup-ruby@v1.343.0
+      - uses: ruby/setup-ruby@v1.344.0
         with:
           ruby-version: .ruby-version
           bundler-cache: true
