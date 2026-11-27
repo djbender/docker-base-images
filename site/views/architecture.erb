@@ -42,7 +42,9 @@ ruby:
 <ul>
   <li><strong>Primary:</strong> <code>:version</code>, <code>:version-distro</code>, <code>:major</code>, <code>:latest</code></li>
   <li><strong>Dev:</strong> <code>:version-dev</code>, <code>:version-dev-distro</code>, <code>:major-dev</code></li>
+  <li><strong>Commit (added by CI on <code>main</code>):</strong> <code>:version-sha</code>, <code>:version-dev-sha</code>, and <code>:sha</code> for the latest version's primary image only</li>
 </ul>
+<p>Commit tags are never overwritten. Unchanged images are re-tagged without being rebuilt.</p>
 
 <h2>CI Flow</h2>
 <pre><code>push to main
